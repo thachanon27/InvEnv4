@@ -636,8 +636,8 @@ class InvEnv4(gym.Env):
         if overage3 > 9000:
             extra_penalty3 = 15000000
             
-        if overage1 in range(2000,9000) and overage2_2 in range(2000,8000) and overage3_2 in range(2000,7500) :
-            extra_reward1 = 250*1000000
+        if overage1 in range(2000,9000) and overage2_2 in range(1500,8000) and overage3_2 in range(1000,7500) :
+            extra_reward1 = 500*1000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         
@@ -826,7 +826,7 @@ class InvEnv4(gym.Env):
         #if overage3_2 in range(1500,7500):
         #    extra_reward3 = 200*1000000
 
-        sum_extra_reward =  extra_reward1 +  extra_reward2
+        sum_extra_reward =  extra_reward1 
         sum_extra_penalty_2 = extra_penalty1_2 + extra_penalty2_2 + extra_penalty3_2
         sum_extra_penalty_3 = extra_penalty1_3 + extra_penalty2_3 + extra_penalty3_3
         # print("extra penalty3 =", extra_penalty1_3, extra_penalty2_3, extra_penalty3_3)
