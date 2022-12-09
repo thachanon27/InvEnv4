@@ -636,7 +636,7 @@ class InvEnv4(gym.Env):
         if overage3 > 9000:
             extra_penalty3 = 15000000
             
-        if overage1 in range(2000,9000) and overage2_2 in range(1500,8000) and overage3_2 in range(1000,7500) :
+        if overage1 in range(2000,9000) and overage2 in range(2000,8000) and overage3 in range(1500,7500) :
             extra_reward1 = 500*1000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
@@ -819,14 +819,14 @@ class InvEnv4(gym.Env):
         if overage3_3 > 7000:
             extra_penalty3_3 = 120000000
             
-        if overage1_2 in range(2000,6000) and overage2_2 in range(1500,6000) and overage3_2 in range(1500,5500) :
+        if overage1_2 in range(1500,9000) and overage2_2 in range(1000,8000) and overage3_2 in range(1000,7500) :
             extra_reward2 = 250*1000000
         #if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
         #if overage3_2 in range(1500,7500):
         #    extra_reward3 = 200*1000000
 
-        sum_extra_reward =  extra_reward1 
+        sum_extra_reward =  extra_reward1 + extra_reward2
         sum_extra_penalty_2 = extra_penalty1_2 + extra_penalty2_2 + extra_penalty3_2
         sum_extra_penalty_3 = extra_penalty1_3 + extra_penalty2_3 + extra_penalty3_3
         # print("extra penalty3 =", extra_penalty1_3, extra_penalty2_3, extra_penalty3_3)
@@ -847,7 +847,7 @@ class InvEnv4(gym.Env):
 
         #for Tanh activation fn
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward_tanh = ((sum_extra_reward/1000000 - (purchase_cost + holding + penalty_lost_sale
+        reward = ((sum_extra_reward/1000000 - (purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
@@ -856,7 +856,7 @@ class InvEnv4(gym.Env):
         
         #for Gelu activation fn
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (1500 + (sum_extra_reward/1000000 - (purchase_cost + holding + penalty_lost_sale
+        reward_gelu = (1500 + (sum_extra_reward/1000000 - (purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
