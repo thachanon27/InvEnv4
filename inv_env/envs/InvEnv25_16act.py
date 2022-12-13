@@ -857,12 +857,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (150 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (250 - ((purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 150
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 250
 
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออกก
         reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
