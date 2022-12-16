@@ -854,6 +854,7 @@ class InvEnv4(gym.Env):
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 100
+        print("reward",reward)
         
         #for Gelu activation fn
         #sum_extra_reward/1000000
