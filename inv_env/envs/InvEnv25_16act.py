@@ -623,11 +623,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = 10000000
 
         if overage1 < 0:
-            extra_penalty1 = 500000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = 50000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 < 0:
-            extra_penalty2 = 500000000
+            extra_penalty2 = 50000000
         if overage3 < 0:
-            extra_penalty3 = 800000000
+            extra_penalty3 = 50000000
 
         if overage1 > 10000:
             extra_penalty1 = 5000000
@@ -687,7 +687,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 1000000)  # train with 10000000 set of demand data
+                rng3 = randint(0, 1000000000)  # train with 10000000 set of demand data
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
@@ -726,7 +726,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 1000000)  # train with 50,000,000 set of demand data
+                rng3 = randint(0, 1000000000)  # train with 50,000,000 set of demand data
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
@@ -794,11 +794,11 @@ class InvEnv4(gym.Env):
         # print("overage1_2 =", overage1_2)
 
         if overage1_2 < 1500:
-            extra_penalty1_2 = 150000000
+            extra_penalty1_2 = 15000000
         if overage2_2 < 1000:
-            extra_penalty2_2 = 150000000
+            extra_penalty2_2 = 15000000
         if overage3_2 < 1000:
-            extra_penalty3_2 = 150000000
+            extra_penalty3_2 = 15000000
         if overage1_3 < 1000:
             extra_penalty1_3 = 15000000
         if overage2_3 < 1000:
@@ -807,17 +807,17 @@ class InvEnv4(gym.Env):
             extra_penalty3_3 = 15000000
 
         if overage1_2 > 10000:
-            extra_penalty1_2 = 10000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
+            extra_penalty1_2 = 8000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
         if overage2_2 > 10000:
-            extra_penalty2_2 = 10000000
+            extra_penalty2_2 = 8000000
         if overage3_2 > 10000:
-            extra_penalty3_2 = 10000000
-        if overage1_3 > 9000:
-            extra_penalty1_3 = 15000000
-        if overage2_3 > 9000:
-            extra_penalty2_3 = 15000000
-        if overage3_3 > 9000:
-            extra_penalty3_3 = 15000000
+            extra_penalty3_2 = 8000000
+        if overage1_3 > 10000:
+            extra_penalty1_3 = 20000000
+        if overage2_3 > 10000:
+            extra_penalty2_3 = 20000000
+        if overage3_3 > 10000:
+            extra_penalty3_3 = 20000000
             
         if overage1 in range(1500,9000) and overage2 in range(1000,8000) and overage3 in range(1000,8000) and overage1_2 in range(1000,9000) and overage2_2 in range(1000,8000) and overage3_2 in range(1000,7500)and overage1_3 in range(0,9000) and overage2_3 in range(0,8000) and overage3_3 in range(0,7500) :
             extra_reward2 = 50*1000000
@@ -848,7 +848,7 @@ class InvEnv4(gym.Env):
 
         #for Tanh activation fn
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = ((0 - (purchase_cost + holding + penalty_lost_sale
+        reward = ((sum_extra_reward/1000000 - (purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
