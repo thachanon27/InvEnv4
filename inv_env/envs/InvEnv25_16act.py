@@ -623,11 +623,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = 10000000
 
         if overage1 < 0:
-            extra_penalty1 = 50000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = 500000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 < 0:
-            extra_penalty2 = 60000000
+            extra_penalty2 = 500000000
         if overage3 < 0:
-            extra_penalty3 = 80000000
+            extra_penalty3 = 800000000
 
         if overage1 > 10000:
             extra_penalty1 = 5000000
@@ -794,11 +794,11 @@ class InvEnv4(gym.Env):
         # print("overage1_2 =", overage1_2)
 
         if overage1_2 < 1500:
-            extra_penalty1_2 = 15000000
+            extra_penalty1_2 = 150000000
         if overage2_2 < 1000:
-            extra_penalty2_2 = 15000000
+            extra_penalty2_2 = 150000000
         if overage3_2 < 1000:
-            extra_penalty3_2 = 15000000
+            extra_penalty3_2 = 150000000
         if overage1_3 < 1000:
             extra_penalty1_3 = 15000000
         if overage2_3 < 1000:
