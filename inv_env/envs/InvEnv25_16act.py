@@ -687,7 +687,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 1000000000)  # train with 10000000 set of demand data
+                rng3 = randint(0, 1000)  # train with 10000000 set of demand data
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
@@ -726,7 +726,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 1000000000)  # train with 50,000,000 set of demand data
+                rng3 = randint(0, 1000)  # train with 50,000,000 set of demand data
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
@@ -859,12 +859,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (375 + sum_extra_reward/1000000 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (400 + sum_extra_reward/1000000 - ((purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 375
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 400
 
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออกก
         reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
