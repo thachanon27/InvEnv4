@@ -615,11 +615,11 @@ class InvEnv4(gym.Env):
         extra_reward2 = 0
         extra_reward3 = 0
 
-        if overage1 < 2000:
+        if overage1 < 1000:
             extra_penalty1 = 10000000
-        if overage2 < 2000:
+        if overage2 < 1000:
             extra_penalty2 = 10000000
-        if overage3 < 2000:
+        if overage3 < 1000:
             extra_penalty3 = 10000000
 
         if overage1 < 0:
@@ -629,11 +629,11 @@ class InvEnv4(gym.Env):
         if overage3 < 0:
             extra_penalty3 = 50000000
 
-        if overage1 > 10000:
+        if overage1 > 8000:
             extra_penalty1 = 5000000
-        if overage2 > 10000:
+        if overage2 > 7000:
             extra_penalty2 = 5000000
-        if overage3  > 9000:
+        if overage3  > 6000:
             extra_penalty3 = 5000000
             
         if overage1 in range(2000,9000) and overage2 in range(2000,8000) and overage3 in range(1500,7500) :
@@ -806,17 +806,17 @@ class InvEnv4(gym.Env):
         if overage3_3 < 1000:
             extra_penalty3_3 = 15000000
 
-        if overage1_2 > 10000:
+        if overage1_2 > 8000:
             extra_penalty1_2 = 8000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
-        if overage2_2 > 10000:
+        if overage2_2 > 7000:
             extra_penalty2_2 = 8000000
-        if overage3_2 > 10000:
+        if overage3_2 > 6000:
             extra_penalty3_2 = 8000000
-        if overage1_3 > 10000:
+        if overage1_3 > 8000:
             extra_penalty1_3 = 20000000
-        if overage2_3 > 10000:
+        if overage2_3 > 7000:
             extra_penalty2_3 = 20000000
-        if overage3_3 > 10000:
+        if overage3_3 > 6000:
             extra_penalty3_3 = 20000000
             
         if overage1 in range(1500,9000) and overage2 in range(1000,8000) and overage3 in range(1000,8000) and overage1_2 in range(1000,9000) and overage2_2 in range(1000,8000) and overage3_2 in range(1000,7500)and overage1_3 in range(0,9000) and overage2_3 in range(0,8000) and overage3_3 in range(0,7500) :
