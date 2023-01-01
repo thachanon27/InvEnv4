@@ -552,28 +552,29 @@ class InvEnv4(gym.Env):
         extra_p_on2_2 = 0
         extra_p_on2_3 = 0
         extra_p_on_set = []
+        penalty_onpeak = 80000
         if stp in on_peak_stepcount:
             # print("yes")
             vcm1 = vc_m1_on
             # print("vcm1 = ", vcm1)
             vcm2 = vc_m2_on
             if M1P1 > 0:
-                extra_p_on1_1 = 3000 * M1P1
+                extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
             if M1P2 > 0:
-                extra_p_on1_2 = 3000 * M1P2
+                extra_p_on1_2 = penalty_onpeak * M1P2
                 extra_p_on_set.append(extra_p_on1_2)
             if M1P3 > 0:
-                extra_p_on1_3 = 3000 * M1P3
+                extra_p_on1_3 = penalty_onpeak * M1P3
                 extra_p_on_set.append(extra_p_on1_3)
             if M2P1 > 0:
-                extra_p_on2_1 = 3000 * M2P1
+                extra_p_on2_1 = penalty_onpeak * M2P1
                 extra_p_on_set.append(extra_p_on2_1)
             if M2P2 > 0:
-                extra_p_on2_2 = 3000 * M2P2
+                extra_p_on2_2 = penalty_onpeak * M2P2
                 extra_p_on_set.append(extra_p_on2_2)
             if M2P3 > 0:
-                extra_p_on2_3 = 3000 * M2P3
+                extra_p_on2_3 = penalty_onpeak * M2P3
                 extra_p_on_set.append(extra_p_on2_3)
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
@@ -879,12 +880,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (1200 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (1600 - ((purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1200
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 2000
 
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออกก
         reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
