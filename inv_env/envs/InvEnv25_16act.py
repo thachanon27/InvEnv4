@@ -270,6 +270,36 @@ class InvEnv4(gym.Env):
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
         demand6, demand7, demand8, demand9, extra_p_on = self.state
+        
+        print("value ก่อนแปลงกลับ") 
+        print("demand1 =", demand1, "=state[3]=",self.state[3])
+        print("overage1 =", overage1, "=state[0]=",self.state[0])
+        # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
+        demand1 = demand1*(4500-2500)+2500
+        demand2 = demand2*(3500-2000)+2000
+        demand3 = demand3*(2500-1000)+1000
+        
+        demand4 = demand4*(4500-2500)+2500
+        demand5 = demand5*(3500-2000)+2000
+        demand6 = demand6*(2500-1000)+1000
+        demand7 = demand7*(4500-2500)+2500
+        demand8 = demand8*(3500-2000)+2000
+        demand9 = demand9*(2500-1000)+1000
+        
+        overage1 = overage1*(9000-0)+0
+        overage2 = overage2*(8000-0)+0
+        overage3 = overage3*(7000-0)+0
+        overage1_2 = overage1_2*(9000-0)+0
+        overage2_2 = overage2_2*(8000-0)+0
+        overage3_2 = overage3_2*(7000-0)+0
+        overage1_3 = overage1_3*(9000-0)+0
+        overage2_3 = overage2_3*(8000-0)+0
+        overage3_3 = overage3_3*(7000-0)+0
+        
+        print("value หลังแปลงกลับ") 
+        print("demand1 =", demand1)
+        print("overage1 =", overage1)
+        
 
         # print("Step :", self.step_count)
         # print("onhand1 from last period =", on_hand1)
@@ -878,6 +908,8 @@ class InvEnv4(gym.Env):
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 650
+        #normalize reward อีกที 
+        reward = reward/25
 
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออกก
         reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
@@ -911,58 +943,8 @@ class InvEnv4(gym.Env):
                        - fix_production_cost
                        - (variable_cost_m1 + variable_cost_m2))
 
-        # inv data
-        self.state[0] = 0
-        self.state[1] = 0
-        self.state[2] = 0
-        # update demand data this period
-        self.state[3] = demand1
-        self.state[4] = demand2
-        self.state[5] = demand3
-
-        self.state[0] += overage1  # Inventory that has already subtracted demand
-        self.state[1] += overage2
-        self.state[2] += overage3
-        # collect Production data to use in next state
-        self.state[6] = N1P
-        self.state[7] = N1P1
-        self.state[8] = N1P2
-        self.state[9] = N1P3
-        self.state[10] = N2P
-        self.state[11] = N2P1
-        self.state[12] = N2P2
-        self.state[13] = N2P3
-        self.state[14] = overage1_2
-        self.state[15] = overage2_2
-        self.state[16] = overage3_2
-        self.state[17] = overage1_3
-        self.state[18] = overage2_3
-        self.state[19] = overage3_3
-        self.state[20] = demand4
-        self.state[21] = demand5
-        self.state[22] = demand6
-        self.state[23] = demand7
-        self.state[24] = demand8
-        self.state[25] = demand9
-        self.state[26] = extra_p_on
-#         self.state[27] = M1P1
-#         self.state[28] = M1P2
-#         self.state[29] = M1P3
-#         self.state[30] = M2P1
-#         self.state[31] = M2P2
-#         self.state[32] = M2P3
         
-        M1P1, M1P2, M1P3, M2P1, M2P2, M2P3
-
-        # Clears the variables used to store data.
-        N1P_ = 0
-        N1P1_ = 0
-        N1P2_ = 0
-        N1P3_ = 0
-        N2P_ = 0
-        N2P1_ = 0
-        N2P2_ = 0
-        N2P3_ = 0
+        
 
         # print("Step", self.step_count)
         self.step_count += 1
@@ -1010,6 +992,87 @@ class InvEnv4(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward]  # info[23]
+     
+        print("value ก่อน normalize") 
+        print("demand1 =", demand1)
+        print("overage1 =", overage1)
+        #Normalize value to 0-1 range  =before sendout to neural network
+        demand1 = (demand1-2500)/(4500-2500)
+        demand2 = (demand2-2000)/(3500-2000)
+        demand3 = (demand3-1000)/(2500-1000)
+        
+        demand4 = (demand4-2500)/(4500-2500)
+        demand5 = (demand5-2000)/(3500-2000)
+        demand6 = (demand6-1000)/(2500-1000)
+        demand7 = (demand7-2500)/(4500-2500)
+        demand8 = (demand8-2000)/(3500-2000)
+        demand9 = (demand9-1000)/(2500-1000)
+        
+        overage1 = (overage1-0)/(9000-0)
+        overage2 = (overage2-0)/(8000-0)
+        overage3 = (overage3-0)/(7000-0)
+        overage1_2 = (overage1_2-0)/(9000-0)
+        overage2_2 = (overage2_2-0)/(8000-0)
+        overage3_2 = (overage3_2-0)/(7000-0)
+        overage1_3 = (overage1_3-0)/(9000-0)
+        overage2_3 = (overage2_3-0)/(8000-0)
+        overage3_3 = (overage3_3-0)/(7000-0)
+        
+        
+        # inv data
+        self.state[0] = 0
+        self.state[1] = 0
+        self.state[2] = 0
+        # update demand data this period
+        self.state[3] = demand1
+        self.state[4] = demand2
+        self.state[5] = demand3
+
+        self.state[0] += overage1  # Inventory that has already subtracted demand
+        self.state[1] += overage2
+        self.state[2] += overage3
+        # collect Production data to use in next state
+        self.state[6] = N1P
+        self.state[7] = N1P1
+        self.state[8] = N1P2
+        self.state[9] = N1P3
+        self.state[10] = N2P
+        self.state[11] = N2P1
+        self.state[12] = N2P2
+        self.state[13] = N2P3
+        self.state[14] = overage1_2
+        self.state[15] = overage2_2
+        self.state[16] = overage3_2
+        self.state[17] = overage1_3
+        self.state[18] = overage2_3
+        self.state[19] = overage3_3
+        self.state[20] = demand4
+        self.state[21] = demand5
+        self.state[22] = demand6
+        self.state[23] = demand7
+        self.state[24] = demand8
+        self.state[25] = demand9
+        self.state[26] = extra_p_on
+#         self.state[27] = M1P1
+#         self.state[28] = M1P2
+#         self.state[29] = M1P3
+#         self.state[30] = M2P1
+#         self.state[31] = M2P2
+#         self.state[32] = M2P3
+        
+        print("value หลัง normalize") 
+        print("demand1 =", demand1,"=state[3]=",self.state[3])
+        print("overage1 =", overage1,"=state[0]=",self.state[0])
+
+        # Clears the variables used to store data.
+        N1P_ = 0
+        N1P1_ = 0
+        N1P2_ = 0
+        N1P3_ = 0
+        N2P_ = 0
+        N2P1_ = 0
+        N2P2_ = 0
+        N2P3_ = 0
 
         '''
         if R1 > 0:
