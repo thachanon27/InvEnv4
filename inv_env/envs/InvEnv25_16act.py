@@ -298,7 +298,7 @@ class InvEnv4(gym.Env):
         
         print("value หลังแปลงกลับ") 
         print("demand1 =", demand1)
-        print("overage1 =", overage1)
+        print("on_hand1 =", on_hand1)
         
 
         # print("Step :", self.step_count)
