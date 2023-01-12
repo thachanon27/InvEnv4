@@ -273,7 +273,7 @@ class InvEnv4(gym.Env):
         
         print("value ก่อนแปลงกลับ") 
         print("demand1 =", demand1, "=state[3]=",self.state[3])
-        print("overage1 =", overage1, "=state[0]=",self.state[0])
+        print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
         demand1 = demand1*(4500-2500)+2500
         demand2 = demand2*(3500-2000)+2000
@@ -286,9 +286,9 @@ class InvEnv4(gym.Env):
         demand8 = demand8*(3500-2000)+2000
         demand9 = demand9*(2500-1000)+1000
         
-        overage1 = overage1*(9000-0)+0
-        overage2 = overage2*(8000-0)+0
-        overage3 = overage3*(7000-0)+0
+        on_hand1 = on_hand1*(9000-0)+0
+        on_hand2 = on_hand2*(8000-0)+0
+        on_hand3 = on_hand3*(7000-0)+0
         overage1_2 = overage1_2*(9000-0)+0
         overage2_2 = overage2_2*(8000-0)+0
         overage3_2 = overage3_2*(7000-0)+0
