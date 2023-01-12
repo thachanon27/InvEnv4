@@ -38,7 +38,7 @@ class InvEnv4(gym.Env):
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
-            0, 0, 0,  # initial inventory
+            0, 0, 0,  # initial inventory             ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27 + 6 = 33
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
             0, 0, 0, 0,
@@ -46,7 +46,9 @@ class InvEnv4(gym.Env):
             0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3
             0, 0, 0,  # d4, d5, d6
             0, 0, 0,  # d7, d8, d9
-            0  # extra_p_on
+            0,  # extra_p_on
+            0, 0, 0,    # amount of production from machine 1
+            0, 0, 0    # amount of production from machine 2
         ])
         self.statehigh = np.array([
             np.inf, np.inf, np.inf,  # initial inventory
@@ -57,15 +59,18 @@ class InvEnv4(gym.Env):
             np.inf, np.inf, np.inf,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3
             np.inf, np.inf, np.inf,  # future demand d4, d5, d6
             np.inf, np.inf, np.inf,  # initial demand d7, d8, d9
-            1  # extra_p_on
+            1,  # extra_p_on
+            np.inf, np.inf, np.inf,    # amount of production from machine 1
+            np.inf, np.inf, np.inf    # amount of production from machine 2
         ])
         self.observation_space = Box(self.statelow, self.statehigh,
                                      dtype=np.float32)
 
         self.state = [self.on_hand1, self.on_hand2, self.on_hand3,
-                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
                       0, 0, 0, 0, 0, 0,  # future inventory position state[14] - state[19]
-                      0, 0, 0, 0, 0, 0, 0]  # future demand position state[20] - state[25]
+                      0, 0, 0, 0, 0, 0, 0,  # future demand position state[20] - state[25]
+                      0, 0, 0, 0, 0, 0]   # amount of production
 
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -104,7 +109,9 @@ class InvEnv4(gym.Env):
             0, 0, 0, 0,
             0, 0, 0, 0, 0, 0,  # future inventory
             0, 0, 0, 0, 0, 0,  # future demand
-            1  # เริ่มต้น step แรกคือ เป็นช่วง onpeak
+            1,  # เริ่มต้น step แรกคือ เป็นช่วง onpeak
+            0, 0, 0,    # amount of production from machine 1
+            0, 0, 0    # amount of production from machine 2
         ])
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -268,7 +275,8 @@ class InvEnv4(gym.Env):
         on_hand1, on_hand2, on_hand3, demand1, demand2, demand3, N1P, N1P1, \
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
-        demand6, demand7, demand8, demand9, extra_p_on = self.state
+        demand6, demand7, demand8, demand9, extra_p_on, \
+        M1P1, M1P2, M1P3, M2P1, M2P2, M2P3= self.state
 
         # print("Step :", self.step_count)
         # print("onhand1 from last period =", on_hand1)
@@ -944,6 +952,14 @@ class InvEnv4(gym.Env):
         self.state[24] = demand8
         self.state[25] = demand9
         self.state[26] = extra_p_on
+        self.state[27] = M1P1
+        self.state[28] = M1P2
+        self.state[29] = M1P3
+        self.state[30] = M2P1
+        self.state[31] = M2P2
+        self.state[32] = M2P3
+        
+        M1P1, M1P2, M1P3, M2P1, M2P2, M2P3
 
         # Clears the variables used to store data.
         N1P_ = 0
