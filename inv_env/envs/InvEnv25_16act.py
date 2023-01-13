@@ -1019,9 +1019,9 @@ class InvEnv4(gym.Env):
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward]  # info[23]
      
-        print("value ก่อน normalize") 
-        print("demand1 =", demand1)
-        print("overage1 =", overage1)
+#         print("value ก่อน normalize") 
+#         print("demand1 =", demand1)
+#         print("overage1 =", overage1)
         #Normalize value to 0-1 range  =before sendout to neural network
         demand1 = (demand1-mind1)/(maxd1-mind1)
         demand2 = (demand2-mind2)/(maxd2-mind2)
