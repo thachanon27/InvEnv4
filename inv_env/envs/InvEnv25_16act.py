@@ -270,7 +270,9 @@ class InvEnv4(gym.Env):
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
         demand6, demand7, demand8, demand9, extra_p_on = self.state
-        
+         
+        print("############################################################# ")
+        print("stepcount ", stepcount )
         print("value ก่อนแปลงกลับ") 
         print("demand1 =", demand1, "=state[3]=",self.state[3])
         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
