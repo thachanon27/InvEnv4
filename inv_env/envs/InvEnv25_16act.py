@@ -447,9 +447,9 @@ class InvEnv4(gym.Env):
         sales3 = min(on_hand3, demand3)
         # print("sales1 =", sales1)
         sales_revenue = p1 * sales1 + p2 * sales2 + p3 * sales3
-        overage1 = on_hand1 - sales1
-        overage2 = on_hand2 - sales2
-        overage3 = on_hand3 - sales3
+        overage1 = max(0,on_hand1 - sales1)
+        overage2 = max(0,on_hand2 - sales2)
+        overage3 = max(0,on_hand3 - sales3)
         # print("overage1 =", overage1)
         underage1 = max(0, demand1 - on_hand1)
         underage2 = max(0, demand2 - on_hand2)
@@ -678,11 +678,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = s_penal*1000000
             
         penal = 50
-        if overage1 < 0:
+        if overage1 == 0:
             extra_penalty1 = penal*1000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
-        if overage2 < 0:
+        if overage2 == 0:
             extra_penalty2 = penal*1000000
-        if overage3 < 0:
+        if overage3 == 0:
             extra_penalty3 = penal*1000000
 
         if overage1 > 9000:
@@ -846,12 +846,18 @@ class InvEnv4(gym.Env):
         extra_penalty3_3 = 0
         sum_extra_penalty_2 = 0
         sum_extra_penalty_3 = 0
-        overage1_2 = overage1 - d4 + R1
-        overage2_2 = overage2 - d5 + R2
-        overage3_2 = overage3 - d6 + R3
-        overage1_3 = overage1 - d7 + R1
-        overage2_3 = overage2 - d8 + R2
-        overage3_3 = overage3 - d9 + R3
+#         overage1_2 = overage1 - d4 + R1
+#         overage2_2 = overage2 - d5 + R2
+#         overage3_2 = overage3 - d6 + R3
+#         overage1_3 = overage1 - d7 + R1
+#         overage2_3 = overage2 - d8 + R2
+#         overage3_3 = overage3 - d9 + R3
+        overage1_2 = max(0,overage1 - d4 + R1)
+        overage2_2 = max(0,overage2 - d5 + R2)
+        overage3_2 = max(0,overage3 - d6 + R3)
+        overage1_3 = max(0,overage1 - d7 + R1)
+        overage2_3 = max(0,overage2 - d8 + R2)
+        overage3_3 = max(0,overage3 - d9 + R3)
         # print("overage1_2 =", overage1_2)
 
         if overage1_2 < 1500:
@@ -1091,7 +1097,7 @@ class InvEnv4(gym.Env):
 #         print("value หลัง normalize") 
 #         print("demand1 =", demand1,"=state[3]=",self.state[3])
 #         print("overage1 =", overage1,"=state[0]=",self.state[0])
-#         print("state norm", self.state)
+          print("state norm", self.state)
 
         # Clears the variables used to store data.
         N1P_ = 0
