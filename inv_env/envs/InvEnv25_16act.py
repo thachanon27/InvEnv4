@@ -816,7 +816,10 @@ class InvEnv4(gym.Env):
             demand7 = self.demand_all[(self.step_count + 1) * 3 + 6]
             demand8 = self.demand_all[(self.step_count + 1) * 3 + 7]
             demand9 = self.demand_all[(self.step_count + 1) * 3 + 8]
-
+        
+        #demand1 from random 
+        print("demand1",demand1)
+        
         # Penalty for future shortage
         extra_penalty1_2 = 0
         extra_penalty2_2 = 0
