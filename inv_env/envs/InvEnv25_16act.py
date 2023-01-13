@@ -97,7 +97,7 @@ class InvEnv4(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-             self.on_hand1, self.on_hand2, self.on_hand3,  # initial inventory
+             (self.on_hand1-0)/(9000-0), (self.on_hand2-0)/(8000-0), (self.on_hand3-0)/(7000-0),  # initial inventory  #ก่อนป้อนเข้า env ต้องทำเป็นค่า normalize แบบค่าอื่นก่อน
             #np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
             # initial inventory แบบ random
             0, 0, 0,  # initial demand
