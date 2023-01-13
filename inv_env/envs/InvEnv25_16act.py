@@ -97,7 +97,7 @@ class InvEnv4(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-             (self.on_hand1-0)/(9000-0), (self.on_hand2-0)/(8000-0), (self.on_hand3-0)/(7000-0),  # initial inventory  #ก่อนป้อนเข้า env ต้องทำเป็นค่า normalize แบบค่าอื่นก่อน
+             (self.on_hand1-0)/(12000-0), (self.on_hand2-0)/(10000-0), (self.on_hand3-0)/(9000-0),  # initial inventory  #ก่อนป้อนเข้า env ต้องทำเป็นค่า normalize แบบค่าอื่นก่อน
             #np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
             # initial inventory แบบ random
             0, 0, 0,  # initial demand
@@ -281,16 +281,16 @@ class InvEnv4(gym.Env):
         minr1 = 0
         minr2 = 0
         minr3 = 0
-        maxr1 = 9000
-        maxr2 = 8000
-        maxr3 = 7000
+        maxr1 = 12000
+        maxr2 = 10000
+        maxr3 = 9000
         
          
-        print("############################################################# ")
-        print("stepcount ", stepcount )
-        print("value ก่อนแปลงกลับ") 
-        print("demand1 =", demand1, "=state[3]=",self.state[3])
-        print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
+#         print("############################################################# ")
+#         print("stepcount ", stepcount )
+#         print("value ก่อนแปลงกลับ") 
+#         print("demand1 =", demand1, "=state[3]=",self.state[3])
+#         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
         demand1 = demand1*(maxd1-mind1)+mind1
         demand2 = demand2*(maxd2-mind2)+mind2
@@ -313,9 +313,9 @@ class InvEnv4(gym.Env):
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
         
-        print("value หลังแปลงกลับ") 
-        print("demand1 =", demand1)
-        print("on_hand1 =", on_hand1)
+#         print("value หลังแปลงกลับ") 
+#         print("demand1 =", demand1)
+#         print("on_hand1 =", on_hand1)
         
 
         # print("Step :", self.step_count)
@@ -1082,10 +1082,10 @@ class InvEnv4(gym.Env):
 #         self.state[31] = M2P2
 #         self.state[32] = M2P3
         
-        print("value หลัง normalize") 
-        print("demand1 =", demand1,"=state[3]=",self.state[3])
-        print("overage1 =", overage1,"=state[0]=",self.state[0])
-        print("state norm", self.state)
+#         print("value หลัง normalize") 
+#         print("demand1 =", demand1,"=state[3]=",self.state[3])
+#         print("overage1 =", overage1,"=state[0]=",self.state[0])
+#         print("state norm", self.state)
 
         # Clears the variables used to store data.
         N1P_ = 0
