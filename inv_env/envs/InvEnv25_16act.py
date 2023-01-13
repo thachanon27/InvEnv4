@@ -1097,7 +1097,7 @@ class InvEnv4(gym.Env):
 #         print("value หลัง normalize") 
 #         print("demand1 =", demand1,"=state[3]=",self.state[3])
 #         print("overage1 =", overage1,"=state[0]=",self.state[0])
-        print("state norm", self.state)
+#         print("state norm", self.state)
 
         # Clears the variables used to store data.
         N1P_ = 0
