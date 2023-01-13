@@ -270,6 +270,21 @@ class InvEnv4(gym.Env):
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
         demand6, demand7, demand8, demand9, extra_p_on = self.state
+        
+        #parameter for normalize
+        mind1 = 0  #min demand1
+        mind2 = 0
+        mind3 = 0
+        maxd1 = 4500
+        maxd2 = 3500
+        maxd3 = 2500
+        minr1 = 0
+        minr2 = 0
+        minr3 = 0
+        maxr1 = 9000
+        maxr2 = 8000
+        maxr3 = 7000
+        
          
         print("############################################################# ")
         print("stepcount ", stepcount )
@@ -277,26 +292,26 @@ class InvEnv4(gym.Env):
         print("demand1 =", demand1, "=state[3]=",self.state[3])
         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
-        demand1 = demand1*(4500-2500)+2500
-        demand2 = demand2*(3500-2000)+2000
-        demand3 = demand3*(2500-1000)+1000
+        demand1 = demand1*(maxd1-mind1)+mind1
+        demand2 = demand2*(maxd2-mind2)+mind2
+        demand3 = demand3*(maxd3-mind3)+mind3
         
-        demand4 = demand4*(4500-2500)+2500
-        demand5 = demand5*(3500-2000)+2000
-        demand6 = demand6*(2500-1000)+1000
-        demand7 = demand7*(4500-2500)+2500
-        demand8 = demand8*(3500-2000)+2000
-        demand9 = demand9*(2500-1000)+1000
+        demand4 = demand4*(maxd1-mind1)+mind1
+        demand5 = demand5*(maxd2-mind2)+mind2
+        demand6 = demand6*(maxd3-mind3)+mind3
+        demand7 = demand7*(maxd1-mind1)+mind1
+        demand8 = demand8*(maxd2-mind2)+mind2
+        demand9 = demand9*(maxd3-mind3)+mind3
         
-        on_hand1 = on_hand1*(9000-0)+0
-        on_hand2 = on_hand2*(8000-0)+0
-        on_hand3 = on_hand3*(7000-0)+0
-        overage1_2 = overage1_2*(9000-0)+0
-        overage2_2 = overage2_2*(8000-0)+0
-        overage3_2 = overage3_2*(7000-0)+0
-        overage1_3 = overage1_3*(9000-0)+0
-        overage2_3 = overage2_3*(8000-0)+0
-        overage3_3 = overage3_3*(7000-0)+0
+        on_hand1 = on_hand1*(maxr1-0)+0
+        on_hand2 = on_hand2*(maxr2-0)+0
+        on_hand3 = on_hand3*(maxr3-0)+0
+        overage1_2 = overage1_2*(maxr1-0)+0
+        overage2_2 = overage2_2*(maxr2-0)+0
+        overage3_2 = overage3_2*(maxr3-0)+0
+        overage1_3 = overage1_3*(maxr1-0)+0
+        overage2_3 = overage2_3*(maxr2-0)+0
+        overage3_3 = overage3_3*(maxr3-0)+0
         
         print("value หลังแปลงกลับ") 
         print("demand1 =", demand1)
@@ -1002,26 +1017,26 @@ class InvEnv4(gym.Env):
         print("demand1 =", demand1)
         print("overage1 =", overage1)
         #Normalize value to 0-1 range  =before sendout to neural network
-        demand1 = (demand1-2500)/(4500-2500)
-        demand2 = (demand2-2000)/(3500-2000)
-        demand3 = (demand3-1000)/(2500-1000)
+        demand1 = (demand1-mind1)/(maxd1-mind1)
+        demand2 = (demand2-mind2)/(maxd2-mind2)
+        demand3 = (demand3-mind3)/(maxd3-mind3)
         
-        demand4 = (demand4-2500)/(4500-2500)
-        demand5 = (demand5-2000)/(3500-2000)
-        demand6 = (demand6-1000)/(2500-1000)
-        demand7 = (demand7-2500)/(4500-2500)
-        demand8 = (demand8-2000)/(3500-2000)
-        demand9 = (demand9-1000)/(2500-1000)
+        demand4 = (demand4-mind1)/(maxd1-mind1)
+        demand5 = (demand5-mind2)/(maxd2-mind2)
+        demand6 = (demand6-mind3)/(maxd3-mind3)
+        demand7 = (demand7-mind1)/(maxd1-mind1)
+        demand8 = (demand8-mind2)/(maxd2-mind2)
+        demand9 = (demand9-mind3)/(maxd3-mind3)
         
-        overage1 = (overage1-0)/(9000-0)
-        overage2 = (overage2-0)/(8000-0)
-        overage3 = (overage3-0)/(7000-0)
-        overage1_2 = (overage1_2-0)/(9000-0)
-        overage2_2 = (overage2_2-0)/(8000-0)
-        overage3_2 = (overage3_2-0)/(7000-0)
-        overage1_3 = (overage1_3-0)/(9000-0)
-        overage2_3 = (overage2_3-0)/(8000-0)
-        overage3_3 = (overage3_3-0)/(7000-0)
+        overage1 = (overage1-minr1)/(maxr1-minr1)
+        overage2 = (overage2-minr2)/(maxr2-minr2)
+        overage3 = (overage3-minr3)/(maxr3-minr3)
+        overage1_2 = (overage1_2-minr1)/(maxr1-minr1)
+        overage2_2 = (overage2_2-minr2)/(maxr2-minr2)
+        overage3_2 = (overage3_2-minr3)/(maxr3-minr3)
+        overage1_3 = (overage1_3-minr1)/(maxr1-minr1)
+        overage2_3 = (overage2_3-minr2)/(maxr2-minr2)
+        overage3_3 = (overage3_3-minr3)/(maxr3-minr3)
         
         
         # inv data
@@ -1068,6 +1083,7 @@ class InvEnv4(gym.Env):
         print("value หลัง normalize") 
         print("demand1 =", demand1,"=state[3]=",self.state[3])
         print("overage1 =", overage1,"=state[0]=",self.state[0])
+        print("state norm", self.state)
 
         # Clears the variables used to store data.
         N1P_ = 0
