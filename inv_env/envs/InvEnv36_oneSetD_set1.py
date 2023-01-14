@@ -929,7 +929,7 @@ class InvEnv6(gym.Env):
         self.state[25] = demand9
         self.state[26] = extra_p_on
         
-        print("#######################State####################", state)
+        print("#######################State####################", self.state)
         
         # Clears the variables used to store data.
         N1P_ = 0
