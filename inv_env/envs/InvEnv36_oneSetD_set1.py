@@ -288,7 +288,7 @@ class InvEnv6(gym.Env):
         maxr3 = 9000
         
          
-         print("############################################################# ")
+        print("############################################################# ")
 #         print("stepcount ", stepcount )
         print("value ก่อนแปลงกลับ") 
         print("demand1 =", demand1, "=state[3]=",self.state[3])
