@@ -96,7 +96,7 @@ class InvEnv6(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0)  # initial inventory
+            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory
             #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
