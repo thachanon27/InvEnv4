@@ -288,11 +288,11 @@ class InvEnv6(gym.Env):
         maxr3 = 9000
         
          
-#         print("############################################################# ")
+         print("############################################################# ")
 #         print("stepcount ", stepcount )
-#         print("value ก่อนแปลงกลับ") 
-#         print("demand1 =", demand1, "=state[3]=",self.state[3])
-#         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
+         print("value ก่อนแปลงกลับ") 
+         print("demand1 =", demand1, "=state[3]=",self.state[3])
+         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
         demand1 = demand1*(maxd1-mind1)+mind1
         demand2 = demand2*(maxd2-mind2)+mind2
@@ -314,6 +314,10 @@ class InvEnv6(gym.Env):
         overage1_3 = overage1_3*(maxr1-0)+0
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
+        
+        print("value หลังแปลงกลับ") 
+        print("demand1", demand1)
+        print("on_hand1", on_hand1)
 
         if action == 0:
             case = [[1, 0], [2, 3]]
@@ -894,6 +898,10 @@ class InvEnv6(gym.Env):
         overage2_3 = (overage2_3-minr2)/(maxr2-minr2)
         overage3_3 = (overage3_3-minr3)/(maxr3-minr3)
         
+        print("value ก่อน Normalize") 
+        print("demand1", demand1)
+        print("overage1", overage1)
+        
          # inv data
         self.state[0] = 0
         self.state[1] = 0
@@ -929,7 +937,10 @@ class InvEnv6(gym.Env):
         self.state[25] = demand9
         self.state[26] = extra_p_on
         
-        print("#######################State####################", self.state)
+        print("value หลัง Normalize") 
+        print("demand1", demand1)
+        print("overage1", overage1)
+        #print("#######################State####################", self.state)
         
         # Clears the variables used to store data.
         N1P_ = 0
