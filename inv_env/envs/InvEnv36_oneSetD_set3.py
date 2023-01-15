@@ -32,9 +32,9 @@ class InvEnv8(gym.Env):
         self.step_count = 0
         self.overall_time_trained = 0
         # initial inventory
-        self.on_hand1 = 5659
-        self.on_hand2 = 3051
-        self.on_hand3 = 2084
+        self.on_hand1 = (5659-0)/(12000-0)  #5659
+        self.on_hand2 = (3051-0)/(10000-0)
+        self.on_hand3 = (2084-0)/(9000-0)
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
@@ -96,7 +96,8 @@ class InvEnv8(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            5659, 3051, 2084,  # initial inventory
+            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory
+            #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
             0, 0, 0, 0,
@@ -272,6 +273,52 @@ class InvEnv8(gym.Env):
         # print("onhand1 from last period =", on_hand1)
         # print("onhand2 from last period =", on_hand2)
         # print("onhand3 from last period =", on_hand3)
+        
+        #parameter for normalize
+        mind1 = 0  #min demand1
+        mind2 = 0
+        mind3 = 0
+        maxd1 = 4500
+        maxd2 = 3500
+        maxd3 = 2500
+        minr1 = 0
+        minr2 = 0
+        minr3 = 0
+        maxr1 = 12000
+        maxr2 = 10000
+        maxr3 = 9000
+        
+         
+#         print("############################################################# ")
+#         print("stepcount ", stepcount )
+#         print("value ก่อนแปลงกลับ") 
+#         print("demand1 =", demand1, "=state[3]=",self.state[3])
+#         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
+        # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
+        demand1 = demand1*(maxd1-mind1)+mind1
+        demand2 = demand2*(maxd2-mind2)+mind2
+        demand3 = demand3*(maxd3-mind3)+mind3
+        
+        demand4 = demand4*(maxd1-mind1)+mind1
+        demand5 = demand5*(maxd2-mind2)+mind2
+        demand6 = demand6*(maxd3-mind3)+mind3
+        demand7 = demand7*(maxd1-mind1)+mind1
+        demand8 = demand8*(maxd2-mind2)+mind2
+        demand9 = demand9*(maxd3-mind3)+mind3
+        
+        on_hand1 = on_hand1*(maxr1-0)+0
+        on_hand2 = on_hand2*(maxr2-0)+0
+        on_hand3 = on_hand3*(maxr3-0)+0
+        overage1_2 = overage1_2*(maxr1-0)+0
+        overage2_2 = overage2_2*(maxr2-0)+0
+        overage3_2 = overage3_2*(maxr3-0)+0
+        overage1_3 = overage1_3*(maxr1-0)+0
+        overage2_3 = overage2_3*(maxr2-0)+0
+        overage3_3 = overage3_3*(maxr3-0)+0
+        
+#         print("value หลังแปลงกลับ") 
+#         print("demand1", demand1)
+#         print("on_hand1", on_hand1)
 
         if action == 0:
             case = [[1, 0], [2, 3]]
@@ -606,18 +653,28 @@ class InvEnv8(gym.Env):
         extra_penalty2 = 0
         extra_penalty3 = 0
         sum_extra_penalty = 0
-        if overage1 < 1500:
-            extra_penalty1 = 1000000
-        if overage2 < 1000:
-            extra_penalty2 = 1000000
+        s_penal = 40
+        if overage1 < 2000:
+            extra_penalty1 = s_penal*1000000
+        if overage2 < 1500:
+            extra_penalty2 = s_penal*1000000
         if overage3 < 1000:
-            extra_penalty3 = 1000000
-        if overage1 > 8000:
-            extra_penalty1 = 500000
-        if overage2 > 7000:
-            extra_penalty2 = 500000
-        if overage3 > 5000:
-            extra_penalty3 = 500000
+            extra_penalty3 = s_penal*1000000
+            
+        penal = 80
+        if overage1 == 0:
+            extra_penalty1 = penal*2000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+        if overage2 == 0:
+            extra_penalty2 = penal*2000000
+        if overage3 == 0:
+            extra_penalty3 = penal*2000000
+
+        if overage1 > 9000:
+            extra_penalty1 = s_penal*1000000
+        if overage2 > 8000:
+            extra_penalty2 = s_penal*1000000
+        if overage3  > 7000:
+            extra_penalty3 = s_penal*10000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         # print("extra penalty =", extra_penalty1, extra_penalty2, extra_penalty3)
@@ -694,37 +751,39 @@ class InvEnv8(gym.Env):
         extra_penalty1_3 = 0
         extra_penalty2_3 = 0
         extra_penalty3_3 = 0
-        overage1_2 = overage1 - d4
-        overage2_2 = overage2 - d5
-        overage3_2 = overage3 - d6
-        overage1_3 = overage1 - d7
-        overage2_3 = overage2 - d8
-        overage3_3 = overage3 - d9
+        overage1_2 = max(0,overage1 - d4 + R1)
+        overage2_2 = max(0,overage2 - d5 + R2)
+        overage3_2 = max(0,overage3 - d6 + R3)
+        overage1_3 = max(0,overage1 - d7 + R1)
+        overage2_3 = max(0,overage2 - d8 + R2)
+        overage3_3 = max(0,overage3 - d9 + R3)
         # print("overage1_2 =", overage1_2)
-        if overage1_2 < 1500:
-            extra_penalty1_2 = 1000000
-        if overage2_2 < 1000:
-            extra_penalty2_2 = 1000000
-        if overage3_2 < 1000:
-            extra_penalty3_2 = 1000000
-        if overage1_3 < 1500:
-            extra_penalty1_3 = 1000000
-        if overage2_3 < 1000:
-            extra_penalty2_3 = 1000000
-        if overage3_3 < 1000:
-            extra_penalty3_3 = 1000000
-        if overage1_2 > 8000:
-            extra_penalty1 = 500000
-        if overage2_2 > 7000:
-            extra_penalty2 = 500000
-        if overage3_2 > 5000:
-            extra_penalty3 = 500000
-        if overage1_3 > 8000:
-            extra_penalty1 = 500000
-        if overage2_3 > 7000:
-            extra_penalty2 = 500000
-        if overage3_3 > 5000:
-            extra_penalty3 = 500000
+        if overage1_2 == 0:
+            extra_penalty1_2 = s_penal*2000000
+        if overage2_2 == 0:
+            extra_penalty2_2 = s_penal*2000000
+        if overage3_2 == 0:
+            extra_penalty3_2 = s_penal*2000000
+        if overage1_3 == 0:
+            extra_penalty1_3 = s_penal*1000000
+        if overage2_3 == 0:
+            extra_penalty2_3 = s_penal*1000000
+        if overage3_3 == 0:
+            extra_penalty3_3 = s_penal*1000000
+
+        if overage1_2 > 10000:
+            extra_penalty1_2 = s_penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
+        if overage2_2 > 9000:
+            extra_penalty2_2 = s_penal*1000000
+        if overage3_2 > 8000:
+            extra_penalty3_2 = s_penal*1000000
+        if overage1_3 > 10000:
+            extra_penalty1_3 = penal*2000000
+        if overage2_3 > 9000:
+            extra_penalty2_3 = penal*2000000
+        if overage3_3 > 8000:
+            extra_penalty3_3 = penal*2000000
+            
         sum_extra_penalty_2 = extra_penalty1_2 + extra_penalty2_2 + extra_penalty3_2
         sum_extra_penalty_3 = extra_penalty1_3 + extra_penalty2_3 + extra_penalty3_3
         # print("extra penalty3 =", extra_penalty1_3, extra_penalty2_3, extra_penalty3_3)
@@ -736,12 +795,19 @@ class InvEnv8(gym.Env):
         # print("penalty array2 =", self.sum_ex_penalty_array_3)
 
         # reward that use to train agent
-        reward = (sales_revenue - (purchase_cost + holding + penalty_lost_sale
-                                   + (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
-                                   + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
-                                   + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
-                                   + (
-                                               extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)
+#         reward = (sales_revenue - (purchase_cost + holding + penalty_lost_sale
+#                                    + (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
+#                                    + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+#                                    + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+#                                    + (
+#                                                extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)
+
+        reward = (1500 - ((purchase_cost + holding + penalty_lost_sale
+                            + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
+                            + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+                            + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+                            + (
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1500   #650
 
         reward_ = sales_revenue \
                   - purchase_cost \
@@ -765,50 +831,9 @@ class InvEnv8(gym.Env):
                       - fix_production_cost \
                       - (variable_cost_m1 + variable_cost_m2)
 
-        # inv data
-        self.state[0] = 0
-        self.state[1] = 0
-        self.state[2] = 0
-        # update demand data this period
-        self.state[3] = demand1
-        self.state[4] = demand2
-        self.state[5] = demand3
+       
 
-        self.state[0] += overage1  # Inventory that has already subtracted demand
-        self.state[1] += overage2
-        self.state[2] += overage3
-        # collect Production data to use in next state
-        self.state[6] = N1P
-        self.state[7] = N1P1
-        self.state[8] = N1P2
-        self.state[9] = N1P3
-        self.state[10] = N2P
-        self.state[11] = N2P1
-        self.state[12] = N2P2
-        self.state[13] = N2P3
-        self.state[14] = overage1_2
-        self.state[15] = overage2_2
-        self.state[16] = overage3_2
-        self.state[17] = overage1_3
-        self.state[18] = overage2_3
-        self.state[19] = overage3_3
-        self.state[20] = demand4
-        self.state[21] = demand5
-        self.state[22] = demand6
-        self.state[23] = demand7
-        self.state[24] = demand8
-        self.state[25] = demand9
-        self.state[26] = extra_p_on
-
-        # Clears the variables used to store data.
-        N1P_ = 0
-        N1P1_ = 0
-        N1P2_ = 0
-        N1P3_ = 0
-        N2P_ = 0
-        N2P1_ = 0
-        N2P2_ = 0
-        N2P3_ = 0
+        
 
         # print("Step",self.step_count )
         self.step_count += 1
@@ -850,6 +875,83 @@ class InvEnv8(gym.Env):
                 self.demand_all, extra_p_on_set,  # last one is info[16]
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set]  # info[20-22]
+        
+#         print("value ก่อน Normalize") 
+#         print("demand1", demand1)
+#         print("overage1", overage1)
+        #Normalize value to 0-1 range  =before sendout to neural network
+        demand1 = (demand1-mind1)/(maxd1-mind1)
+        demand2 = (demand2-mind2)/(maxd2-mind2)
+        demand3 = (demand3-mind3)/(maxd3-mind3)
+        
+        demand4 = (demand4-mind1)/(maxd1-mind1)
+        demand5 = (demand5-mind2)/(maxd2-mind2)
+        demand6 = (demand6-mind3)/(maxd3-mind3)
+        demand7 = (demand7-mind1)/(maxd1-mind1)
+        demand8 = (demand8-mind2)/(maxd2-mind2)
+        demand9 = (demand9-mind3)/(maxd3-mind3)
+        
+        overage1 = (overage1-0)/(9000-0)
+        overage2 = (overage2-minr2)/(maxr2-minr2)
+        overage3 = (overage3-minr3)/(maxr3-minr3)
+        overage1_2 = (overage1_2-minr1)/(maxr1-minr1)
+        overage2_2 = (overage2_2-minr2)/(maxr2-minr2)
+        overage3_2 = (overage3_2-minr3)/(maxr3-minr3)
+        overage1_3 = (overage1_3-minr1)/(maxr1-minr1)
+        overage2_3 = (overage2_3-minr2)/(maxr2-minr2)
+        overage3_3 = (overage3_3-minr3)/(maxr3-minr3)
+        
+        
+        
+         # inv data
+        self.state[0] = 0
+        self.state[1] = 0
+        self.state[2] = 0
+        # update demand data this period
+        self.state[3] = demand1
+        self.state[4] = demand2
+        self.state[5] = demand3
+
+        self.state[0] += overage1  # Inventory that has already subtracted demand
+        self.state[1] += overage2
+        self.state[2] += overage3
+        # collect Production data to use in next state
+        self.state[6] = N1P
+        self.state[7] = N1P1
+        self.state[8] = N1P2
+        self.state[9] = N1P3
+        self.state[10] = N2P
+        self.state[11] = N2P1
+        self.state[12] = N2P2
+        self.state[13] = N2P3
+        self.state[14] = overage1_2
+        self.state[15] = overage2_2
+        self.state[16] = overage3_2
+        self.state[17] = overage1_3
+        self.state[18] = overage2_3
+        self.state[19] = overage3_3
+        self.state[20] = demand4
+        self.state[21] = demand5
+        self.state[22] = demand6
+        self.state[23] = demand7
+        self.state[24] = demand8
+        self.state[25] = demand9
+        self.state[26] = extra_p_on
+        
+#         print("value หลัง Normalize") 
+#         print("demand1", demand1)
+#         print("overage1", overage1)
+        #print("#######################State####################", self.state)
+        
+        # Clears the variables used to store data.
+        N1P_ = 0
+        N1P1_ = 0
+        N1P2_ = 0
+        N1P3_ = 0
+        N2P_ = 0
+        N2P1_ = 0
+        N2P2_ = 0
+        N2P3_ = 0
 
         '''
         if R1 > 0:
