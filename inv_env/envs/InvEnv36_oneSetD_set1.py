@@ -32,9 +32,9 @@ class InvEnv6(gym.Env):
         self.step_count = 0
         self.overall_time_trained = 0
         # initial inventory
-        self.on_hand1 = 5659  #5659
-        self.on_hand2 = 3051
-        self.on_hand3 = 2084
+        self.on_hand1 = (5659-0)/(12000-0)  #5659
+        self.on_hand2 = (3051-0)/(10000-0)
+        self.on_hand3 = (2084-0)/(9000-0)
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
@@ -96,7 +96,8 @@ class InvEnv6(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            8659, 3051, 2084,  # initial inventory               #5659
+            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0)  # initial inventory
+            #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
             0, 0, 0, 0,
@@ -876,6 +877,9 @@ class InvEnv6(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set]  # info[20-22]
         
+        print("value ก่อน Normalize") 
+        print("demand1", demand1)
+        print("overage1", overage1)
         #Normalize value to 0-1 range  =before sendout to neural network
         demand1 = (demand1-mind1)/(maxd1-mind1)
         demand2 = (demand2-mind2)/(maxd2-mind2)
@@ -898,9 +902,7 @@ class InvEnv6(gym.Env):
         overage2_3 = (overage2_3-minr2)/(maxr2-minr2)
         overage3_3 = (overage3_3-minr3)/(maxr3-minr3)
         
-        print("value ก่อน Normalize") 
-        print("demand1", demand1)
-        print("overage1", overage1)
+        
         
          # inv data
         self.state[0] = 0
