@@ -77,7 +77,7 @@ class InvEnv4(gym.Env):
         self.sum_ex_penalty_array = []
         self.sum_ex_penalty_array_2 = []
         self.sum_ex_penalty_array_3 = []
-        self.demand_all = [0, 0, 0,np.random.randint(2500, 4500), np.random.randint(2000, 3500), np.random.randint(1000, 2500),0, 0, 0]
+        self.demand_all = [0, 0, 0,(np.random.randint(2500, 4500)-2500)/(4500-2500), (np.random.randint(2000, 3500)-3500)/(3500-2000), (np.random.randint(1000, 2500)-2500)/(2500-1000),0, 0, 0 ]
         self.reset()
         self.M1P1_set = []
         self.M1P2_set = []
