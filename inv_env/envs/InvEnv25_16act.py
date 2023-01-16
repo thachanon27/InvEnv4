@@ -31,9 +31,9 @@ class InvEnv4(gym.Env):
         self.step_count = 0
         self.overall_time_trained = 0
         # initial inventory
-        self.on_hand1 = np.random.randint(3500, 6500) #5659
-        self.on_hand2 = np.random.randint(2500, 4500) #3051
-        self.on_hand3 = np.random.randint(2000, 3500) #2084
+        self.on_hand1 = (np.random.randint(3500, 6500)-12000)/(12000-0) #5659
+        self.on_hand2 = (np.random.randint(2500, 4500)-10000)/(10000-0) #3051
+        self.on_hand3 = (np.random.randint(2000, 3500)-9000)/(9000-0) #2084
         # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
@@ -109,7 +109,7 @@ class InvEnv4(gym.Env):
         ])
         self.sum_reward = 0
         self.sum_real_reward = 0
-        self.demand_all = [0, 0, 0,np.random.randint(2500, 4500), np.random.randint(2000, 3500), np.random.randint(1000, 2500),0, 0, 0 ]
+        self.demand_all = [0, 0, 0,(np.random.randint(2500, 4500)-2500)/(4500-2500), (np.random.randint(2000, 3500)-3500)/(3500-2000), (np.random.randint(1000, 2500)-2500)/(2500-1000),0, 0, 0 ]
         self.M1P1_set = []
         self.M1P2_set = []
         self.M1P3_set = []
