@@ -1011,7 +1011,7 @@ class InvEnv4(gym.Env):
 
         # Normalize the reward
         raw_reward = reward
-        reward = reward
+        reward = reward/25
 
         # reward = (315 + reward)    #ไว้แก้ไม่ให้ค่า reward เป็นลบ  คำนวณได้ว่าค่า max penalty per period จะประมาณ 121000000 หรือ 121 M
         # reward = (500 + reward)     #เหมือนใช้ 315 แล้วไม่ค่อยโอเค อาจจะยังมีติดลบอยู่ เลยเพิ่มเห็น 500
@@ -1063,7 +1063,7 @@ class InvEnv4(gym.Env):
         demand8 = (demand8-mind2)/(maxd2-mind2)
         demand9 = (demand9-mind3)/(maxd3-mind3)
         
-        overage1 = (overage1-0)/(9000-0)
+        overage1 = (overage1-minr1)/(maxr1-minr1)
         overage2 = (overage2-minr2)/(maxr2-minr2)
         overage3 = (overage3-minr3)/(maxr3-minr3)
         overage1_2 = (overage1_2-minr1)/(maxr1-minr1)
