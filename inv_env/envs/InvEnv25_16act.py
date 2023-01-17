@@ -289,9 +289,9 @@ class InvEnv4(gym.Env):
         
          
 #         print("############################################################# ")
-        print("stepcount ", self.step_count )
-        print("value ก่อนแปลงกลับ") 
-        print("demand1 =", demand1, "=state[3]=",self.state[3])
+#         print("stepcount ", self.step_count )
+#         print("value ก่อนแปลงกลับ") 
+#         print("demand1 =", demand1, "=state[3]=",self.state[3])
 #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
         demand1 = demand1*(maxd1-mind1)+mind1
@@ -315,8 +315,8 @@ class InvEnv4(gym.Env):
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
         
-        print("value หลังแปลงกลับ") 
-        print("demand1 =", demand1)
+#         print("value หลังแปลงกลับ") 
+#         print("demand1 =", demand1)
 #         print("on_hand1 =", on_hand1)
         
 
