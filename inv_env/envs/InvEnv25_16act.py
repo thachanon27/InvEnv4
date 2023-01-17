@@ -671,7 +671,7 @@ class InvEnv4(gym.Env):
         extra_reward2 = 0
         extra_reward3 = 0
 
-        s_penal = 40
+        s_penal = 8
         if overage1 < 2000:
             extra_penalty1 = s_penal*1000000
         if overage2 < 1500:
@@ -679,7 +679,7 @@ class InvEnv4(gym.Env):
         if overage3 < 1000:
             extra_penalty3 = s_penal*1000000
             
-        penal = 80
+        penal = 15
         if overage1 <= 0:
             extra_penalty1 = penal*1000000*1.5  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
@@ -956,12 +956,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (1800 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (350 - ((purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1800   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 350   #650
         
         #normalize reward อีกที 
         #reward = reward/25
