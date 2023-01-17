@@ -680,12 +680,12 @@ class InvEnv4(gym.Env):
             extra_penalty3 = s_penal*1000000
             
         penal = 80
-        if overage1 == 0:
-            extra_penalty1 = penal*2000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
-        if overage2 == 0:
-            extra_penalty2 = penal*2000000
-        if overage3 == 0:
-            extra_penalty3 = penal*2000000
+        if overage1 <= 0:
+            extra_penalty1 = penal*1000000*1.5  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+        if overage2 <= 0:
+            extra_penalty2 = penal*1000000*1.5
+        if overage3 <= 0:
+            extra_penalty3 = penal*1000000*1.5
 
         if overage1 > 9000:
             extra_penalty1 = s_penal*1000000
@@ -695,11 +695,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = s_penal*1000000
         
         if overage1 > 15000:
-            extra_penalty1 = 10*penal*1000000
-        if overage2 > 15000:
-            extra_penalty2 = 10*penal*1000000
-        if overage3  > 15000:
-            extra_penalty3 = 10*penal*1000000
+            extra_penalty1 = penal*1000000
+        if overage2 > 13000:
+            extra_penalty2 = penal*1000000
+        if overage3  > 12000:
+            extra_penalty3 = penal*1000000
             
         
             
@@ -882,17 +882,17 @@ class InvEnv4(gym.Env):
 #         if overage3_3 < 1000:
 #             extra_penalty3_3 = s_penal*1000000
         
-        if overage1_2 == 0:
+        if overage1_2 <= 0:
             extra_penalty1_2 = s_penal*2000000
-        if overage2_2 == 0:
+        if overage2_2 <= 0:
             extra_penalty2_2 = s_penal*2000000
-        if overage3_2 == 0:
+        if overage3_2 <= 0:
             extra_penalty3_2 = s_penal*2000000
-        if overage1_3 == 0:
+        if overage1_3 <= 0:
             extra_penalty1_3 = s_penal*1000000
-        if overage2_3 == 0:
+        if overage2_3 <= 0:
             extra_penalty2_3 = s_penal*1000000
-        if overage3_3 == 0:
+        if overage3_3 <= 0:
             extra_penalty3_3 = s_penal*1000000
 
         if overage1_2 > 10000:
