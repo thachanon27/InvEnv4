@@ -289,8 +289,8 @@ class InvEnv4(gym.Env):
         
          
 #         print("############################################################# ")
-#         print("stepcount ", stepcount )
-#         print("value ก่อนแปลงกลับ") 
+        print("stepcount ", stepcount )
+        print("value ก่อนแปลงกลับ") 
 #         print("demand1 =", demand1, "=state[3]=",self.state[3])
 #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
