@@ -289,7 +289,7 @@ class InvEnv4(gym.Env):
         
          
 #         print("############################################################# ")
-        print("stepcount ", self.stepcount )
+        print("stepcount ", self.step_count )
         print("value ก่อนแปลงกลับ") 
 #         print("demand1 =", demand1, "=state[3]=",self.state[3])
         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
