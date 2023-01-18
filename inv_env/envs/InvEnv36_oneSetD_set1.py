@@ -674,7 +674,7 @@ class InvEnv6(gym.Env):
         if overage2 > 8000:
             extra_penalty2 = s_penal*1000000
         if overage3  > 7000:
-            extra_penalty3 = s_penal*10000000
+            extra_penalty3 = s_penal*1000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         # print("extra penalty =", extra_penalty1, extra_penalty2, extra_penalty3)
@@ -892,7 +892,7 @@ class InvEnv6(gym.Env):
         demand8 = (demand8-mind2)/(maxd2-mind2)
         demand9 = (demand9-mind3)/(maxd3-mind3)
         
-        overage1 = (overage1-0)/(9000-0)
+        overage1 = (overage1-minr1)/(maxr1-minr1)
         overage2 = (overage2-minr2)/(maxr2-minr2)
         overage3 = (overage3-minr3)/(maxr3-minr3)
         overage1_2 = (overage1_2-minr1)/(maxr1-minr1)
