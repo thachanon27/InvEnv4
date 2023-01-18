@@ -604,7 +604,7 @@ class InvEnv4(gym.Env):
         extra_p_on_set = []
        
         ######################################################################
-        penalty_onpeak = 2000
+        penalty_onpeak = 3000
         
         if stp in on_peak_stepcount:
             # print("yes")
@@ -681,11 +681,11 @@ class InvEnv4(gym.Env):
             
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal*1000000*1.5  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal*1000000*2  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal*1000000*1.5
+            extra_penalty2 = penal*1000000*2
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*1.5
+            extra_penalty3 = penal*1000000*2
 
         if overage1 > 9000:
             extra_penalty1 = s_penal*1000000
@@ -694,12 +694,12 @@ class InvEnv4(gym.Env):
         if overage3  > 7000:
             extra_penalty3 = s_penal*1000000
         
-        if overage1 > 15000:
-            extra_penalty1 = penal*1000000
-        if overage2 > 13000:
-            extra_penalty2 = penal*1000000
-        if overage3  > 12000:
-            extra_penalty3 = penal*1000000
+        if overage1 > 12000:
+            extra_penalty1 = penal*1000000*2
+        if overage2 > 11000:
+            extra_penalty2 = penal*1000000*2
+        if overage3  > 10000:
+            extra_penalty3 = penal*1000000*2
             
         
             
@@ -956,12 +956,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (350 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (450 - ((purchase_cost + holding + penalty_lost_sale
                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 350   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 450   #650
         
         #normalize reward อีกที 
         #reward = reward/25
