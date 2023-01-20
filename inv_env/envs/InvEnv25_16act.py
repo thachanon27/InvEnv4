@@ -996,7 +996,7 @@ class InvEnv4(gym.Env):
                        - (changeover_cost_of_m1 + changeover_cost_of_m2)
                        - switch_on_cost
                        - fix_production_cost
-                       - (variable_cost_m1 + variable_cost_m2))
+                       - (variable_cost_m1 + variable_cost_m2))/34.84   #แปลงจากบาท to dollar
 
         
         
