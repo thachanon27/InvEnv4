@@ -86,6 +86,9 @@ class InvEnv4(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
 
     def reset(
             self,
@@ -183,9 +186,9 @@ class InvEnv4(gym.Env):
         FC_M2 = 0
         stepcount = 0
         
-        changeover_cost_of_m1 = 0
-        changeover_cost_of_m2 = 0
-        switch_on_cost = 0
+        self.changeover_cost_of_m1 = 0
+        self.changeover_cost_of_m2 = 0
+        self.switch_on_cost = 0
 
 
         extra_penalty1 = 0
@@ -619,10 +622,10 @@ class InvEnv4(gym.Env):
             co11 = 33896
             co21 = 33896
             sw1 = 401.78
-            changeover_cost_of_m1 = co11 * (
+            self.changeover_cost_of_m1 = co11 * (
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
-            switch_on_cost = sw1*(SW1 + SW2)
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
             variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
             
@@ -655,10 +658,10 @@ class InvEnv4(gym.Env):
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
-            changeover_cost_of_m1 = co11 * (
+            self.changeover_cost_of_m1 = co11 * (
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
-            switch_on_cost = sw1*(SW1 + SW2)
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
             variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
@@ -668,10 +671,10 @@ class InvEnv4(gym.Env):
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
-            changeover_cost_of_m1 = co11 * (
+            self.changeover_cost_of_m1 = co11 * (
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
-            switch_on_cost = sw1*(SW1 + SW2)
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
             variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
 
@@ -989,8 +992,8 @@ class InvEnv4(gym.Env):
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
         reward = (450 - ((purchase_cost + holding + penalty_lost_sale
-                            + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
-                            + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+                            + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
+                            + self.switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 450   #650
