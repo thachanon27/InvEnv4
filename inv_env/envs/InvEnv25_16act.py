@@ -89,6 +89,9 @@ class InvEnv4(gym.Env):
         self.changeover_cost_of_m1 = 0
         self.switch_on_cost = 0
         self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
+        
 
     def reset(
             self,
@@ -626,8 +629,8 @@ class InvEnv4(gym.Env):
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
             self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
             self.switch_on_cost = sw1*(SW1 + SW2)
-            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
             
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
@@ -662,8 +665,8 @@ class InvEnv4(gym.Env):
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
             self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
             self.switch_on_cost = sw1*(SW1 + SW2)
-            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
@@ -675,8 +678,8 @@ class InvEnv4(gym.Env):
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
             self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
             self.switch_on_cost = sw1*(SW1 + SW2)
-            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
 
         # print("vcm1_cost = ", vcm1)
         # print("vcm2_cost = ", vcm2)
@@ -993,7 +996,7 @@ class InvEnv4(gym.Env):
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
         reward = (450 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
-                            + self.switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+                            + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 450   #650
@@ -1031,7 +1034,7 @@ class InvEnv4(gym.Env):
                        - (self.changeover_cost_of_m1 + self.changeover_cost_of_m2)
                        - self.switch_on_cost
                        - fix_production_cost
-                       - (variable_cost_m1 + variable_cost_m2))/34.84   #แปลงจากบาท to dollar
+                       - (self.variable_cost_m1 + self.variable_cost_m2))/34.84   #แปลงจากบาท to dollar
 
         
         
