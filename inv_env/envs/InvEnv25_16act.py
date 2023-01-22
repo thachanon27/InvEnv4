@@ -182,6 +182,11 @@ class InvEnv4(gym.Env):
         FC_M1 = 0  # fix production (N)
         FC_M2 = 0
         stepcount = 0
+        
+        changeover_cost_of_m1 = 0
+        changeover_cost_of_m2 = 0
+        switch_on_cost = 0
+
 
         extra_penalty1 = 0
         extra_penalty2 = 0
@@ -643,7 +648,6 @@ class InvEnv4(gym.Env):
             extra_p_on = 1  # = next step will be on-peak
         
         
-
         if stp in off_peak_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
