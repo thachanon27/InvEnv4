@@ -146,12 +146,12 @@ class InvEnv4(gym.Env):
         c1 = 1434.375  # 3060
         c2 = 871.875  # 1860
         c3 = 1395.000  # 2976
-        # chage over
-        co11 = 4631.490
-        co21 = 4631.490
-        # switch_on_cost
-        sw1 = 401.790
-        sw2 = 401.790
+        # chage over  #ต้นทุนเปลี่ยนตาม on-off peak เลยเอาไปใส่ในบรรทัด 609 แทน
+        #co11 = 33896   #4631.490
+        #co21 = 33896    #4631.490
+        # switch_on_cost  #ต้นทุนเปลี่ยนตาม on-off peak เลยเอาไปใส่ในบรรทัด 609 แทน
+        #sw1 = 401.790
+        #sw2 = 401.790
         # fix_production_cost
         fc_m1 = 1426.140
         fc_m2 = 1326.140
@@ -611,6 +611,10 @@ class InvEnv4(gym.Env):
             vcm1 = vc_m1_on
             # print("vcm1 = ", vcm1)
             vcm2 = vc_m2_on
+            co11 = 33896
+            co21 = 33896
+            sw1 = 401.78
+            
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
@@ -638,10 +642,16 @@ class InvEnv4(gym.Env):
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
         if stp in weekend_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
 
         # print("vcm1_cost = ", vcm1)
         # print("vcm2_cost = ", vcm2)
@@ -653,7 +663,7 @@ class InvEnv4(gym.Env):
         changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
         # print("CO11 =",CO11)
         # print("CO21 =",CO21)
-        switch_on_cost = sw1 * SW1 + sw2 * SW2
+        switch_on_cost = sw1*(SW1 + SW2)
         # print("SW1 =", SW1)
         # print("SW2 =", SW2)
 
