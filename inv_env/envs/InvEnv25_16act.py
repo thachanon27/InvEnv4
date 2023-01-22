@@ -965,12 +965,12 @@ class InvEnv4(gym.Env):
         # print("penalty array2 =", self.sum_ex_penalty_array_3)
 
         # reward that use to train agent
-        reward_ = (((-purchase_cost + holding + penalty_lost_sale
-                     - (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
-                     - switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
-                     - sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
-                     - (
-                                 extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000))
+#         reward_ = (((-purchase_cost + holding + penalty_lost_sale
+#                      - (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
+#                      - switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+#                      - sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+#                      - (
+#                                  extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000))
 
         #for Tanh activation fn
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
@@ -981,12 +981,12 @@ class InvEnv4(gym.Env):
 #                             + (
 #                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 100
         #print("reward",reward)
-        reward_tanh = (0 - ((purchase_cost + holding + penalty_lost_sale
-                            + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
-                            + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
-                            + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
-                            + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 500
+#         reward_tanh = (0 - ((purchase_cost + holding + penalty_lost_sale
+#                             + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
+#                             + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+#                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+#                             + (
+#                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 500
         
         #for Gelu activation fn
         #sum_extra_reward/1000000
@@ -1002,23 +1002,23 @@ class InvEnv4(gym.Env):
         #reward = reward/25
 
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออกก
-        reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
-                                                     + (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
-                                                     + switch_on_cost + fix_production_cost + (
-                                                                 variable_cost_m1 + variable_cost_m2)
-                                                     + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
-                                                     + (
-                                                                 extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000) / 415
+#         reward___ = (415 + (sales_revenue) / 1000000 - (purchase_cost + holding * 3 + penalty_lost_sale
+#                                                      + (changeover_cost_of_m1 + changeover_cost_of_m2) * 100
+#                                                      + switch_on_cost + fix_production_cost + (
+#                                                                  variable_cost_m1 + variable_cost_m2)
+#                                                      + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+#                                                      + (
+#                                                                  extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000) / 415
 
  #real reward that equal to real revenue
-        reward_____ = (sales_revenue
-                       - purchase_cost
-                       - holding
-                       - penalty_lost_sale
-                       - (changeover_cost_of_m1 + changeover_cost_of_m2)
-                       - switch_on_cost
-                       - fix_production_cost
-                       - (variable_cost_m1 + variable_cost_m2))
+#         reward_____ = (sales_revenue
+#                        - purchase_cost
+#                        - holding
+#                        - penalty_lost_sale
+#                        - (changeover_cost_of_m1 + changeover_cost_of_m2)
+#                        - switch_on_cost
+#                        - fix_production_cost
+#                        - (variable_cost_m1 + variable_cost_m2))
       
     
     
@@ -1028,8 +1028,8 @@ class InvEnv4(gym.Env):
                        - purchase_cost
                        - holding
                        - penalty_lost_sale
-                       - (changeover_cost_of_m1 + changeover_cost_of_m2)
-                       - switch_on_cost
+                       - (self.changeover_cost_of_m1 + self.changeover_cost_of_m2)
+                       - self.switch_on_cost
                        - fix_production_cost
                        - (variable_cost_m1 + variable_cost_m2))/34.84   #แปลงจากบาท to dollar
 
