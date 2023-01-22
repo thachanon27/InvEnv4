@@ -614,6 +614,12 @@ class InvEnv4(gym.Env):
             co11 = 33896
             co21 = 33896
             sw1 = 401.78
+            changeover_cost_of_m1 = co11 * (
+                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            switch_on_cost = sw1*(SW1 + SW2)
+            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
             
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
@@ -645,6 +651,12 @@ class InvEnv4(gym.Env):
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
+            changeover_cost_of_m1 = co11 * (
+                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            switch_on_cost = sw1*(SW1 + SW2)
+            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
@@ -652,18 +664,24 @@ class InvEnv4(gym.Env):
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
+            changeover_cost_of_m1 = co11 * (
+                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+            changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            switch_on_cost = sw1*(SW1 + SW2)
+            variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
 
         # print("vcm1_cost = ", vcm1)
         # print("vcm2_cost = ", vcm2)
-        variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-        variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+        #variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+        #variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         # print("variable_cost_m1 = ", variable_cost_m1)
-        changeover_cost_of_m1 = co11 * (
-                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-        changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+        #changeover_cost_of_m1 = co11 * (
+        #        CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+        #changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
         # print("CO11 =",CO11)
         # print("CO21 =",CO21)
-        switch_on_cost = sw1*(SW1 + SW2)
+        #switch_on_cost = sw1*(SW1 + SW2)
         # print("SW1 =", SW1)
         # print("SW2 =", SW2)
 
