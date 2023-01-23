@@ -1001,6 +1001,13 @@ class InvEnv4(gym.Env):
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 450   #650
         
+        pure_reward = (purchase_cost + holding + penalty_lost_sale
+                            + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
+                            + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
+                            + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+                            + (
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) 
+        
         #normalize reward อีกที 
         #reward = reward/25
 
@@ -1038,7 +1045,21 @@ class InvEnv4(gym.Env):
 
         
         
-
+        print("############################################################# ")
+        print("stepcount ", self.step_count )
+        print("self.changeover_cost_of_m1 ", self.changeover_cost_of_m1 )
+        print("self.changeover_cost_of_m2 ", self.changeover_cost_of_m2 )
+        print("self.switch_on_cost ", self.switch_on_cost )
+        print("self.variable_cost_m1 ", self.variable_cost_m1 )
+        print("self.variable_cost_m2 ", self.variable_cost_m2 )
+        print("fix_production_cost ", fix_production_cost )
+        print("holding ", holding )
+        print("purchase_cost ", purchase_cost )
+        print("sum_extra_penalty ", sum_extra_penalty )
+        print("sum_extra_penalty2 ", sum_extra_penalty_2 )
+        print("sum_extra_penalty3 ", sum_extra_penalty_3 )
+        print("pure_reward ", pure_reward )
+        
         # print("Step", self.step_count)
         self.step_count += 1
         done = bool(self.step_count >= 29)  # planning time frame period = 15
