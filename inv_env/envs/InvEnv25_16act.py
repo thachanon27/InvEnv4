@@ -792,7 +792,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 10000)  # train with 500 set of demand data  #5000
+                rng3 = randint(0, 10000000)  #24-01-66=10000 # train with 500 set of demand data  #5000
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
@@ -831,7 +831,7 @@ class InvEnv4(gym.Env):
             if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
                 #y = self.step_count
-                rng3 = randint(0, 10000)  # train with 50,000,000 set of demand data
+                rng3 = randint(0, 10000000)  # train with 50,000,000 set of demand data
                 np.random.seed(rng3)
                 demand_array2[y * 3] = np.random.randint(2500, 4500)
                 self.demand_all.append(demand_array2[y * 3])
