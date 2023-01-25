@@ -279,14 +279,14 @@ class InvEnv13(gym.Env):
         mind2 = 0
         mind3 = 0
         maxd1 = 4500
-        maxd2 = 3500
-        maxd3 = 2500
+        maxd2 = 4500
+        maxd3 = 4500
         minr1 = 0
         minr2 = 0
         minr3 = 0
         maxr1 = 12000
-        maxr2 = 10000
-        maxr3 = 9000
+        maxr2 = 12000
+        maxr3 = 12000
         
          
 #         print("############################################################# ")
@@ -892,7 +892,7 @@ class InvEnv13(gym.Env):
         demand8 = (demand8-mind2)/(maxd2-mind2)
         demand9 = (demand9-mind3)/(maxd3-mind3)
         
-        overage1 = (overage1-0)/(9000-0)
+        overage1 = (overage1-minr1)/(maxr1-minr1)
         overage2 = (overage2-minr2)/(maxr2-minr2)
         overage3 = (overage3-minr3)/(maxr3-minr3)
         overage1_2 = (overage1_2-minr1)/(maxr1-minr1)
