@@ -279,14 +279,14 @@ class InvEnv6(gym.Env):
         mind2 = 0
         mind3 = 0
         maxd1 = 4500
-        maxd2 = 3500
-        maxd3 = 2500
+        maxd2 = 4500
+        maxd3 = 4500
         minr1 = 0
         minr2 = 0
         minr3 = 0
         maxr1 = 12000
-        maxr2 = 10000
-        maxr3 = 9000
+        maxr2 = 12000
+        maxr3 = 12000
         
          
 #         print("############################################################# ")
