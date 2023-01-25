@@ -141,9 +141,9 @@ class InvEnv4(gym.Env):
         h2 = 29.86  # 34.53
         h3 = 47.77  # 48.66
         # Lost of good Will
-        k1 = 10200
-        k2 = 6200
-        k3 = 9920
+        k1 = 10200*25
+        k2 = 6200*25
+        k3 = 9920*25
         # Sell price
         p1 = 5100
         p2 = 3100
