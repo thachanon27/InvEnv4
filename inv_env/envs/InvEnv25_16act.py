@@ -741,8 +741,8 @@ class InvEnv4(gym.Env):
             
         
             
-        if overage1 in range(2000,9000) and overage2 in range(2000,8000) and overage3 in range(1500,7500) :
-            extra_reward1 = 50*1000000
+        if overage1 in range(50,7000) and overage2 in range(50,6000) and overage3 in range(50,5500) :
+            extra_reward1 = 150*1000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         
@@ -994,7 +994,7 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (440 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (440 + extra_reward1 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
