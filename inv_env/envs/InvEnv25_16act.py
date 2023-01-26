@@ -719,11 +719,11 @@ class InvEnv4(gym.Env):
             
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal*1000000*2  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal*1000000*4  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal*1000000*2
+            extra_penalty2 = penal*1000000*4
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*2
+            extra_penalty3 = penal*1000000*4
 
         if overage1 > 7000:
             extra_penalty1 = s_penal*1000000*1.5
@@ -921,17 +921,17 @@ class InvEnv4(gym.Env):
 #             extra_penalty3_3 = s_penal*1000000
         
         if overage1_2 <= 0:
-            extra_penalty1_2 = s_penal*2000000
+            extra_penalty1_2 = penal*2000000
         if overage2_2 <= 0:
-            extra_penalty2_2 = s_penal*2000000
+            extra_penalty2_2 = penal*2000000
         if overage3_2 <= 0:
-            extra_penalty3_2 = s_penal*2000000
+            extra_penalty3_2 = penal*2000000
         if overage1_3 <= 0:
-            extra_penalty1_3 = s_penal*1000000
+            extra_penalty1_3 = penal*1000000*2
         if overage2_3 <= 0:
-            extra_penalty2_3 = s_penal*1000000
+            extra_penalty2_3 = penal*1000000*2
         if overage3_3 <= 0:
-            extra_penalty3_3 = s_penal*1000000
+            extra_penalty3_3 = penal*1000000*2
 
         if overage1_2 > 5000:
             extra_penalty1_2 = s_penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
@@ -994,12 +994,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (500 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (440 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 500   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 440   #650
         
         pure_reward = (purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
