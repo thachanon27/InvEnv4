@@ -723,21 +723,21 @@ class InvEnv4(gym.Env):
         if overage2 <= 0:
             extra_penalty2 = penal*1000000*4
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*4
+            extra_penalty3 = penal*1000000*6
 
         if overage1 > 7000:
-            extra_penalty1 = s_penal*1000000*1.5
+            extra_penalty1 = penal*1000000*3
         if overage2 > 6500:
-            extra_penalty2 = s_penal*1000000*1.5
+            extra_penalty2 = penal*1000000*3
         if overage3  > 6000:
-            extra_penalty3 = s_penal*1000000*1.5
+            extra_penalty3 = penal*1000000*3
         
         if overage1 > 10000:
-            extra_penalty1 = penal*1000000*2
+            extra_penalty1 = penal*1000000*3
         if overage2 > 9000:
-            extra_penalty2 = penal*1000000*2
+            extra_penalty2 = penal*1000000*3
         if overage3  > 8000:
-            extra_penalty3 = penal*1000000*2
+            extra_penalty3 = penal*1000000*3
             
         
             
@@ -933,18 +933,18 @@ class InvEnv4(gym.Env):
         if overage3_3 <= 0:
             extra_penalty3_3 = penal*1000000*2
 
-        if overage1_2 > 5000:
-            extra_penalty1_2 = s_penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
-        if overage2_2 > 5000:
-            extra_penalty2_2 = s_penal*1000000
-        if overage3_2 > 5000:
-            extra_penalty3_2 = s_penal*1000000
-        if overage1_3 > 3000:
-            extra_penalty1_3 = penal*2000000
-        if overage2_3 > 3000:
-            extra_penalty2_3 = penal*2000000
-        if overage3_3 > 3000:
-            extra_penalty3_3 = penal*2000000
+        if overage1_2 > 6000:
+            extra_penalty1_2 = penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
+        if overage2_2 > 6000:
+            extra_penalty2_2 = penal*1000000
+        if overage3_2 > 6000:
+            extra_penalty3_2 = penal*1000000
+        if overage1_3 > 6000:
+            extra_penalty1_3 = penal*1000000*6
+        if overage2_3 > 6000:
+            extra_penalty2_3 = penal*1000000*4
+        if overage3_3 > 6000:
+            extra_penalty3_3 = penal*1000000*4
         
 
             
@@ -994,12 +994,12 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (440 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (550 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 440   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 550   #650
         
         pure_reward = (purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
