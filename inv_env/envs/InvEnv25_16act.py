@@ -732,7 +732,7 @@ class InvEnv4(gym.Env):
         if overage3  > 6000:
             extra_penalty3 = penal*1000000*7
         
-        if overage1 > 10000:
+        if overage1 > 9000:   #10000
             extra_penalty1 = penal*1000000*10
         if overage2 > 9000:
             extra_penalty2 = penal*1000000*10
