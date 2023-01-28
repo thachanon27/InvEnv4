@@ -84,6 +84,11 @@ class InvEnv6(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
 
     def reset(
             self,
@@ -114,6 +119,11 @@ class InvEnv6(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
         if not return_info:
             return np.array(self.state, dtype=np.float32)
         else:
@@ -190,6 +200,12 @@ class InvEnv6(gym.Env):
         extra_penalty3_3 = 0
 
         extra_p_on = 0
+        
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
 
         # print("=========================================================================================")
         # print("step :", self.step_count)
@@ -626,23 +642,29 @@ class InvEnv6(gym.Env):
         if stp in off_peak_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
+            extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
+            self.changeover_cost_of_m1 = co11 * (
+                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
-
-        # print("vcm1_cost = ", vcm1)
-        # print("vcm2_cost = ", vcm2)
-        variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-        variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
-        # print("variable_cost_m1 = ", variable_cost_m1)
-        changeover_cost_of_m1 = co11 * (
+            extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
+            self.changeover_cost_of_m1 = co11 * (
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-        changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
-        # print("CO11 =",CO11)
-        # print("CO21 =",CO21)
-        switch_on_cost = sw1 * SW1 + sw2 * SW2
-        # print("SW1 =", SW1)
-        # print("SW2 =", SW2)
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
 
         fix_production_cost = fc_m1 * FC_M1 + fc_m2 * FC_M2
         # print("FC_M1 =", FC_M1)
@@ -654,12 +676,12 @@ class InvEnv6(gym.Env):
         extra_penalty3 = 0
         sum_extra_penalty = 0
         s_penal = 40
-        if overage1 < 2000:
-            extra_penalty1 = s_penal*1000000
-        if overage2 < 1500:
-            extra_penalty2 = s_penal*1000000
-        if overage3 < 1000:
-            extra_penalty3 = s_penal*1000000
+        if overage1 < 500:
+            extra_penalty1 = penal*1000000
+        if overage2 < 500:
+            extra_penalty2 = penal*1000000
+        if overage3 < 500:
+            extra_penalty3 = penal*1000000
             
         penal = 80
         if overage1 == 0:
