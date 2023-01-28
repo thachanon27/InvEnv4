@@ -676,6 +676,7 @@ class InvEnv6(gym.Env):
         if overage3  > 7000:
             extra_penalty3 = s_penal*1000000
         
+        extra_reward1 = 0
         if overage1 in range(50,7000) and overage2 in range(50,6000) and overage3 in range(50,5500) :
             extra_reward1 = 300*1000000
 
