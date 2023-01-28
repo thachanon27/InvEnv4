@@ -124,6 +124,11 @@ class InvEnv4(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
         if not return_info:
             return np.array(self.state, dtype=np.float32)
         else:
