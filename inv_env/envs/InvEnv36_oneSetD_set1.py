@@ -865,6 +865,7 @@ class InvEnv6(gym.Env):
         if self.step_count == 0:
             print("=======================================")
             print("begin R1 =" , overage1)
+            print("begin R2 =" , overage2)
 
         self.M1P1_set.append(M1P1)
         self.M1P2_set.append(M1P2)
