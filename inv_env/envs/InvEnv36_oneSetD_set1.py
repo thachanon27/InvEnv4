@@ -96,7 +96,7 @@ class InvEnv6(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory
+            (5659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory
             #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
@@ -803,12 +803,12 @@ class InvEnv6(gym.Env):
 #                                    + (
 #                                                extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)
 
-        reward = (1500 - ((purchase_cost + holding + penalty_lost_sale
-                            + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
-                            + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+        reward = (630 + (sales_revenue)/1000000 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
+                            + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
+                            + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1500   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 630 
 
         reward_ = sales_revenue \
                   - purchase_cost \
@@ -823,14 +823,14 @@ class InvEnv6(gym.Env):
                   - sum_extra_penalty_3 \
                   - (extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)
         # real reward that equal to real revenue
-        real_reward = sales_revenue \
-                      - purchase_cost \
-                      - holding \
-                      - penalty_lost_sale \
-                      - (changeover_cost_of_m1 + changeover_cost_of_m2) \
-                      - switch_on_cost \
-                      - fix_production_cost \
-                      - (variable_cost_m1 + variable_cost_m2)
+        real_reward = (sales_revenue
+                       - purchase_cost
+                       - holding
+                       - penalty_lost_sale
+                       - (self.changeover_cost_of_m1 + self.changeover_cost_of_m2)
+                       - self.switch_on_cost
+                       - fix_production_cost
+                       - (self.variable_cost_m1 + self.variable_cost_m2))/34.84   #แปลงจากบาท to dollar
 
        
 
