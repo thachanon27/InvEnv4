@@ -858,6 +858,10 @@ class InvEnv6(gym.Env):
         if self.step_count == 30:
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
+        
+        if self.step_count == 0:
+            print("=======================================")
+            print("begin R1 =" , overage1)
 
         self.M1P1_set.append(M1P1)
         self.M1P2_set.append(M1P2)
