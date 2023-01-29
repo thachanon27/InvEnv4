@@ -836,18 +836,7 @@ class InvEnv6(gym.Env):
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 630 
 
-        reward_ = sales_revenue \
-                  - purchase_cost \
-                  - holding \
-                  - penalty_lost_sale \
-                  - (changeover_cost_of_m1 + changeover_cost_of_m2) \
-                  - switch_on_cost \
-                  - fix_production_cost \
-                  - (variable_cost_m1 + variable_cost_m2) \
-                  - sum_extra_penalty \
-                  - sum_extra_penalty_2 \
-                  - sum_extra_penalty_3 \
-                  - (extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)
+        
         # real reward that equal to real revenue
         real_reward = (sales_revenue
                        - purchase_cost
