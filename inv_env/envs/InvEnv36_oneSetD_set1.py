@@ -336,6 +336,7 @@ class InvEnv6(gym.Env):
             print("---------------------on_hand1=", on_hand1)
             on_hand1 = 5659
             print("on_hand1=", on_hand1)
+            action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
         
 #         print("value หลังแปลงกลับ") 
 #         print("demand1", demand1)
