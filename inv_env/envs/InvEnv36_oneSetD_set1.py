@@ -332,6 +332,11 @@ class InvEnv6(gym.Env):
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
         
+        if self.step_count == 0:
+            print("---------------------on_hand1=", on_hand1
+            on_hand1 = 5659
+            print("on_hand1=", on_hand1)
+        
 #         print("value หลังแปลงกลับ") 
 #         print("demand1", demand1)
 #         print("on_hand1", on_hand1)
