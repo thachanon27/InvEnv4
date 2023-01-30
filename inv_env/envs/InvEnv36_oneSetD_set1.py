@@ -606,11 +606,15 @@ class InvEnv6(gym.Env):
         if N2P1 + N2P2 + N2P3 == 1:
             FC_M2 = 1
         # Assign - on-peak and off-peak p cost to each period
-        weekend_stepcount = [3, 4, 5, 6, 17, 18, 19, 20]
-        on_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
-        off_peak_stepcount = [2, 8, 10, 12, 14, 22, 24, 26, 28, 30]
+#         weekend_stepcount = [3, 4, 5, 6, 17, 18, 19, 20]
+#         on_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
+#         off_peak_stepcount = [2, 8, 10, 12, 14, 22, 24, 26, 28, 30]
+        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 16, 18, 20, 26, 28]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 21, 23, 25, 27, 29]
         stp = 0
-        stp = self.step_count + 1
+#         stp = self.step_count + 1
+        stp = self.step_count
         # print("stp =",stp)
         # if stp in on_peak_stepcount:
         #    print("yes")
@@ -647,7 +651,7 @@ class InvEnv6(gym.Env):
                 extra_p_on_set.append(extra_p_on2_3)
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
-        if stp == 1:
+        if stp == 0:
             penalty_onpeak = 10000
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
