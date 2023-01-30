@@ -337,6 +337,7 @@ class InvEnv6(gym.Env):
             on_hand1 = 5659
             print("on_hand1=", on_hand1)
             action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
+            
         
 #         print("value หลังแปลงกลับ") 
 #         print("demand1", demand1)
@@ -439,12 +440,13 @@ class InvEnv6(gym.Env):
             N2P3 = 1
             M2P3 = 1359
 
-        # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        # print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-        # print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-        # print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+        print("action =", action)
+        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+        print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+        print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+        print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
+        print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
+        print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
