@@ -657,12 +657,33 @@ class InvEnv4(gym.Env):
                 extra_p_on_set.append(extra_p_on2_3)
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
+        if stp == 1:
+            penalty_onpeak = 20000
+            if M1P1 > 0:
+                extra_p_on1_1 = penalty_onpeak * M1P1
+                extra_p_on_set.append(extra_p_on1_1)
+            if M1P2 > 0:
+                extra_p_on1_2 = penalty_onpeak * M1P2
+                extra_p_on_set.append(extra_p_on1_2)
+            if M1P3 > 0:
+                extra_p_on1_3 = penalty_onpeak * M1P3
+                extra_p_on_set.append(extra_p_on1_3)
+            if M2P1 > 0:
+                extra_p_on2_1 = penalty_onpeak * M2P1
+                extra_p_on_set.append(extra_p_on2_1)
+            if M2P2 > 0:
+                extra_p_on2_2 = penalty_onpeak * M2P2
+                extra_p_on_set.append(extra_p_on2_2)
+            if M2P3 > 0:
+                extra_p_on2_3 = penalty_onpeak * M2P3
+                extra_p_on_set.append(extra_p_on2_3)
+            
         
         
         if stp in off_peak_stepcount:
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
-            extra_p_on = 0
+            extra_p_on= 0
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
@@ -925,17 +946,17 @@ class InvEnv4(gym.Env):
 #         if overage3_3 < 1000:
 #             extra_penalty3_3 = s_penal*1000000
         
-        if overage1_2 <= 0:
+        if overage1_2 <= -1000:           #ลองแก้จาก 0 เป็นติด - ดู เพราะเหมือนมันจะ overstock มากไป
             extra_penalty1_2 = penal*2000000
-        if overage2_2 <= 0:
+        if overage2_2 <= -1000:
             extra_penalty2_2 = penal*2000000
-        if overage3_2 <= 0:
+        if overage3_2 <= -1000:
             extra_penalty3_2 = penal*2000000
-        if overage1_3 <= 0:
+        if overage1_3 <= -1500:
             extra_penalty1_3 = penal*1000000*2
-        if overage2_3 <= 0:
+        if overage2_3 <= -1500:
             extra_penalty2_3 = penal*1000000*2
-        if overage3_3 <= 0:
+        if overage3_3 <= -1500:
             extra_penalty3_3 = penal*1000000*2
 
 #         if overage1_2 > 6000:
