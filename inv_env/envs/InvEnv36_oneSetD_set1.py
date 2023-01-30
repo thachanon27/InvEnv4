@@ -101,7 +101,7 @@ class InvEnv6(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (5659-0)/(12000-0), (3051-0)/(10000-0), (39999-0)/(9000-0),  # initial inventory  #2084
+            (5659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory  #2084
             #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
@@ -850,7 +850,11 @@ class InvEnv6(gym.Env):
 
        
 
-        
+        #if self.step_count == 0:
+        print("=======================================")
+        print("self.step_count", self.step_count)
+        print("begin R1 =" , overage1)
+        print("begin R2 =" , overage2)
 
         # print("Step",self.step_count )
         self.step_count += 1
@@ -875,10 +879,7 @@ class InvEnv6(gym.Env):
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
         
-        if self.step_count == 0:
-            print("=======================================")
-            print("begin R1 =" , overage1)
-            print("begin R2 =" , overage2)
+        
 
         self.M1P1_set.append(M1P1)
         self.M1P2_set.append(M1P2)
