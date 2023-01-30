@@ -621,33 +621,55 @@ class InvEnv6(gym.Env):
         extra_p_on2_2 = 0
         extra_p_on2_3 = 0
         extra_p_on_set = []
+        penalty_onpeak = 5000
         if stp in on_peak_stepcount:
             # print("yes")
             vcm1 = vc_m1_on
             # print("vcm1 = ", vcm1)
             vcm2 = vc_m2_on
             if M1P1 > 0:
-                extra_p_on1_1 = 5000 * M1P1
+                extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
             if M1P2 > 0:
-                extra_p_on1_1 = 5000 * M1P2
+                extra_p_on1_1 = penalty_onpeak * M1P2
                 extra_p_on_set.append(extra_p_on1_2)
             if M1P3 > 0:
-                extra_p_on1_1 = 5000 * M1P2
+                extra_p_on1_1 = penalty_onpeak * M1P2
                 extra_p_on_set.append(extra_p_on1_3)
             if M2P1 > 0:
-                extra_p_on2_1 = 5000 * M2P1
+                extra_p_on2_1 = penalty_onpeak * M2P1
                 extra_p_on_set.append(extra_p_on2_1)
             if M2P2 > 0:
-                extra_p_on2_2 = 5000 * M2P2
+                extra_p_on2_2 = penalty_onpeak * M2P2
                 extra_p_on_set.append(extra_p_on2_2)
             if M2P3 > 0:
-                extra_p_on2_3 = 5000 * M2P3
+                extra_p_on2_3 = penalty_onpeak * M2P3
                 extra_p_on_set.append(extra_p_on2_3)
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
-
+        if stp == 1:
+            penalty_onpeak = 10000
+            if M1P1 > 0:
+                extra_p_on1_1 = penalty_onpeak * M1P1
+                extra_p_on_set.append(extra_p_on1_1)
+            if M1P2 > 0:
+                extra_p_on1_2 = penalty_onpeak * M1P2
+                extra_p_on_set.append(extra_p_on1_2)
+            if M1P3 > 0:
+                extra_p_on1_3 = penalty_onpeak * M1P3
+                extra_p_on_set.append(extra_p_on1_3)
+            if M2P1 > 0:
+                extra_p_on2_1 = penalty_onpeak * M2P1
+                extra_p_on_set.append(extra_p_on2_1)
+            if M2P2 > 0:
+                extra_p_on2_2 = penalty_onpeak * M2P2
+                extra_p_on_set.append(extra_p_on2_2)
+            if M2P3 > 0:
+                extra_p_on2_3 = penalty_onpeak * M2P3
+                extra_p_on_set.append(extra_p_on2_3)
+        
         if stp in off_peak_stepcount:
+            penalty_onpeak = 0
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
@@ -661,6 +683,7 @@ class InvEnv6(gym.Env):
             self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
+            penalty_onpeak = 0
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
@@ -673,6 +696,9 @@ class InvEnv6(gym.Env):
             self.switch_on_cost = sw1*(SW1 + SW2)
             self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+        
+        print("penalty_onpeak =", penalty_onpeak) 
+        print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
 
         fix_production_cost = fc_m1 * FC_M1 + fc_m2 * FC_M2
         # print("FC_M1 =", FC_M1)
