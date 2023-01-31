@@ -651,8 +651,7 @@ class InvEnv4(gym.Env):
             self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
             self.switch_on_cost = sw1*(SW1 + SW2)
             self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
-            
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)          
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
@@ -697,6 +696,7 @@ class InvEnv4(gym.Env):
         
         
         if stp in off_peak_stepcount:
+            penalty_onpeak = 0
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on= 0
