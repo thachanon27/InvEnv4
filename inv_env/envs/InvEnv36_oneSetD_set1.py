@@ -896,7 +896,7 @@ class InvEnv6(gym.Env):
 
         # print("Step",self.step_count )
         self.step_count += 1
-        done = bool(self.step_count >= 31)  # planning time frame period = 15
+        done = bool(self.step_count >= 30)  # planning time frame period = 15
         self.overall_time_trained += 1
 
         # if done == True:
