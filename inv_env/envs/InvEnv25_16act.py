@@ -658,7 +658,7 @@ class InvEnv4(gym.Env):
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
         if stp == 1:
-            penalty_onpeak = 20000
+            penalty_onpeak = 50000
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
