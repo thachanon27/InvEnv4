@@ -1069,12 +1069,12 @@ class InvEnv4(gym.Env):
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 630   #650
         
-        pure_reward = (purchase_cost + holding + penalty_lost_sale
-                            + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
-                            + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
-                            + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
-                            + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) 
+#         pure_reward = (purchase_cost + holding + penalty_lost_sale
+#                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
+#                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
+#                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+#                             + (
+#                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) 
         
         #normalize reward อีกที 
         #reward = reward/25
