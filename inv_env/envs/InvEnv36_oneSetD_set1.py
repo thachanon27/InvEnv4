@@ -207,8 +207,8 @@ class InvEnv6(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
 
-        # print("=========================================================================================")
-        # print("step :", self.step_count)
+        print("=========================================================================================")
+        print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -889,10 +889,10 @@ class InvEnv6(gym.Env):
        
 
         #if self.step_count == 0:
-        print("=======================================")
-        print("self.step_count", self.step_count)
-        print("begin R1 =" , overage1)
-        print("begin R2 =" , overage2)
+        #print("=======================================")
+        #print("self.step_count", self.step_count)
+        print("overage1 =" , overage1)
+        print("overage2 =" , overage2)
 
         # print("Step",self.step_count )
         self.step_count += 1
