@@ -610,8 +610,8 @@ class InvEnv6(gym.Env):
 #         on_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
 #         off_peak_stepcount = [2, 8, 10, 12, 14, 22, 24, 26, 28, 30]
         weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
-        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 16, 18, 20, 26, 28]
-        off_peak_stepcount = [1, 7, 9, 11, 13, 21, 23, 25, 27, 29]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
         stp = 0
 #         stp = self.step_count + 1
         stp = self.step_count
@@ -896,7 +896,7 @@ class InvEnv6(gym.Env):
 
         # print("Step",self.step_count )
         self.step_count += 1
-        done = bool(self.step_count >= 30)  # planning time frame period = 15
+        done = bool(self.step_count >= 31)  # planning time frame period = 15
         self.overall_time_trained += 1
 
         # if done == True:
