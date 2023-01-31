@@ -207,8 +207,8 @@ class InvEnv6(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
 
-#         print("=========================================================================================")
-#         print("step :", self.step_count)
+        print("=======================================================================================================")
+        print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -305,8 +305,7 @@ class InvEnv6(gym.Env):
         maxr3 = 12000
         
          
-        print("####################################################################################################### ")
-        print("stepcount ", stepcount )
+        
 #         print("value ก่อนแปลงกลับ") 
 #         print("demand1 =", demand1, "=state[3]=",self.state[3])
 #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
