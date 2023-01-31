@@ -207,8 +207,8 @@ class InvEnv6(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
 
-        print("=========================================================================================")
-        print("step :", self.step_count)
+#         print("=========================================================================================")
+#         print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -305,8 +305,8 @@ class InvEnv6(gym.Env):
         maxr3 = 12000
         
          
-#         print("############################################################# ")
-#         print("stepcount ", stepcount )
+        print("####################################################################################################### ")
+        print("stepcount ", stepcount )
 #         print("value ก่อนแปลงกลับ") 
 #         print("demand1 =", demand1, "=state[3]=",self.state[3])
 #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
@@ -332,11 +332,11 @@ class InvEnv6(gym.Env):
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
         
-        if self.step_count == 0:
-            print("---------------------on_hand1=", on_hand1)
-            on_hand1 = 5659
-            print("on_hand1=", on_hand1)
-            action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
+#         if self.step_count == 0:
+#             print("---------------------on_hand1=", on_hand1)
+#             on_hand1 = 5659
+#             print("on_hand1=", on_hand1)
+#             action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
             
         
 #         print("value หลังแปลงกลับ") 
@@ -440,13 +440,13 @@ class InvEnv6(gym.Env):
             N2P3 = 1
             M2P3 = 1359
 
-        print("action =", action)
-        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-        print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-        print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+#         print("action =", action)
+#         print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+#         print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+#         print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+#         print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
+#         print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
+#         print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -626,6 +626,15 @@ class InvEnv6(gym.Env):
         extra_p_on2_3 = 0
         extra_p_on_set = []
         penalty_onpeak = 5000
+        reward_weekend = 0
+        extra_r_weekend1_1 = 0  # extra penalty กรณีผลิตช่วง onpeak เพื่อให้ agent ฉลาดขึ้น
+        extra_r_weekend1_2 = 0
+        extra_r_weekend1_3 = 0
+        extra_r_weekend2_1 = 0
+        extra_r_weekend2_2 = 0
+        extra_r_weekend2_3 = 0
+        
+        
         if stp in on_peak_stepcount:
             # print("yes")
             vcm1 = vc_m1_on
@@ -688,6 +697,7 @@ class InvEnv6(gym.Env):
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             penalty_onpeak = 0
+            reward_weekend = 20000
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
@@ -700,9 +710,29 @@ class InvEnv6(gym.Env):
             self.switch_on_cost = sw1*(SW1 + SW2)
             self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+            if M1P1 > 0:
+                extra_r_weekend1_1 = reward_weekend * M1P1
+                #extra_p_on_set.append(extra_p_on1_1)
+            if M1P2 > 0:
+                extra_r_weekend1_2 = reward_weekend * M1P2
+                #extra_p_on_set.append(extra_p_on1_2)
+            if M1P3 > 0:
+                extra_r_weekend1_3 = reward_weekend * M1P3
+                #extra_p_on_set.append(extra_p_on1_3)
+            if M2P1 > 0:
+                extra_r_weekend2_1 = reward_weekend * M2P1
+                #extra_p_on_set.append(extra_p_on2_1)
+            if M2P2 > 0:
+                extra_r_weekend2_2 = reward_weekend * M2P2
+                #extra_p_on_set.append(extra_p_on2_2)
+            if M2P3 > 0:
+                extra_r_weekend2_3 = reward_weekend * M2P3
+                #extra_p_on_set.append(extra_p_on2_3)
         
         print("penalty_onpeak =", penalty_onpeak) 
         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
+        print("reward_weekend =", reward_weekend) 
+        print(extra_r_weekend1_1,extra_r_weekend1_2,extra_r_weekend1_3,extra_r_weekend2_1,extra_r_weekend2_2,extra_r_weekend2_3)
 
         fix_production_cost = fc_m1 * FC_M1 + fc_m2 * FC_M2
         # print("FC_M1 =", FC_M1)
@@ -872,6 +902,7 @@ class InvEnv6(gym.Env):
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+                            -(extra_r_weekend1_1 + extra_r_weekend1_2 + extra_r_weekendn1_3 + extra_r_weekend2_1 + extra_r_weekend2_2 + extra_r_weekend2_3)/1000000
                             + (
                                        extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 630 
 
