@@ -84,6 +84,11 @@ class InvEnv14(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
 
     def reset(
             self,
@@ -96,7 +101,7 @@ class InvEnv14(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (8659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory
+            (5659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory  #2084
             #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
@@ -114,6 +119,11 @@ class InvEnv14(gym.Env):
         self.M2P1_set = []
         self.M2P2_set = []
         self.M2P3_set = []
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
         if not return_info:
             return np.array(self.state, dtype=np.float32)
         else:
@@ -190,9 +200,15 @@ class InvEnv14(gym.Env):
         extra_penalty3_3 = 0
 
         extra_p_on = 0
+        
+        self.changeover_cost_of_m1 = 0
+        self.switch_on_cost = 0
+        self.changeover_cost_of_m2 = 0
+        self.variable_cost_m1 = 0
+        self.variable_cost_m2 = 0
 
-        # print("=========================================================================================")
-        # print("step :", self.step_count)
+#         print("=======================================================================================================")
+#         print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -289,8 +305,7 @@ class InvEnv14(gym.Env):
         maxr3 = 12000
         
          
-#         print("############################################################# ")
-#         print("stepcount ", stepcount )
+        
 #         print("value ก่อนแปลงกลับ") 
 #         print("demand1 =", demand1, "=state[3]=",self.state[3])
 #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
@@ -315,6 +330,13 @@ class InvEnv14(gym.Env):
         overage1_3 = overage1_3*(maxr1-0)+0
         overage2_3 = overage2_3*(maxr2-0)+0
         overage3_3 = overage3_3*(maxr3-0)+0
+        
+#         if self.step_count == 0:
+#             print("---------------------on_hand1=", on_hand1)
+#             on_hand1 = 5659
+#             print("on_hand1=", on_hand1)
+#             action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
+            
         
 #         print("value หลังแปลงกลับ") 
 #         print("demand1", demand1)
@@ -417,12 +439,13 @@ class InvEnv14(gym.Env):
             N2P3 = 1
             M2P3 = 1359
 
-        # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        # print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-        # print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-        # print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+#         print("action =", action)
+#         print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+#         print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+#         print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+#         print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
+#         print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
+#         print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -582,11 +605,15 @@ class InvEnv14(gym.Env):
         if N2P1 + N2P2 + N2P3 == 1:
             FC_M2 = 1
         # Assign - on-peak and off-peak p cost to each period
-        weekend_stepcount = [3, 4, 5, 6, 17, 18, 19, 20]
-        on_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
-        off_peak_stepcount = [2, 8, 10, 12, 14, 22, 24, 26, 28, 30]
+#         weekend_stepcount = [3, 4, 5, 6, 17, 18, 19, 20]
+#         on_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
+#         off_peak_stepcount = [2, 8, 10, 12, 14, 22, 24, 26, 28, 30]
+        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
         stp = 0
-        stp = self.step_count + 1
+#         stp = self.step_count + 1
+        stp = self.step_count
         # print("stp =",stp)
         # if stp in on_peak_stepcount:
         #    print("yes")
@@ -597,52 +624,114 @@ class InvEnv14(gym.Env):
         extra_p_on2_2 = 0
         extra_p_on2_3 = 0
         extra_p_on_set = []
+        penalty_onpeak = 5000
+        reward_weekend = 0
+        extra_r_weekend1_1 = 0  # extra penalty กรณีผลิตช่วง onpeak เพื่อให้ agent ฉลาดขึ้น
+        extra_r_weekend1_2 = 0
+        extra_r_weekend1_3 = 0
+        extra_r_weekend2_1 = 0
+        extra_r_weekend2_2 = 0
+        extra_r_weekend2_3 = 0
+        
+        
         if stp in on_peak_stepcount:
             # print("yes")
             vcm1 = vc_m1_on
             # print("vcm1 = ", vcm1)
             vcm2 = vc_m2_on
             if M1P1 > 0:
-                extra_p_on1_1 = 5000 * M1P1
+                extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
             if M1P2 > 0:
-                extra_p_on1_1 = 5000 * M1P2
+                extra_p_on1_1 = penalty_onpeak * M1P2
                 extra_p_on_set.append(extra_p_on1_2)
             if M1P3 > 0:
-                extra_p_on1_1 = 5000 * M1P2
+                extra_p_on1_1 = penalty_onpeak * M1P2
                 extra_p_on_set.append(extra_p_on1_3)
             if M2P1 > 0:
-                extra_p_on2_1 = 5000 * M2P1
+                extra_p_on2_1 = penalty_onpeak * M2P1
                 extra_p_on_set.append(extra_p_on2_1)
             if M2P2 > 0:
-                extra_p_on2_2 = 5000 * M2P2
+                extra_p_on2_2 = penalty_onpeak * M2P2
                 extra_p_on_set.append(extra_p_on2_2)
             if M2P3 > 0:
-                extra_p_on2_3 = 5000 * M2P3
+                extra_p_on2_3 = penalty_onpeak * M2P3
                 extra_p_on_set.append(extra_p_on2_3)
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
-
+        if stp == 0:
+            penalty_onpeak = 10000
+            if M1P1 > 0:
+                extra_p_on1_1 = penalty_onpeak * M1P1
+                extra_p_on_set.append(extra_p_on1_1)
+            if M1P2 > 0:
+                extra_p_on1_2 = penalty_onpeak * M1P2
+                extra_p_on_set.append(extra_p_on1_2)
+            if M1P3 > 0:
+                extra_p_on1_3 = penalty_onpeak * M1P3
+                extra_p_on_set.append(extra_p_on1_3)
+            if M2P1 > 0:
+                extra_p_on2_1 = penalty_onpeak * M2P1
+                extra_p_on_set.append(extra_p_on2_1)
+            if M2P2 > 0:
+                extra_p_on2_2 = penalty_onpeak * M2P2
+                extra_p_on_set.append(extra_p_on2_2)
+            if M2P3 > 0:
+                extra_p_on2_3 = penalty_onpeak * M2P3
+                extra_p_on_set.append(extra_p_on2_3)
+        
         if stp in off_peak_stepcount:
+            penalty_onpeak = 0
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
-        if stp in weekend_stepcount:
-            vcm1 = vc_m1_off
-            vcm2 = vc_m2_off
-
-        # print("vcm1_cost = ", vcm1)
-        # print("vcm2_cost = ", vcm2)
-        variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
-        variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
-        # print("variable_cost_m1 = ", variable_cost_m1)
-        changeover_cost_of_m1 = co11 * (
+            extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
+            self.changeover_cost_of_m1 = co11 * (
                 CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
-        changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
-        # print("CO11 =",CO11)
-        # print("CO21 =",CO21)
-        switch_on_cost = sw1 * SW1 + sw2 * SW2
-        # print("SW1 =", SW1)
-        # print("SW2 =", SW2)
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+        if stp in weekend_stepcount:
+            penalty_onpeak = 0
+            reward_weekend = 20000
+            vcm1 = vc_m1_off
+            vcm2 = vc_m2_off
+            extra_p_on = 0
+            co11 = 32139
+            co21 = 32139
+            sw1 = 331.9
+            self.changeover_cost_of_m1 = co11 * (
+                CO11 + CO12 + CO13)  # period นึงจะเกิด CO11, CO12, CO13 ได้แค่ 1 กรณี จึงจับรวมได้เลย
+            self.changeover_cost_of_m2 = co21 * (CO21 + CO22 + CO23)
+            self.switch_on_cost = sw1*(SW1 + SW2)
+            self.variable_cost_m1 = vcm1 * (M1P1 + M1P2 + M1P3)
+            self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
+            if M1P1 > 0:
+                extra_r_weekend1_1 = reward_weekend * M1P1
+                #extra_p_on_set.append(extra_p_on1_1)
+            if M1P2 > 0:
+                extra_r_weekend1_2 = reward_weekend * M1P2
+                #extra_p_on_set.append(extra_p_on1_2)
+            if M1P3 > 0:
+                extra_r_weekend1_3 = reward_weekend * M1P3
+                #extra_p_on_set.append(extra_p_on1_3)
+            if M2P1 > 0:
+                extra_r_weekend2_1 = reward_weekend * M2P1
+                #extra_p_on_set.append(extra_p_on2_1)
+            if M2P2 > 0:
+                extra_r_weekend2_2 = reward_weekend * M2P2
+                #extra_p_on_set.append(extra_p_on2_2)
+            if M2P3 > 0:
+                extra_r_weekend2_3 = reward_weekend * M2P3
+                #extra_p_on_set.append(extra_p_on2_3)
+        
+#         print("penalty_onpeak =", penalty_onpeak) 
+#         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
+#         print("reward_weekend =", reward_weekend) 
+#         print(extra_r_weekend1_1,extra_r_weekend1_2,extra_r_weekend1_3,extra_r_weekend2_1,extra_r_weekend2_2,extra_r_weekend2_3)
 
         fix_production_cost = fc_m1 * FC_M1 + fc_m2 * FC_M2
         # print("FC_M1 =", FC_M1)
@@ -654,14 +743,15 @@ class InvEnv14(gym.Env):
         extra_penalty3 = 0
         sum_extra_penalty = 0
         s_penal = 40
-        if overage1 < 2000:
-            extra_penalty1 = s_penal*1000000
-        if overage2 < 1500:
-            extra_penalty2 = s_penal*1000000
-        if overage3 < 1000:
-            extra_penalty3 = s_penal*1000000
-            
         penal = 80
+        if overage1 < 500:
+            extra_penalty1 = penal*1000000
+        if overage2 < 500:
+            extra_penalty2 = penal*1000000
+        if overage3 < 500:
+            extra_penalty3 = penal*1000000
+            
+        
         if overage1 == 0:
             extra_penalty1 = penal*2000000  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 == 0:
@@ -674,7 +764,11 @@ class InvEnv14(gym.Env):
         if overage2 > 8000:
             extra_penalty2 = s_penal*1000000
         if overage3  > 7000:
-            extra_penalty3 = s_penal*10000000
+            extra_penalty3 = s_penal*1000000
+        
+        extra_reward1 = 0
+        if overage1 in range(50,7000) and overage2 in range(50,6000) and overage3 in range(50,5500) :
+            extra_reward1 = 300*1000000
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         # print("extra penalty =", extra_penalty1, extra_penalty2, extra_penalty3)
@@ -803,38 +897,34 @@ class InvEnv14(gym.Env):
 #                                    + (
 #                                                extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)
 
-        reward = (1500 - ((purchase_cost + holding + penalty_lost_sale
-                            + (changeover_cost_of_m1 + changeover_cost_of_m2) * 10
-                            + switch_on_cost + fix_production_cost + (variable_cost_m1 + variable_cost_m2)
+        reward = (630 + (sales_revenue)/1000000 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
+                            + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
+                            + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
+                            -(extra_r_weekend1_1 + extra_r_weekend1_2 + extra_r_weekend1_3 + extra_r_weekend2_1 + extra_r_weekend2_2 + extra_r_weekend2_3)
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1500   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 630 
 
-        reward_ = sales_revenue \
-                  - purchase_cost \
-                  - holding \
-                  - penalty_lost_sale \
-                  - (changeover_cost_of_m1 + changeover_cost_of_m2) \
-                  - switch_on_cost \
-                  - fix_production_cost \
-                  - (variable_cost_m1 + variable_cost_m2) \
-                  - sum_extra_penalty \
-                  - sum_extra_penalty_2 \
-                  - sum_extra_penalty_3 \
-                  - (extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)
+        
         # real reward that equal to real revenue
-        real_reward = sales_revenue \
-                      - purchase_cost \
-                      - holding \
-                      - penalty_lost_sale \
-                      - (changeover_cost_of_m1 + changeover_cost_of_m2) \
-                      - switch_on_cost \
-                      - fix_production_cost \
-                      - (variable_cost_m1 + variable_cost_m2)
+        real_reward = (sales_revenue
+                       - purchase_cost
+                       - holding
+                       - penalty_lost_sale
+                       - (self.changeover_cost_of_m1 + self.changeover_cost_of_m2)
+                       - self.switch_on_cost
+                       - fix_production_cost
+                       - (self.variable_cost_m1 + self.variable_cost_m2))/34.84   #แปลงจากบาท to dollar
 
        
 
-        
+        #if self.step_count == 0:
+        #print("=======================================")
+        #print("self.step_count", self.step_count)
+#         print("overage1 =" , overage1)
+#         print("overage2 =" , overage2)
+#         print("overage3 =" , overage3)
+
 
         # print("Step",self.step_count )
         self.step_count += 1
@@ -858,6 +948,8 @@ class InvEnv14(gym.Env):
         if self.step_count == 30:
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
+        
+        
 
         self.M1P1_set.append(M1P1)
         self.M1P2_set.append(M1P2)
@@ -996,3 +1088,6 @@ class InvEnv14(gym.Env):
 
         # เนื่องจาก reward ตอนที่ A3C คิดน่าจะ เป็น sum_reward ในแต่ละ episode อยู่แล้ว ดังนั้น reward ที่ return ควรเป็น reward
         return np.array(self.state, dtype=np.float32), reward, done, info
+    
+    
+    
