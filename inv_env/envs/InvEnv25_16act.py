@@ -809,7 +809,7 @@ class InvEnv4(gym.Env):
         
             
         if overage1 in range(50,7000) and overage2 in range(50,6000) and overage3 in range(50,5500) :
-            extra_reward1 = 300*1000000
+            extra_reward1 = 600*1000000   #300
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         
