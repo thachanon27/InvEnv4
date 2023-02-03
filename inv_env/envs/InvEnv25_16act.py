@@ -786,30 +786,30 @@ class InvEnv4(gym.Env):
             
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal*1000000*12  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal*1000000*20  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal*1000000*12
+            extra_penalty2 = penal*1000000*20
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*12
+            extra_penalty3 = penal*1000000*20
 
         if overage1 > 7000:
-            extra_penalty1 = penal*1000000*7
+            extra_penalty1 = penal*1000000*15
         if overage2 > 6500:
-            extra_penalty2 = penal*1000000*7
+            extra_penalty2 = penal*1000000*15
         if overage3  > 6000:
-            extra_penalty3 = penal*1000000*7
+            extra_penalty3 = penal*1000000*15
         
         if overage1 > 9000:   #10000
-            extra_penalty1 = penal*1000000*12
+            extra_penalty1 = penal*1000000*20
         if overage2 > 9000:
-            extra_penalty2 = penal*1000000*12
+            extra_penalty2 = penal*1000000*20
         if overage3  > 8000:
-            extra_penalty3 = penal*1000000*12
+            extra_penalty3 = penal*1000000*20
             
         
             
         if overage1 in range(50,7000) and overage2 in range(50,6000) and overage3 in range(50,5500) :
-            extra_reward1 = 600*1000000   #300
+            extra_reward1 = 800*1000000   #300
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
         
@@ -988,17 +988,17 @@ class InvEnv4(gym.Env):
 #             extra_penalty3_3 = s_penal*1000000
         
         if overage1_2 <= -1000:           #ลองแก้จาก 0 เป็นติด - ดู เพราะเหมือนมันจะ overstock มากไป
-            extra_penalty1_2 = penal*2000000
+            extra_penalty1_2 = penal*1000000*5
         if overage2_2 <= -1000:
-            extra_penalty2_2 = penal*2000000
+            extra_penalty2_2 = penal*1000000*5
         if overage3_2 <= -1000:
-            extra_penalty3_2 = penal*2000000
+            extra_penalty3_2 = penal*1000000*5
         if overage1_3 <= -1500:
-            extra_penalty1_3 = penal*1000000*2
+            extra_penalty1_3 = penal*1000000*5
         if overage2_3 <= -1500:
-            extra_penalty2_3 = penal*1000000*2
+            extra_penalty2_3 = penal*1000000*5
         if overage3_3 <= -1500:
-            extra_penalty3_3 = penal*1000000*2
+            extra_penalty3_3 = penal*1000000*5
 
 #         if overage1_2 > 6000:
 #             extra_penalty1_2 = penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
@@ -1061,13 +1061,13 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (700 + (sales_revenue)/1000000 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (800 + (sales_revenue)/1000000 + extra_reward1/1000000 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             -(extra_r_weekend1_1 + extra_r_weekend1_2 + extra_r_weekend1_3 + extra_r_weekend2_1 + extra_r_weekend2_2 + extra_r_weekend2_3)
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 700   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 800   #650
         
 #         pure_reward = (purchase_cost + holding + penalty_lost_sale
 #                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
