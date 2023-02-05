@@ -972,9 +972,9 @@ class InvEnv4(gym.Env):
         overage1_2 = max(0,overage1 - d4 + R1)
         overage2_2 = max(0,overage2 - d5 + R2)
         overage3_2 = max(0,overage3 - d6 + R3)
-        overage1_3 = max(0,overage1 - d7 + R1)
-        overage2_3 = max(0,overage2 - d8 + R2)
-        overage3_3 = max(0,overage3 - d9 + R3)
+        overage1_3 = overage1 - d7 + R1
+        overage2_3 = overage2 - d8 + R2
+        overage3_3 = overage3 - d9 + R3
         # print("overage1_2 =", overage1_2)
 
 #         if overage1_2 < 1500:
@@ -1018,8 +1018,8 @@ class InvEnv4(gym.Env):
         
 
             
-#         if overage1 in range(1500,9000) and overage2 in range(1000,8000) and overage3 in range(1000,8000) and overage1_2 in range(1000,9000) and overage2_2 in range(1000,8000) and overage3_2 in range(1000,7500)and overage1_3 in range(0,9000) and overage2_3 in range(0,8000) and overage3_3 in range(0,7500) :
-#             extra_reward2 = 50*1000000
+        if overage1_3 in range(-1500,5000) and overage2_3 in range(-1500,5000) and overage3_3 in range(-1500,5000) :
+            extra_reward2 = 200*1000000
         #if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
         #if overage3_2 in range(1500,7500):
@@ -1064,7 +1064,7 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (800 + (sales_revenue)/1000000 + extra_reward1/1000000 ++ extra_reward2/1000000 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (800 + (sales_revenue)/1000000 + extra_reward1/1000000 + extra_reward2/1000000 +extra_reward3/1000000 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
