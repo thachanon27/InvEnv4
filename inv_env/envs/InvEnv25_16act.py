@@ -778,19 +778,19 @@ class InvEnv4(gym.Env):
 
         s_penal = 8
         if overage1 < 500:
-            extra_penalty1 = s_penal*1000000*5
+            extra_penalty1 = s_penal*1000000*15
         if overage2 < 500:
-            extra_penalty2 = s_penal*1000000*5
+            extra_penalty2 = s_penal*1000000*15
         if overage3 < 500:
-            extra_penalty3 = s_penal*1000000*5
+            extra_penalty3 = s_penal*1000000*15
             
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal*1000000*22  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal*1000000*30  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal*1000000*22
+            extra_penalty2 = penal*1000000*30
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*22
+            extra_penalty3 = penal*1000000*30
 
         if overage1 > 7000:
             extra_penalty1 = penal*1000000*15
@@ -800,11 +800,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = penal*1000000*15
         
         if overage1 > 9000:   #10000
-            extra_penalty1 = penal*1000000*20
+            extra_penalty1 = penal*1000000*30
         if overage2 > 9000:
-            extra_penalty2 = penal*1000000*20
+            extra_penalty2 = penal*1000000*30
         if overage3  > 8000:
-            extra_penalty3 = penal*1000000*20
+            extra_penalty3 = penal*1000000*30
             
         
             
@@ -1018,8 +1018,8 @@ class InvEnv4(gym.Env):
         
 
             
-        if overage1_3 in range(-1500,5000) and overage2_3 in range(-1500,5000) and overage3_3 in range(-1500,5000) :
-            extra_reward2 = 200*1000000
+        if overage1_3 in range(-3000,5000) and overage2_3 in range(-2000,5000) and overage3_3 in range(-2000,5000) :
+            extra_reward2 = 600*1000000
         #if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
         #if overage3_2 in range(1500,7500):
