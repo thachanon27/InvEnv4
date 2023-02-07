@@ -938,9 +938,9 @@ class InvEnv4(gym.Env):
 #         ppp8 = (self.step_count + 1) * 3 + 8
 #         print("================ppp============", ppp)
 #         print("================ppp + 8============", ppp8)
-        demand1 = self.demand_all[(self.step_count + 1) * 3]
-        demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
-        demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
+#         demand1 = self.demand_all[(self.step_count + 1) * 3]
+#         demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
+#         demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
         if self.step_count < 24:
             demand1 = self.demand_all[(self.step_count + 1) * 3]
             demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
