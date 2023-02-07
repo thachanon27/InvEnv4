@@ -951,7 +951,7 @@ class InvEnv4(gym.Env):
             demand7 = self.demand_all[(self.step_count + 1) * 3 + 6]
             demand8 = self.demand_all[(self.step_count + 1) * 3 + 7]
             demand9 = self.demand_all[(self.step_count + 1) * 3 + 8]
-        if self.step_count < 27:  #27
+        if self.step_count < 28:  #27
             demand1 = self.demand_all[(self.step_count + 1) * 3]
             demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
             demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
