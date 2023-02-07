@@ -934,10 +934,10 @@ class InvEnv4(gym.Env):
         # assign demand of next period from array of demand data
 
         #demand9 = 0
-        ppp = (self.step_count + 1) * 3
-        ppp8 = (self.step_count + 1) * 3 + 8
-        print("================ppp============", ppp)
-        print("================ppp + 8============", ppp8)
+#         ppp = (self.step_count + 1) * 3
+#         ppp8 = (self.step_count + 1) * 3 + 8
+#         print("================ppp============", ppp)
+#         print("================ppp + 8============", ppp8)
         demand1 = self.demand_all[(self.step_count + 1) * 3]
         demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
         demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
@@ -984,8 +984,8 @@ class InvEnv4(gym.Env):
 
 
 
-        print(demand1,demand2,demand3,demand4,demand5,demand6,demand7,demand8,demand9)
-        print("self.demand_all", self.demand_all)
+#         print(demand1,demand2,demand3,demand4,demand5,demand6,demand7,demand8,demand9)
+#         print("self.demand_all", self.demand_all)
 
         # demand1 from random
         # print("demand1",demand1)
