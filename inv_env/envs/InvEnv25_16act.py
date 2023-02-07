@@ -786,32 +786,32 @@ class InvEnv4(gym.Env):
             
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal*1000000*30  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal*1000000*20  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal*1000000*30
+            extra_penalty2 = penal*1000000*20
         if overage3 <= 0:
-            extra_penalty3 = penal*1000000*30
+            extra_penalty3 = penal*1000000*20
 
         if overage1 > 7000:
-            extra_penalty1 = penal*1000000*15
+            extra_penalty1 = penal*1000000*10
         if overage2 > 6500:
-            extra_penalty2 = penal*1000000*15
+            extra_penalty2 = penal*1000000*10
         if overage3  > 6000:
-            extra_penalty3 = penal*1000000*15
+            extra_penalty3 = penal*1000000*10
         
         if overage1 > 9000:   #10000
-            extra_penalty1 = penal*1000000*30
+            extra_penalty1 = penal*1000000*15
         if overage2 > 9000:
-            extra_penalty2 = penal*1000000*30
+            extra_penalty2 = penal*1000000*15
         if overage3  > 8000:
-            extra_penalty3 = penal*1000000*30
+            extra_penalty3 = penal*1000000*15
             
         
             
-        if overage1 in range(800,10000) and overage2 in range(800,9000) and overage3 in range(600,8000) :
-            extra_reward1 = 800*1000000   #300
-        if overage1 in range(500,7000) and overage2 in range(500,6000) and overage3 in range(500,5500) :
-            extra_reward2 = 800*1000000   #300
+        if overage1 in range(0,7000) and overage2 in range(0,7000) and overage3 in range(0,7000) :
+            extra_reward1 = 1000*1000000   #300
+        if overage1_2 in range(0,7000) and overage2_2 in range(0,7000) and overage3_2 in range(0,6000) :
+            extra_reward2 = 400*1000000   #300
        
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
@@ -969,9 +969,9 @@ class InvEnv4(gym.Env):
 #         overage1_3 = overage1 - d7 + R1
 #         overage2_3 = overage2 - d8 + R2
 #         overage3_3 = overage3 - d9 + R3
-        overage1_2 = max(0,overage1 - d4 + R1)
-        overage2_2 = max(0,overage2 - d5 + R2)
-        overage3_2 = max(0,overage3 - d6 + R3)
+        overage1_2 = overage1 - d4 + R1
+        overage2_2 = overage2 - d5 + R2
+        overage3_2 = overage3 - d6 + R3
         overage1_3 = overage1 - d7 + R1
         overage2_3 = overage2 - d8 + R2
         overage3_3 = overage3 - d9 + R3
@@ -990,36 +990,36 @@ class InvEnv4(gym.Env):
 #         if overage3_3 < 1000:
 #             extra_penalty3_3 = s_penal*1000000
         
-        if overage1_2 <= -1000:           #ลองแก้จาก 0 เป็นติด - ดู เพราะเหมือนมันจะ overstock มากไป
+        if overage1_2 <= 0:           #ลองแก้จาก 0 เป็นติด - ดู เพราะเหมือนมันจะ overstock มากไป
             extra_penalty1_2 = penal*1000000*5
-        if overage2_2 <= -1000:
+        if overage2_2 <= 0:
             extra_penalty2_2 = penal*1000000*5
-        if overage3_2 <= -1000:
+        if overage3_2 <= 0:
             extra_penalty3_2 = penal*1000000*5
-        if overage1_3 <= -1500:
+        if overage1_3 <= 0:
             extra_penalty1_3 = penal*1000000*5
-        if overage2_3 <= -1500:
+        if overage2_3 <= 0:
             extra_penalty2_3 = penal*1000000*5
-        if overage3_3 <= -1500:
+        if overage3_3 <= 0:
             extra_penalty3_3 = penal*1000000*5
 
-#         if overage1_2 > 6000:
-#             extra_penalty1_2 = penal*1000000  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
-#         if overage2_2 > 6000:
-#             extra_penalty2_2 = penal*1000000
-#         if overage3_2 > 6000:
-#             extra_penalty3_2 = penal*1000000
-#         if overage1_3 > 6000:
-#             extra_penalty1_3 = penal*1000000*6
-#         if overage2_3 > 6000:
-#             extra_penalty2_3 = penal*1000000*4
-#         if overage3_3 > 6000:
-#             extra_penalty3_3 = penal*1000000*4
+        if overage1_2 > 6000:
+            extra_penalty1_2 = penal*1000000*6  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
+        if overage2_2 > 6000:
+            extra_penalty2_2 = penal*1000000*6
+        if overage3_2 > 6000:
+            extra_penalty3_2 = penal*1000000*6
+        if overage1_3 > 6000:
+            extra_penalty1_3 = penal*1000000*10
+        if overage2_3 > 6000:
+            extra_penalty2_3 = penal*1000000*10
+        if overage3_3 > 6000:
+            extra_penalty3_3 = penal*1000000*10
         
 
             
-        if overage1_3 in range(-3000,5000) and overage2_3 in range(-2000,5000) and overage3_3 in range(-2000,5000) :
-            extra_reward2 = 600*1000000
+        if overage1_3 in range(0,5000) and overage2_3 in range(0,5000) and overage3_3 in range(0,5000) :
+            extra_reward2 = 500*1000000
         #if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
         #if overage3_2 in range(1500,7500):
@@ -1064,13 +1064,13 @@ class InvEnv4(gym.Env):
         #for Gelu activation fn
         #sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (800 + (sales_revenue)/1000000 + extra_reward1/1000000 + extra_reward2/1000000 +extra_reward3/1000000 - ((purchase_cost + holding + penalty_lost_sale
+        reward = (1300 + (sales_revenue)/1000000 + extra_reward1/1000000 + extra_reward2/1000000 +extra_reward3/1000000 - ((purchase_cost + holding + penalty_lost_sale
                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
                             + self.switch_on_cost + fix_production_cost + (self.variable_cost_m1 + self.variable_cost_m2)
                             + sum_extra_penalty + sum_extra_penalty_2 + sum_extra_penalty_3
                             -(extra_r_weekend1_1 + extra_r_weekend1_2 + extra_r_weekend1_3 + extra_r_weekend2_1 + extra_r_weekend2_2 + extra_r_weekend2_3)
                             + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 800   #650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1300   #650
         
 #         pure_reward = (purchase_cost + holding + penalty_lost_sale
 #                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
