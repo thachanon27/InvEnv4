@@ -783,11 +783,11 @@ class InvEnv4(gym.Env):
 
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal * 1000000 * 20  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal * 1000000 * 30  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal * 1000000 * 20
+            extra_penalty2 = penal * 1000000 * 30
         if overage3 <= 0:
-            extra_penalty3 = penal * 1000000 * 20
+            extra_penalty3 = penal * 1000000 * 30
 
         if overage1 > 7000:
             extra_penalty1 = penal * 1000000 * 10
@@ -1027,11 +1027,11 @@ class InvEnv4(gym.Env):
         #             extra_penalty3_3 = s_penal*1000000
 
         if overage1_2 <= 0:  # ลองแก้จาก 0 เป็นติด - ดู เพราะเหมือนมันจะ overstock มากไป
-            extra_penalty1_2 = penal * 1000000 * 5
+            extra_penalty1_2 = penal * 1000000 * 15
         if overage2_2 <= 0:
-            extra_penalty2_2 = penal * 1000000 * 5
+            extra_penalty2_2 = penal * 1000000 * 15
         if overage3_2 <= 0:
-            extra_penalty3_2 = penal * 1000000 * 5
+            extra_penalty3_2 = penal * 1000000 * 15
         if overage1_3 <= 0:
             extra_penalty1_3 = penal * 1000000 * 5
         if overage2_3 <= 0:
