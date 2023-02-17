@@ -24,7 +24,7 @@ from random import randint, choice
 
 
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
-print("new env @18-2-66")
+#print("new env @18-2-66")
 
 
 class InvEnv4(gym.Env):
