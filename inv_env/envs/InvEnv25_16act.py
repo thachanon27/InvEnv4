@@ -708,7 +708,7 @@ class InvEnv4(gym.Env):
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             penalty_onpeak = 0
-            reward_weekend = 20000
+            reward_weekend = 30000
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
@@ -778,8 +778,8 @@ class InvEnv4(gym.Env):
             extra_penalty1 = s_penal * 1000000 * 15
         if overage2 < 500:
             extra_penalty2 = s_penal * 1000000 * 15
-        if overage3 < 200:
-            extra_penalty3 = s_penal * 1000000 * 30
+        if overage3 < 500:
+            extra_penalty3 = s_penal * 1000000 * 15
 
         penal = 15
         if overage1 <= 0:
@@ -787,26 +787,27 @@ class InvEnv4(gym.Env):
         if overage2 <= 0:
             extra_penalty2 = penal * 1000000 * 30
         if overage3 <= 0:
-            extra_penalty3 = penal * 1000000 * 40
+            extra_penalty3 = penal * 1000000 * 30
 
-        if overage1 > 7000:
-            extra_penalty1 = penal * 1000000 * 10
-        if overage2 > 6500:
-            extra_penalty2 = penal * 1000000 * 10
-        if overage3 > 6500:
-            extra_penalty3 = penal * 1000000 * 10
-
-        if overage1 > 9000:  # 10000
-            extra_penalty1 = penal * 1000000 * 15
-        if overage2 > 9000:
-            extra_penalty2 = penal * 1000000 * 15
+        if overage1 > 9000:
+            extra_penalty1 = penal * 1000000 * 20
+        if overage2 > 8500:
+            extra_penalty2 = penal * 1000000 * 20
         if overage3 > 8000:
-            extra_penalty3 = penal * 1000000 * 15
+            extra_penalty3 = penal * 1000000 * 20
 
-        if overage1 in range(0, 7000) and overage2 in range(0, 7000) and overage3 in range(500, 7000):
+        if overage1 > 12000:  # 10000
+            extra_penalty1 = penal * 1000000 * 30
+        if overage2 > 12000:
+            extra_penalty2 = penal * 1000000 * 30
+        if overage3 > 12000:
+            extra_penalty3 = penal * 1000000 * 30
+
+        if overage1 in range(1, 9000) and overage2 in range(1, 9000) and overage3 in range(1, 9000):  #min value ไม่ควร = 0 เพราะจะหมายถึง ของหมด ก็ยังได้รางวัล
             extra_reward1 = 1000 * 1000000  # 300
-        if overage1_2 in range(0, 7000) and overage2_2 in range(0, 7000) and overage3_2 in range(0, 6000):
+        if overage1_2 in range(1, 9000) and overage2_2 in range(1, 9000) and overage3_2 in range(1, 9000):
             extra_reward2 = 400 * 1000000  # 300
+        
 
         sum_extra_penalty = extra_penalty1 + extra_penalty2 + extra_penalty3
 
@@ -1031,28 +1032,28 @@ class InvEnv4(gym.Env):
         if overage2_2 <= 0:
             extra_penalty2_2 = penal * 1000000 * 15
         if overage3_2 <= 0:
-            extra_penalty3_2 = penal * 1000000 * 20
+            extra_penalty3_2 = penal * 1000000 * 15
         if overage1_3 <= 0:
             extra_penalty1_3 = penal * 1000000 * 5
         if overage2_3 <= 0:
             extra_penalty2_3 = penal * 1000000 * 5
         if overage3_3 <= 0:
-            extra_penalty3_3 = penal * 1000000 * 10
+            extra_penalty3_3 = penal * 1000000 * 5
 
-        if overage1_2 > 6000:
+        if overage1_2 > 8000:
             extra_penalty1_2 = penal * 1000000 * 6  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
-        if overage2_2 > 6000:
+        if overage2_2 > 8000:
             extra_penalty2_2 = penal * 1000000 * 6
-        if overage3_2 > 6000:
+        if overage3_2 > 8000:
             extra_penalty3_2 = penal * 1000000 * 6
-        if overage1_3 > 6000:
-            extra_penalty1_3 = penal * 1000000 * 10
-        if overage2_3 > 6000:
-            extra_penalty2_3 = penal * 1000000 * 10
-        if overage3_3 > 6000:
-            extra_penalty3_3 = penal * 1000000 * 10
+        if overage1_3 > 8000:
+            extra_penalty1_3 = penal * 1000000 * 15
+        if overage2_3 > 8000:
+            extra_penalty2_3 = penal * 1000000 * 15
+        if overage3_3 > 8000:
+            extra_penalty3_3 = penal * 1000000 * 15
 
-        if overage1_3 in range(0, 5000) and overage2_3 in range(0, 5000) and overage3_3 in range(0, 5000):
+        if overage1_3 in range(1, 5000) and overage2_3 in range(1, 5000) and overage3_3 in range(1, 5000):
             extra_reward2 = 500 * 1000000
         # if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
@@ -1098,7 +1099,7 @@ class InvEnv4(gym.Env):
         # for Gelu activation fn
         # sum_extra_reward/1000000
         # ใส่ _ = ยังไม่เอามาคิด ถ้าจะคิดก็เอา _ ออก    #450
-        reward = (1300 + (
+        reward = (2100 + (
             sales_revenue) / 1000000 + extra_reward1 / 1000000 + extra_reward2 / 1000000 + extra_reward3 / 1000000 - (
                               (purchase_cost + holding + penalty_lost_sale
                                + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
@@ -1108,7 +1109,7 @@ class InvEnv4(gym.Env):
                                - (
                                            extra_r_weekend1_1 + extra_r_weekend1_2 + extra_r_weekend1_3 + extra_r_weekend2_1 + extra_r_weekend2_2 + extra_r_weekend2_3)
                                + (
-                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 1300  # 650
+                                       extra_p_on1_1 + extra_p_on1_2 + extra_p_on1_3 + extra_p_on2_1 + extra_p_on2_2 + extra_p_on2_3)) / 1000000)) / 2100  # 650
 
         #         pure_reward = (purchase_cost + holding + penalty_lost_sale
         #                             + (self.changeover_cost_of_m1 + self.changeover_cost_of_m2) * 10
