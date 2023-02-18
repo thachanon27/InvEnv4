@@ -804,9 +804,9 @@ class InvEnv4(gym.Env):
         if overage3 > 12000:
             extra_penalty3 = penal * 1000000 * 30
 
-        if overage1 in range(500, 9000) and overage2 in range(500, 9000) and overage3 in range(500, 9000):  #min value ไม่ควร = 0 เพราะจะหมายถึง ของหมด ก็ยังได้รางวัล
+        if overage1 in range(300, 9000) and overage2 in range(300, 9000) and overage3 in range(300, 9000):  #min value ไม่ควร = 0 เพราะจะหมายถึง ของหมด ก็ยังได้รางวัล
             extra_reward1 = 1000 * 1000000  # 300
-        if overage1_2 in range(500, 9000) and overage2_2 in range(500, 9000) and overage3_2 in range(500, 9000):
+        if overage1_2 in range(300, 9000) and overage2_2 in range(300, 9000) and overage3_2 in range(300, 9000):
             extra_reward2 = 400 * 1000000  # 300
         
 
@@ -1054,7 +1054,7 @@ class InvEnv4(gym.Env):
         if overage3_3 > 8000:
             extra_penalty3_3 = penal * 1000000 * 15
 
-        if overage1_3 in range(300, 6000) and overage2_3 in range(300, 6000) and overage3_3 in range(300, 6000):
+        if overage1_3 in range(100, 6000) and overage2_3 in range(100, 6000) and overage3_3 in range(100, 6000):
             extra_reward2 = 500 * 1000000
         # if overage2_2 in range(1500,8000):
         #    extra_reward2 = 200*1000000
