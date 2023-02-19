@@ -798,11 +798,11 @@ class InvEnv4(gym.Env):
             extra_penalty3 = penal * 1000000 * 20
 
         if overage1 > 12000:  # 10000
-            extra_penalty1 = penal * 1000000 * 30
+            extra_penalty1 = penal * 1000000 * 50
         if overage2 > 12000:
-            extra_penalty2 = penal * 1000000 * 30
+            extra_penalty2 = penal * 1000000 * 50
         if overage3 > 12000:
-            extra_penalty3 = penal * 1000000 * 30
+            extra_penalty3 = penal * 1000000 * 50
 
         if overage1 in range(300, 9000) and overage2 in range(300, 9000) and overage3 in range(300, 9000):  #min value ไม่ควร = 0 เพราะจะหมายถึง ของหมด ก็ยังได้รางวัล
             extra_reward1 = 1000 * 1000000  # 300
@@ -1041,18 +1041,18 @@ class InvEnv4(gym.Env):
         if overage3_3 <= 0:
             extra_penalty3_3 = penal * 1000000 * 5
 
-        if overage1_2 > 8000:
-            extra_penalty1_2 = penal * 1000000 * 6  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
-        if overage2_2 > 8000:
-            extra_penalty2_2 = penal * 1000000 * 6
-        if overage3_2 > 8000:
-            extra_penalty3_2 = penal * 1000000 * 6
-        if overage1_3 > 8000:
-            extra_penalty1_3 = penal * 1000000 * 15
-        if overage2_3 > 8000:
-            extra_penalty2_3 = penal * 1000000 * 15
-        if overage3_3 > 8000:
-            extra_penalty3_3 = penal * 1000000 * 15
+        if overage1_2 > 10000:
+            extra_penalty1_2 = penal * 1000000 * 30  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
+        if overage2_2 > 10000:
+            extra_penalty2_2 = penal * 1000000 * 30
+        if overage3_2 > 10000:
+            extra_penalty3_2 = penal * 1000000 * 30
+        if overage1_3 > 10000:
+            extra_penalty1_3 = penal * 1000000 * 50
+        if overage2_3 > 10000:
+            extra_penalty2_3 = penal * 1000000 * 50
+        if overage3_3 > 10000:
+            extra_penalty3_3 = penal * 1000000 * 50
 
         if overage1_3 in range(100, 6000) and overage2_3 in range(100, 6000) and overage3_3 in range(100, 6000):
             extra_reward2 = 500 * 1000000
