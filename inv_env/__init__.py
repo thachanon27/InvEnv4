@@ -69,6 +69,18 @@ register(
     id='inv-v5-10',
     entry_point='inv_env.envs:InvEnv15',
 )
+register(
+    id='inv-sen1',
+    entry_point='inv_env.envs:InvSen1',
+)
+register(
+    id='inv-sen2',
+    entry_point='inv_env.envs:InvSen2',
+)
+
+
+
+
 
 
 
