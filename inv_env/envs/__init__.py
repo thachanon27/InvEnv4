@@ -18,6 +18,9 @@ from inv_env.envs.InvEnv36_oneSetD_set8 import InvEnv13  #id= 'inv-v5-8'
 from inv_env.envs.InvEnv36_oneSetD_set9 import InvEnv14  #id= 'inv-v5-9'
 from inv_env.envs.InvEnv36_oneSetD_set10 import InvEnv15  #id= 'inv-v5-10'
 
+from inv_env.envs.Inv_env_sen_set1 import InvSen1  #id= 'inv-v5-10'
+from inv_env.envs.Inv_env_sen_set2 import InvSen2  #id= 'inv-v5-10'
+
 
 
 
