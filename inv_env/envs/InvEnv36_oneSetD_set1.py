@@ -339,7 +339,7 @@ class InvEnv6(gym.Env):
             
         
 #         print("value หลังแปลงกลับ") 
-#         print("demand1", demand1)
+        print("demand1", demand1)
 #         print("on_hand1", on_hand1)
 
         if action == 0:
