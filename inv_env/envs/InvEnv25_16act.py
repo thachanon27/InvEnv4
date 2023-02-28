@@ -33,8 +33,8 @@ class InvEnv4(gym.Env):
         self.overall_time_trained = 0
         # initial inventory
         self.on_hand1 = (np.random.randint(3500, 6500) - 12000) / (12000 - 0)  # 5659
-        self.on_hand2 = (np.random.randint(2500, 4500) - 10000) / (10000 - 0)  # 3051
-        self.on_hand3 = (np.random.randint(2000, 3500) - 9000) / (9000 - 0)  # 2084
+        self.on_hand2 = (np.random.randint(2500, 4500) - 12000) / (12000 - 0)  # 3051
+        self.on_hand3 = (np.random.randint(2000, 3500) - 12000) / (12000 - 0)  # 2084
         # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
@@ -105,8 +105,8 @@ class InvEnv4(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (np.random.randint(3500, 6500) - 0) / (12000 - 0), (np.random.randint(2500, 4500) - 0) / (10000 - 0),
-            (np.random.randint(2000, 3500) - 0) / (9000 - 0),
+            (np.random.randint(3500, 6500) - 0) / (12000 - 0), (np.random.randint(2500, 4500) - 0) / (12000 - 0),
+            (np.random.randint(2000, 3500) - 0) / (12000 - 0),
             # initial inventory  #ก่อนป้อนเข้า env ต้องทำเป็นค่า normalize แบบค่าอื่นก่อน
             # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
             # initial inventory แบบ random
@@ -121,7 +121,7 @@ class InvEnv4(gym.Env):
         self.sum_real_reward = 0
         # self.demand_all = [0, 0, 0,(np.random.randint(2500, 4500)-2500)/(4500-2500), (np.random.randint(2000, 3500)-3500)/(3500-2000), (np.random.randint(1000, 2500)-2500)/(2500-1000),0, 0, 0 ]
         self.demand_all = [0, 0, 0, np.random.randint(2500, 4500), np.random.randint(2000, 3500),
-                           np.random.randint(1000, 2500), 0, 0, 0]
+                           np.random.randint(1000, 2500), 0, 0, 0]  #อันนี้ไม่ต้อง normalize เพราะไม่ใช่ค่าinitial แต่เป็นค่าที่นำไป add รวมกับ demand ที่ random เป็นค่าปกติในส่วนกลางของ env 
         self.M1P1_set = []
         self.M1P2_set = []
         self.M1P3_set = []
@@ -297,8 +297,8 @@ class InvEnv4(gym.Env):
         mind2 = 0
         mind3 = 0
         maxd1 = 4500
-        maxd2 = 3500
-        maxd3 = 2500
+        maxd2 = 4500
+        maxd3 = 4500
         minr1 = 0
         minr2 = 0
         minr3 = 0
