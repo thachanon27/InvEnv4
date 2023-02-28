@@ -33,8 +33,8 @@ class InvEnv7(gym.Env):
         self.overall_time_trained = 0
         # initial inventory
         self.on_hand1 = (5659-0)/(12000-0)  #5659
-        self.on_hand2 = (3051-0)/(10000-0)
-        self.on_hand3 = (2084-0)/(9000-0)
+        self.on_hand2 = (3051-0)/(12000-0)
+        self.on_hand3 = (2084-0)/(12000-0)
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
@@ -101,7 +101,7 @@ class InvEnv7(gym.Env):
         self.step_count = 0
         # state 14 dimension =onhand ,demand ,production status of machines
         self.state = np.array([
-            (5659-0)/(12000-0), (3051-0)/(10000-0), (2084-0)/(9000-0),  # initial inventory  #2084
+            (5659-0)/(12000-0), (3051-0)/(12000-0), (2084-0)/(12000-0),  # initial inventory  #2084
             #8659, 3051, 2084,  # initial inventory               #5659
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
@@ -207,8 +207,8 @@ class InvEnv7(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
 
-#         print("=======================================================================================================")
-#         print("step :", self.step_count)
+        print("=======================================================================================================")
+        print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -339,7 +339,7 @@ class InvEnv7(gym.Env):
             
         
 #         print("value หลังแปลงกลับ") 
-#         print("demand1", demand1)
+        print("demand1", demand1)
 #         print("on_hand1", on_hand1)
 
         if action == 0:
@@ -439,13 +439,13 @@ class InvEnv7(gym.Env):
             N2P3 = 1
             M2P3 = 1359
 
-#         print("action =", action)
-#         print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-#         print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-#         print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-#         print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-#         print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-#         print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+        print("action =", action)
+        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+        print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+        print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+        print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+        print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+        print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -920,9 +920,9 @@ class InvEnv7(gym.Env):
         #if self.step_count == 0:
         #print("=======================================")
         #print("self.step_count", self.step_count)
-#         print("overage1 =" , overage1)
-#         print("overage2 =" , overage2)
-#         print("overage3 =" , overage3)
+        print("overage1 =" , overage1)
+        print("overage2 =" , overage2)
+        print("overage3 =" , overage3)
 
 
         # print("Step",self.step_count )
