@@ -18,8 +18,16 @@ from inv_env.envs.InvEnv36_oneSetD_set8 import InvEnv13  #id= 'inv-v5-8'
 from inv_env.envs.InvEnv36_oneSetD_set9 import InvEnv14  #id= 'inv-v5-9'
 from inv_env.envs.InvEnv36_oneSetD_set10 import InvEnv15  #id= 'inv-v5-10'
 
-from inv_env.envs.Inv_env_sen_set1 import InvSen1  #id= 'inv-v5-10'
-from inv_env.envs.Inv_env_sen_set2 import InvSen2  #id= 'inv-v5-10'
+from inv_env.envs.Inv_env_sen_set1 import InvSen1  #id= 'inv-sen1'
+from inv_env.envs.Inv_env_sen_set2 import InvSen2  #id= 'inv-sen2'
+from inv_env.envs.Inv_env_sen_set3 import InvSen3  #id= 'inv-sen3'
+from inv_env.envs.Inv_env_sen_set4 import InvSen4  #id= 'inv-sen4'
+from inv_env.envs.Inv_env_sen_set5 import InvSen5  #id= 'inv-sen5'
+from inv_env.envs.Inv_env_sen_set6 import InvSen6  #id= 'inv-sen6'
+from inv_env.envs.Inv_env_sen_set7 import InvSen7  #id= 'inv-sen7'
+from inv_env.envs.Inv_env_sen_set8 import InvSen8  #id= 'inv-sen8'
+from inv_env.envs.Inv_env_sen_set9 import InvSen9  #id= 'inv-sen9'
+from inv_env.envs.Inv_env_sen_set10 import InvSen10  #id= 'inv-sen10'
 
 
 
