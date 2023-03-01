@@ -77,6 +77,42 @@ register(
     id='inv-sen2',
     entry_point='inv_env.envs:InvSen2',
 )
+register(
+    id='inv-sen3',
+    entry_point='inv_env.envs:InvSen3',
+)
+register(
+    id='inv-sen4',
+    entry_point='inv_env.envs:InvSen4',
+)
+register(
+    id='inv-sen5',
+    entry_point='inv_env.envs:InvSen5',
+)
+register(
+    id='inv-sen6',
+    entry_point='inv_env.envs:InvSen6',
+)
+register(
+    id='inv-sen7',
+    entry_point='inv_env.envs:InvSen7',
+)
+register(
+    id='inv-sen8',
+    entry_point='inv_env.envs:InvSen8',
+)
+register(
+    id='inv-sen9',
+    entry_point='inv_env.envs:InvSen9',
+)
+register(
+    id='inv-sen10',
+    entry_point='inv_env.envs:InvSen10',
+)
+
+
+
+
 
 
 
