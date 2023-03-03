@@ -776,19 +776,19 @@ class InvEnv4(gym.Env):
 
         s_penal = 8
         if overage1 < 500:
-            extra_penalty1 = s_penal * 1000000 * 15
+            extra_penalty1 = s_penal * 1000000 * 25
         if overage2 < 500:
-            extra_penalty2 = s_penal * 1000000 * 15
+            extra_penalty2 = s_penal * 1000000 * 25
         if overage3 < 500:
-            extra_penalty3 = s_penal * 1000000 * 15
+            extra_penalty3 = s_penal * 1000000 * 25
 
         penal = 15
         if overage1 <= 0:
-            extra_penalty1 = penal * 1000000 * 30  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
+            extra_penalty1 = penal * 1000000 * 40  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
         if overage2 <= 0:
-            extra_penalty2 = penal * 1000000 * 30
+            extra_penalty2 = penal * 1000000 * 40
         if overage3 <= 0:
-            extra_penalty3 = penal * 1000000 * 30
+            extra_penalty3 = penal * 1000000 * 40
 
         if overage1 > 9000:
             extra_penalty1 = penal * 1000000 * 20
