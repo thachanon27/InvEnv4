@@ -635,7 +635,7 @@ class InvEnv4(gym.Env):
         extra_r_weekend2_3 = 0
 
         ######################################################################
-        penalty_onpeak = 3000
+        penalty_onpeak = 5000   #3000
         reward_weekend = 0
 
         if stp in on_peak_stepcount:
@@ -709,7 +709,7 @@ class InvEnv4(gym.Env):
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             penalty_onpeak = 0
-            reward_weekend = 50000
+            reward_weekend = 70000  #50000
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
