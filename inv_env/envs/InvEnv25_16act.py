@@ -635,7 +635,7 @@ class InvEnv4(gym.Env):
         extra_r_weekend2_3 = 0
 
         ######################################################################
-        penalty_onpeak = 5000   #3000
+        penalty_onpeak = 9000   #3000
         reward_weekend = 0
 
         if stp in on_peak_stepcount:
@@ -673,7 +673,7 @@ class InvEnv4(gym.Env):
         if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
             extra_p_on = 1  # = next step will be on-peak
         if stp == 0:
-            penalty_onpeak = 50000
+            penalty_onpeak = 500000
             if M1P1 > 0:
                 extra_p_on1_1 = penalty_onpeak * M1P1
                 extra_p_on_set.append(extra_p_on1_1)
@@ -709,7 +709,7 @@ class InvEnv4(gym.Env):
             self.variable_cost_m2 = vcm2 * (M2P1 + M2P2 + M2P3)
         if stp in weekend_stepcount:
             penalty_onpeak = 0
-            reward_weekend = 70000  #50000
+            reward_weekend = 90000  #50000
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
             extra_p_on = 0
