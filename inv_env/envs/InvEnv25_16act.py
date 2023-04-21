@@ -1071,7 +1071,7 @@ class InvEnv4(gym.Env):
                 extra_penalty2_2 = penal * 1000000 * 40
             if overage3_2 <= 1750:
                 extra_penalty3_2 = penal * 1000000 * 40
-         if self.step_count == 27:
+        if self.step_count == 27:
             if overage1_3 <= 3500:
                 extra_penalty1_3 = penal * 1000000 * 40  # ถ้า < 4500 แต่ ไม่ < 0 ตรงนี้จะข้ามไป ไม่โดน penalty แต่ < 0 ด้วย 5 ล้านจะถูกแทนด้วยค่า 9 ล้าน
             if overage2_3 <= 2750:
