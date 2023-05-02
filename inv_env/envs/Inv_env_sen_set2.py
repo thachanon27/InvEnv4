@@ -250,7 +250,7 @@ class InvSen2(gym.Env):
         demand1 = self.state[3]
         demand2 = self.state[4]
         demand3 = self.state[5]
-        print("demand this period =", demand1, demand2, demand3)
+        # print("demand this period =", demand1, demand2, demand3)
 
         # This clears production data from the previous period.
         self.state[6] = 0
@@ -336,7 +336,7 @@ class InvSen2(gym.Env):
         #             action == 9 #บังคับให้เริ่มต้น ยังไม่ต้องผลิตอะไร เพราะไม่จำเป็น
 
         #         print("value หลังแปลงกลับ")
-        #         print("demand1", demand1)
+        print("demand1", demand1)
         #         print("on_hand1", on_hand1)
 
         if action == 0:
