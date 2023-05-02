@@ -141,9 +141,9 @@ class InvSen1(gym.Env):
         h2 = 29.86  # 34.53
         h3 = 47.77  # 48.66
         # Lost of good Will
-        k1 = 10200
-        k2 = 6200
-        k3 = 9920
+        k1 = 102000  #10200
+        k2 = 62000   #6200
+        k3 = 99200   #9920
         # Sell price
         p1 = 5100
         p2 = 3100
@@ -250,7 +250,7 @@ class InvSen1(gym.Env):
         demand1 = self.state[3]
         demand2 = self.state[4]
         demand3 = self.state[5]
-        # print("demand this period =", demand1, demand2, demand3)
+        print("demand this period =", demand1, demand2, demand3)
 
         # This clears production data from the previous period.
         self.state[6] = 0
@@ -979,7 +979,7 @@ class InvSen1(gym.Env):
                        - self.switch_on_cost
                        - fix_production_cost
                        - (self.variable_cost_m1 + self.variable_cost_m2))/34.84   #แปลงจากบาท to dollar
-
+        
        
 
         #if self.step_count == 0:
@@ -988,6 +988,13 @@ class InvSen1(gym.Env):
         print("overage1 =" , overage1)
         print("overage2 =" , overage2)
         print("overage3 =" , overage3)
+        if overage1 == 0:
+            print("underage1=",underage1)
+        if overage2 == 0:
+            print("underage2=",underage2)
+        if overage3 == 0:
+            print("underage3=",underage3)
+        print("penalty_lost_sale",penalty_lost_sale)
 
 
         # print("Step",self.step_count )
