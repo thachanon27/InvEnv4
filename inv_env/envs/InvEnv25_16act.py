@@ -39,7 +39,7 @@ class InvEnv4(gym.Env):
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
-            0, 0, 0,  # initial inventory             ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27 + 6 = 33
+            0, 0, 0,  # initial inventory             ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27 
             0, 0, 0,  # initial demand
             0, 0, 0, 0,  # initial machine status (0 = idle)
             0, 0, 0, 0,
