@@ -3,14 +3,12 @@
 # คือ ต่อจากไฟล์ 25_16 act แต่ลองปรับ env ตาม moutain car เพื่อให้ appecnd ใน colab ถูก
 # ล่าสุด 14-8-65 ตรงกับไฟล์ InvEnv38_16act.py
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
-#ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง   
-     #pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
+# ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
+# pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
 
 from typing import Optional
 
-
 import gym
-
 
 from gym import spaces
 from gym.spaces import Box, Discrete
@@ -36,15 +34,23 @@ class InvEnv4(gym.Env):
         self.action_space = spaces.Discrete(16)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
-            0, 0, 0,  # initial inventory             ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27
-            0, 0, 0,  # initial demand
-            0, 0, 0, 0,  # initial machine status (0 = idle)
-            0, 0, 0, 0,
-            0, 0, 0,  # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2
-            0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3
-            0, 0, 0,  # d4, d5, d6
-            0, 0, 0,  # d7, d8, d9
-            0  # extra_p_on
+            0, 0, 0,  # initial inventory #0 1 2            ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27
+            0, 0, 0,  # initial demand    #3 4 5
+            0, 0, 0, 0,  # initial machine status (0 = idle)   #6 7 8 9
+            0, 0, 0, 0,                                        #10 11 12 13
+            0, 0, 0,  # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2    #14 15 16
+            0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
+            0, 0, 0,  # d4, d5, d6     #20 21 22
+            0, 0, 0,  # d7, d8, d9     #23 24 25
+            0,  # extra_p_on    ---->  State 26
+            0,  #Demand pattern #27
+            0, 0, 0, # Demand r1-3 at 4 rd period  # 29 30 31
+            0, 0, 0, # Demand r1-3 at 8 th period  # 32 33 34
+            0, 0, 0,  # Demand r1-3 at 12 th period  # 35 36 37
+            0, 0, 0,  # Demand r1-3 at 16 th period  # 38 39 40
+            0, 0, 0,  # Demand r1-3 at 20 th period  # 41 42 43
+            0, 0, 0,  # Demand r1-3 at 24 th period  # 44 45 46
+            0, 0, 0   # Demand r1-3 at 28 th period  # 47 48 49
         ])
         self.statehigh = np.array([
             np.inf, np.inf, np.inf,  # initial inventory
@@ -55,16 +61,20 @@ class InvEnv4(gym.Env):
             np.inf, np.inf, np.inf,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3
             np.inf, np.inf, np.inf,  # future demand d4, d5, d6
             np.inf, np.inf, np.inf,  # initial demand d7, d8, d9
-            1  # extra_p_on
+            1,  # extra_p_on
+            np.inf,  # Demand pattern
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 4 rd period
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 8 th period
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 12 th period
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 16 th period
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 20 th period
+            np.inf, np.inf, np.inf,  # Demand r1-3 at 24 th period
+            np.inf, np.inf, np.inf  # Demand r1-3 at 28 th period
         ])
+        #self.state[49] = 0
         self.observation_space = Box(self.statelow, self.statehigh,
                                      dtype=np.float32)
 
-        self.state = [self.on_hand1, self.on_hand2, self.on_hand3,
-                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                      0, 0, 0, 0, 0, 0,  # future inventory position state[14] - state[19]
-                      0, 0, 0, 0, 0, 0, 0  # future demand position state[20] - state[25]
-                      ]
 
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -75,10 +85,8 @@ class InvEnv4(gym.Env):
         self.sum_ex_penalty_array = []
         self.sum_ex_penalty_array_2 = []
         self.sum_ex_penalty_array_3 = []
-        # self.demand_all = [0, 0, 0,(np.random.randint(2500, 4500)-2500)/(4500-2500), (np.random.randint(2000, 3500)-3500)/(3500-2000), (np.random.randint(1000, 2500)-2500)/(2500-1000),0, 0, 0 ]
-        # self.demand_all = [0, 0, 0, np.random.randint(2500, 4500), np.random.randint(2000, 3500),
-        #                    np.random.randint(1000, 2500), 0, 0, 0]
-        self.demand_all = [0,0,0]
+
+        self.demand_all = [0, 0, 0]
         self.reset()
         self.M1P1_set = []
         self.M1P2_set = []
@@ -93,18 +101,27 @@ class InvEnv4(gym.Env):
         self.variable_cost_m2 = 0
         self.demand_real = []
 
-        self.demand_max_r1 = 4500
-        self.demand_max_r2 = 3500
-        self.demand_max_r3 = 2500
-        self.demand_avg_random_r1 = np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
-        self.demand_avg_random_r2 = np.random.randint(2338, 3163)  # 2000, 3500
-        self.demand_avg_random_r3 = np.random.randint(1488, 2013)  # 1000, 2500
-        # self.idrv_set = []
-        # for j in range(1,91):
-        #     idrv = round(random.uniform(0.5, 1.25), 2)   #random variation pattern
-        #     self.idrv_set.append(idrv)
-        # print("self.idrv_set = ",self.idrv_set)
-        self.demand_all = self.create_demand_all()
+        (self.demand_all, self.aaa) = self.create_demand_all()
+
+        self.state = [self.on_hand1, self.on_hand2, self.on_hand3,  # initial inventory #0 1 2
+                      0, 0, 0,    # initial demand    #3 4 5
+                      0, 0, 0, 0,    # initial machine status (0 = idle)   #6 7 8 9
+                      0, 0, 0, 0,          # 10, 11, 12, 13
+                      0, 0, 0,    # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2    #14 15 16
+                      0, 0, 0,     # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
+                      0, 0, 0,   # future demand # d4, d5, d6     #20 21 22
+                      0, 0, 0,  # future demand # d7, d8, d9     #23 24 25
+                      1, #extra_p_on   ---->  State 26
+                      0,  # Demand pattern   #27
+                      0, 0, 0,  # Demand r1-3 at 4 rd period
+                      0, 0, 0,  # Demand r1-3 at 8 th period
+                      0, 0, 0,  # Demand r1-3 at 12 th period
+                      0, 0, 0,  # Demand r1-3 at 16 th period
+                      0, 0, 0,  # Demand r1-3 at 20 th period
+                      0, 0, 0,  # Demand r1-3 at 24 th period
+                      0, 0, 0  # Demand r1-3 at 28 th period
+                      ]
+
 
     def reset(
             self,
@@ -127,15 +144,20 @@ class InvEnv4(gym.Env):
             0, 0, 0, 0,
             0, 0, 0, 0, 0, 0,  # future inventory
             0, 0, 0, 0, 0, 0,  # future demand
-            1  # เริ่มต้น step แรกคือ เป็นช่วง onpeak
+            1,  # เริ่มต้น step แรกคือ เป็นช่วง onpeak
+            1,  # Demand pattern
+            0, 0, 0,  # Demand r1-3 at 4 rd period
+            0, 0, 0,  # Demand r1-3 at 8 th period
+            0, 0, 0,  # Demand r1-3 at 12 th period
+            0, 0, 0,  # Demand r1-3 at 16 th period
+            0, 0, 0,  # Demand r1-3 at 20 th period
+            0, 0, 0,  # Demand r1-3 at 24 th period
+            0, 0, 0  # Demand r1-3 at 28 th period
         ])
         self.sum_reward = 0
         self.sum_real_reward = 0
-        # self.demand_all = [0, 0, 0,(np.random.randint(2500, 4500)-2500)/(4500-2500), (np.random.randint(2000, 3500)-3500)/(3500-2000), (np.random.randint(1000, 2500)-2500)/(2500-1000),0, 0, 0 ]
-        # self.demand_all = [0, 0, 0, np.random.randint(2500, 4500), np.random.randint(2000, 3500),
-        #                    np.random.randint(1000, 2500), 0, 0,
-        #                    0]  # อันนี้ไม่ต้อง normalize เพราะไม่ใช่ค่าinitial แต่เป็นค่าที่นำไป add รวมกับ demand ที่ random เป็นค่าปกติในส่วนกลางของ env
-        self.demand_all = [0,0,0]
+
+        self.demand_all = [0, 0, 0]
         self.M1P1_set = []
         self.M1P2_set = []
         self.M1P3_set = []
@@ -148,30 +170,22 @@ class InvEnv4(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
         self.demand_real = []
-        self.demand_max_r1 = 4500
-        self.demand_max_r2 = 3500
-        self.demand_max_r3 = 2500
-        self.demand_avg_random_r1 = np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
-        self.demand_avg_random_r2 = np.random.randint(2338, 3163)  # 2000, 3500
-        self.demand_avg_random_r3 = np.random.randint(1488, 2013)  # 1000, 2500
-        self.demand_all = self.create_demand_all()
-        # for j in range(1,91):
-        #     idrv = round(random.uniform(0.5, 1.25), 2)   #random variation pattern
-        #     self.idrv_set.append(idrv)
-        # print("self.idrv_set = ",self.idrv_set)
+        (self.demand_all, self.aaa) = self.create_demand_all()
+
         if not return_info:
             return np.array(self.state, dtype=np.float32)
         else:
             return np.array(self.state, dtype=np.float32), {}
 
+
+
     def create_index2(self):
         rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
         np.random.seed(rng3)
-        aaa = np.random.randint(1, 8)  #อันนี้สุ่ม 1-7
-        idrv = round(random.uniform(0.40, 1.00), 2)  # สุ่มค่า index ของ Random variation ระหว่าง 0.4 ถึง 1.0
+        aaa = np.random.randint(1, 8)  # อันนี้สุ่ม 1-7
 
         idrv_set = []
-        for j in range(1,91):
+        for j in range(1, 91):
             idrv = round(random.uniform(0.40, 1.00), 2)
             idrv_set.append(idrv)
 
@@ -180,59 +194,83 @@ class InvEnv4(gym.Env):
         if aaa == 2:
             index2 = idrv_set
         if aaa == 3:
-            #index = [0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174,1.1,1,0.88,0.78,0.72]  # season 1
-            index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.72, 0.72, 0.72]
+            # index = [0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174,1.1,1,0.88,0.78,0.72]  # season 1
+            index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83,
+                      0.83, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179,
+                      1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0,
+                      0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0,
+                      0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0,
+                      0.0, 0.0, 0.72, 0.72, 0.72]
         if aaa == 4:
-            #index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
-            index2 = [0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.092, 1.092, 1.092, 0.0, 0.0, 0.0, 1.015, 1.015, 1.015, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.116, 1.116, 1.116]
+            # index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
+            index2 = [0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311,
+                      1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0,
+                      0.0, 1.092, 1.092, 1.092, 0.0, 0.0, 0.0, 1.015, 1.015, 1.015, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913,
+                      0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.713,
+                      0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0,
+                      0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.116, 1.116, 1.116]
         if aaa == 5:
-            #index = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]  # season 3
-            index2 = [0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174]
+            # index = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]  # season 3
+            index2 = [0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0,
+                      0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
+                      0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.96, 0.96,
+                      0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253,
+                      1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0,
+                      0.0, 1.174, 1.174, 1.174]
         if aaa == 6:
-            #index = [0.741,0.913,1.179,1.56,1.65,0.913,0.805,0.713,0.69,0.55,0.35,0.55,0.744,0.83,0.988]  # extreme1
-            index2 = [0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988]
+            # index = [0.741,0.913,1.179,1.56,1.65,0.913,0.805,0.713,0.69,0.55,0.35,0.55,0.744,0.83,0.988]  # extreme1
+            index2 = [0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 1.179,
+                      1.179, 1.179, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0, 0.0,
+                      0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0,
+                      0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35, 0.0,
+                      0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83,
+                      0.0, 0.0, 0.0, 0.988, 0.988, 0.988]
         if aaa == 7:
-            #index = [0.69,0.55,0.35,0.55,0.744,0.83,0.988,1.215,1.355,1.56,1.65,1.121,0.805,0.713,0.69]  # extreme2
-            index2 = [0.0, 0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.215, 1.215, 1.215, 0.0, 0.0, 0.0, 1.355, 1.355, 1.355, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0, 0.0, 1.121, 1.121, 1.121, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.69, 0.69, 0.69]
+            # index = [0.69,0.55,0.35,0.55,0.744,0.83,0.988,1.215,1.355,1.56,1.65,1.121,0.805,0.713,0.69]  # extreme2
+            index2 = [0.0, 0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35,
+                      0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83,
+                      0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.215, 1.215, 1.215, 0.0, 0.0, 0.0,
+                      1.355, 1.355, 1.355, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0,
+                      0.0, 1.121, 1.121, 1.121, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
+                      0.0, 0.0, 0.0, 0.69, 0.69, 0.69]
 
         if aaa >= 3:
-            demand_r1 = self.demand_max_r1
-            demand_r2 = self.demand_max_r2
-            demand_r3 = self.demand_max_r3
-        if aaa < 3:
-            demand_r1 = self.demand_avg_random_r1
-            demand_r2 = self.demand_avg_random_r2
-            demand_r3 = self.demand_avg_random_r3
-        return index2, demand_r1, demand_r2, demand_r3
+            demand_r1 =  4500
+            demand_r2 =  3500
+            demand_r3 =  2500
+        if aaa == 1:
+            demand_r1 =  np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
+            demand_r2 =  np.random.randint(2338, 3163)  # 2000, 3500
+            demand_r3 =  np.random.randint(1488, 2013)  # 1000, 2500
+        if aaa == 2:
+            demand_r1 =  np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
+            demand_r2 =  np.random.randint(2338, 3163)  # 2000, 3500
+            demand_r3 =  np.random.randint(1488, 2013)  # 1000, 2500
+
+        return index2, demand_r1, demand_r2, demand_r3, aaa
 
     def create_demand_all(self):
         demand_array2 = list(range(1, 91))
         demand_all = [0, 0, 0]
-        
+
         set_stepcount1 = [0, 4, 8, 12, 16, 20]
         set_stepcount3 = [24]
+        #print("self.step_count## ==", self.step_count)
+        #if self.step_count == 1:  #ให้ create แค่ period ที่ 1
+        (index2, demand_r1, demand_r2, demand_r3, aaa) = self.create_index2()
 
-        (index2, demand_r1, demand_r2, demand_r3) = self.create_index2()
 
-        for step_count in range(0,30):
-            #print("step count =", step_count)
+        for step_count in range(0, 30):
+            # print("step count =", step_count)
             y = step_count + 1
-            #print("y = ", y)
+            # print("y = ", y)
             if step_count < 24:  # 25
                 if step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
-                    #print("len(demand_array2) =", len(demand_array2))
-                    #print("len(demand_all)  =", len(demand_all))
-                    # y = self.step_count
-                    #rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
-                    #np.random.seed(rng3)
-                    aaa = np.random.randint(1, 8)  # อันนี้สุ่ม 1-7
-                    # idrv = round(random.uniform(0.40, 1.00), 2)  # สุ่มค่า index ของ Random variation ระหว่าง 0.4 ถึง 1.0
-                    #แทนที่ตัวเลขใน demand array2 ที่เป็น 1-90 ด้วยค่า demandจริง
-                    demand_array2[y * 3] = demand_r1*index2[y*3] #######
+                    demand_array2[y * 3] = demand_r1 * index2[y * 3]  #######
                     demand_all.append(demand_array2[y * 3])
-                    demand_array2[y * 3 + 1] = demand_r2*index2[y*3+1]  #######
+                    demand_array2[y * 3 + 1] = demand_r2 * index2[y * 3 + 1]  #######
                     demand_all.append(demand_array2[y * 3 + 1])
-                    demand_array2[y * 3 + 2] = demand_r3*index2[y*3+2]  #######
+                    demand_array2[y * 3 + 2] = demand_r3 * index2[y * 3 + 2]  #######
                     demand_all.append(demand_array2[y * 3 + 2])
                     demand_array2[y * 3 + 3] = 0
                     demand_all.append(demand_array2[y * 3 + 3])
@@ -240,11 +278,11 @@ class InvEnv4(gym.Env):
                     demand_all.append(demand_array2[y * 3 + 4])
                     demand_array2[y * 3 + 5] = 0
                     demand_all.append(demand_array2[y * 3 + 5])
-                    demand_array2[y * 3 + 6] = demand_r1*index2[y*3 + 6]    #######
+                    demand_array2[y * 3 + 6] = demand_r1 * index2[y * 3 + 6]  #######
                     demand_all.append(demand_array2[y * 3 + 6])
-                    demand_array2[y * 3 + 7] = demand_r2*index2[y*3  + 7]   #######
+                    demand_array2[y * 3 + 7] = demand_r2 * index2[y * 3 + 7]  #######
                     demand_all.append(demand_array2[y * 3 + 7])
-                    demand_array2[y * 3 + 8] = demand_r3*index2[y*3  + 8]    #######
+                    demand_array2[y * 3 + 8] = demand_r3 * index2[y * 3 + 8]  #######
                     demand_all.append(demand_array2[y * 3 + 8])
                     demand_array2[y * 3 + 9] = 0
                     demand_all.append(demand_array2[y * 3 + 9])
@@ -261,48 +299,43 @@ class InvEnv4(gym.Env):
                     d7 = demand_array2[y * 3 + 6]
                     d8 = demand_array2[y * 3 + 7]
                     d9 = demand_array2[y * 3 + 8]
-        
-                    #print("demand_all= ", demand_all)
-                    #print("len(demand_all) at step<24 =", len(demand_all))
+
+
             if step_count == 24:
-                # if step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
-                    # y = self.step_count
-                    #rng3 = randint(0, 10000000)  # train with 50,000,000 set of demand data
-                    #np.random.seed(rng3)
-                    demand_array2[y * 3] = demand_r1*index2[y*3]   #######
-                    demand_all.append(demand_array2[y * 3])
-                    demand_array2[y * 3 + 1] = demand_r2*index2[y*3  + 1]   #######
-                    demand_all.append(demand_array2[y * 3 + 1])
-                    demand_array2[y * 3 + 2] = demand_r3*index2[y*3 + 2]   #######
-                    demand_all.append(demand_array2[y * 3 + 2])
-                    demand_array2[y * 3 + 3] = 0
-                    demand_all.append(demand_array2[y * 3 + 3])
-                    demand_array2[y * 3 + 4] = 0
-                    demand_all.append(demand_array2[y * 3 + 4])
-                    demand_array2[y * 3 + 5] = 0
-                    demand_all.append(demand_array2[y * 3 + 5])
-                    demand_array2[y * 3 + 6] = demand_r1*index2[y*3 + 6]    #######
-                    demand_all.append(demand_array2[y * 3 + 6])
-                    demand_array2[y * 3 + 7] = demand_r2*index2[y*3 + 7]      #######
-                    demand_all.append(demand_array2[y * 3 + 7])
-                    demand_array2[y * 3 + 8] = demand_r3*index2[y*3 + 8]      #######
-                    demand_all.append(demand_array2[y * 3 + 8])
-                    demand_array2[y * 3 + 9] = 0
-                    demand_all.append(demand_array2[y * 3 + 9])
-                    demand_array2[y * 3 + 10] = 0
-                    demand_all.append(demand_array2[y * 3 + 10])
-                    demand_array2[y * 3 + 11] = 0
-                    demand_all.append(demand_array2[y * 3 + 11])
-                    d1 = demand_array2[y * 3]
-                    d2 = demand_array2[y * 3 + 1]
-                    d3 = demand_array2[y * 3 + 2]
-                    d4 = demand_array2[y * 3 + 3]
-                    d5 = demand_array2[y * 3 + 4]
-                    d6 = demand_array2[y * 3 + 5]
-                    d7 = demand_array2[y * 3 + 6]
-                    d8 = demand_array2[y * 3 + 7]
-                    d9 = demand_array2[y * 3 + 8]
-                    #print("demand_all2= ", demand_all)
+                demand_array2[y * 3] = demand_r1 * index2[y * 3]  #######
+                demand_all.append(demand_array2[y * 3])
+                demand_array2[y * 3 + 1] = demand_r2 * index2[y * 3 + 1]  #######
+                demand_all.append(demand_array2[y * 3 + 1])
+                demand_array2[y * 3 + 2] = demand_r3 * index2[y * 3 + 2]  #######
+                demand_all.append(demand_array2[y * 3 + 2])
+                demand_array2[y * 3 + 3] = 0
+                demand_all.append(demand_array2[y * 3 + 3])
+                demand_array2[y * 3 + 4] = 0
+                demand_all.append(demand_array2[y * 3 + 4])
+                demand_array2[y * 3 + 5] = 0
+                demand_all.append(demand_array2[y * 3 + 5])
+                demand_array2[y * 3 + 6] = demand_r1 * index2[y * 3 + 6]  #######
+                demand_all.append(demand_array2[y * 3 + 6])
+                demand_array2[y * 3 + 7] = demand_r2 * index2[y * 3 + 7]  #######
+                demand_all.append(demand_array2[y * 3 + 7])
+                demand_array2[y * 3 + 8] = demand_r3 * index2[y * 3 + 8]  #######
+                demand_all.append(demand_array2[y * 3 + 8])
+                demand_array2[y * 3 + 9] = 0
+                demand_all.append(demand_array2[y * 3 + 9])
+                demand_array2[y * 3 + 10] = 0
+                demand_all.append(demand_array2[y * 3 + 10])
+                demand_array2[y * 3 + 11] = 0
+                demand_all.append(demand_array2[y * 3 + 11])
+                d1 = demand_array2[y * 3]
+                d2 = demand_array2[y * 3 + 1]
+                d3 = demand_array2[y * 3 + 2]
+                d4 = demand_array2[y * 3 + 3]
+                d5 = demand_array2[y * 3 + 4]
+                d6 = demand_array2[y * 3 + 5]
+                d7 = demand_array2[y * 3 + 6]
+                d8 = demand_array2[y * 3 + 7]
+                d9 = demand_array2[y * 3 + 8]
+                # print("demand_all2= ", demand_all)
 
         demand_all.extend([
             demand_r1 * index2[87],
@@ -311,14 +344,15 @@ class InvEnv4(gym.Env):
             0, 0, 0,
         ])
 
-        assert(len(demand_all) == 93)
-        return demand_all
+        assert (len(demand_all) == 93)
+        return (demand_all, aaa)
 
     def step(self, action):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
         info = {}
+
 
         # all model parameters
         # holding cost
@@ -337,13 +371,6 @@ class InvEnv4(gym.Env):
         c1 = 1434.375  # 3060
         c2 = 871.875  # 1860
         c3 = 1395.000  # 2976
-        # chage over  #ต้นทุนเปลี่ยนตาม on-off peak เลยเอาไปใส่ในบรรทัด 609 แทน
-        # co11 = 33896   #4631.490
-        # co21 = 33896    #4631.490
-        # switch_on_cost  #ต้นทุนเปลี่ยนตาม on-off peak เลยเอาไปใส่ในบรรทัด 609 แทน
-        # sw1 = 401.790
-        # sw2 = 401.790
-        # fix_production_cost
         fc_m1 = 1426.140
         fc_m2 = 1326.140
         # variable_production_cost
@@ -388,7 +415,6 @@ class InvEnv4(gym.Env):
         extra_penalty2_3 = 0
         extra_penalty3_3 = 0
 
-        extra_p_on = 0
 
         #         print("=========================================================================================")
         #         print("step :", self.step_count)
@@ -433,7 +459,7 @@ class InvEnv4(gym.Env):
         demand1 = self.state[3]
         demand2 = self.state[4]
         demand3 = self.state[5]
-        #print("demand this period =", demand1, demand2, demand3)
+        # print("demand this period =", demand1, demand2, demand3)
 
         # This clears production data from the previous period.
         self.state[6] = 0
@@ -462,11 +488,48 @@ class InvEnv4(gym.Env):
         M2P1 = 0
         M2P2 = 0
         M2P3 = 0
+        extra_p_on = 0
+
+
 
         on_hand1, on_hand2, on_hand3, demand1, demand2, demand3, N1P, N1P1, \
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
-        demand6, demand7, demand8, demand9, extra_p_on = self.state
+        demand6, demand7, demand8, demand9, \
+        extra_p_on, \
+        aaa3, \
+        dr1_4, dr2_4, dr3_4,  \
+        dr1_8, dr2_8, dr3_8, \
+        dr1_12, dr2_12, dr3_12, \
+        dr1_16, dr2_16, dr3_16,  \
+        dr1_20, dr2_20, dr3_20, \
+        dr1_24, dr2_24, dr3_24,  \
+        dr1_28, dr2_28, dr3_28 = self.state
+
+        aaa3 = self.aaa
+
+        #print("self.demand_all =", self.demand_all)
+        dr1_4 = self.demand_all[9]
+        dr2_4 = self.demand_all[10]
+        dr3_4 = self.demand_all[11]
+        dr1_8 = self.demand_all[21]
+        dr2_8 = self.demand_all[22]
+        dr3_8 = self.demand_all[23]
+        dr1_12 = self.demand_all[33]
+        dr2_12 = self.demand_all[34]
+        dr3_12 = self.demand_all[35]
+        dr1_16 = self.demand_all[45]
+        dr2_16 = self.demand_all[46]
+        dr3_16 = self.demand_all[47]
+        dr1_20 = self.demand_all[57]
+        dr2_20 = self.demand_all[58]
+        dr3_20 = self.demand_all[59]
+        dr1_24 = self.demand_all[69]
+        dr2_24 = self.demand_all[70]
+        dr3_24 = self.demand_all[71]
+        dr1_28 = self.demand_all[81]
+        dr2_28 = self.demand_all[82]
+        dr3_28 = self.demand_all[83]
 
         # parameter for normalize
         mind1 = 0  # min demand1
@@ -482,11 +545,6 @@ class InvEnv4(gym.Env):
         maxr2 = 12000
         maxr3 = 12000
 
-        #         print("####################################################################################3################# ")
-        #         print("stepcount ", self.step_count )
-        #         print("value ก่อนแปลงกลับ")
-        #         print("demand1 =", demand1, "=state[3]=",self.state[3])
-        #         print("on_hand1 =", on_hand1, "=state[0]=",self.state[0])
         # แปลงค่า Normalize value จาก 0-1 range  กลับเป็นค่าปกติ
         demand1 = demand1 * (maxd1 - mind1) + mind1
         demand2 = demand2 * (maxd2 - mind2) + mind2
@@ -499,13 +557,14 @@ class InvEnv4(gym.Env):
         demand8 = demand8 * (maxd2 - mind2) + mind2
         demand9 = demand9 * (maxd3 - mind3) + mind3
 
-        #print("demand in this period =", demand1, demand2, demand3)
 
-        #self.demand_real = info[24]   #เรียก info มาปริ้นข้างใน env ไม่ได้ จะ error เพราะ info ส่งผ่านไปข้างนอกอย่างเดียว ไม่ได้รับกลับเข้าในแต่ละ step ของ env
+        # print("demand in this period =", demand1, demand2, demand3)
+
+        # self.demand_real = info[24]   #เรียก info มาปริ้นข้างใน env ไม่ได้ จะ error เพราะ info ส่งผ่านไปข้างนอกอย่างเดียว ไม่ได้รับกลับเข้าในแต่ละ step ของ env
         self.demand_real.append(demand1)
         self.demand_real.append(demand2)
         self.demand_real.append(demand3)
-        #print("real demand = ",self.demand_real)
+        # print("real demand = ",self.demand_real)
 
         on_hand1 = on_hand1 * (maxr1 - 0) + 0
         on_hand2 = on_hand2 * (maxr2 - 0) + 0
@@ -802,9 +861,10 @@ class InvEnv4(gym.Env):
         stp = 0
         #         stp = self.step_count + 1
         stp = self.step_count
-        # print("stp =",stp)
-        # if stp in on_peak_stepcount:
-        #    print("yes")
+        #print("stp =",stp)
+        if stp in on_peak_stepcount:
+           #print("On-peak")
+           extra_p_on = 1
         extra_p_on1_1 = 0  # extra penalty กรณีผลิตช่วง onpeak เพื่อให้ agent ฉลาดขึ้น
         extra_p_on1_2 = 0
         extra_p_on1_3 = 0
@@ -855,8 +915,8 @@ class InvEnv4(gym.Env):
             if M2P3 > 0:
                 extra_p_on2_3 = penalty_onpeak * M2P3
                 extra_p_on_set.append(extra_p_on2_3)
-        if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
-            extra_p_on = 1  # = next step will be on-peak
+        #if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
+        #    extra_p_on = 1  # = next step will be on-peak
         if stp == 0:
             penalty_onpeak = 50000
             if M1P1 > 0:
@@ -879,10 +939,11 @@ class InvEnv4(gym.Env):
                 extra_p_on_set.append(extra_p_on2_3)
 
         if stp in off_peak_stepcount:
+            #print("Off-peak")
+            extra_p_on = 0
             penalty_onpeak = 0
             vcm1 = vc_m1_off
             vcm2 = vc_m2_off
-            extra_p_on = 0
             co11 = 32139
             co21 = 32139
             sw1 = 331.9
@@ -1047,101 +1108,27 @@ class InvEnv4(gym.Env):
         set_stepcount2 = [1, 2, 3, 5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19]
         set_stepcount3 = [24]
         # set_stepcount2 = [28]
-        rng_indexset = np.random.randint(1, 8)     #เลขไว้สุ่มชุด index1-7 #1,2=randomV, 3 =season1, 4=season2, 5=season3, 6=extreme1, 7=extreme2
+        rng_indexset = np.random.randint(1,
+                                         8)  # เลขไว้สุ่มชุด index1-7 #1,2=randomV, 3 =season1, 4=season2, 5=season3, 6=extreme1, 7=extreme2
         idrv_set = []
-        index_season1 = [0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174,1.1,1,0.88,0.78,0.72]
-        index_season2 = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]
-        index_season3 = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]
-        index_extreme1 = [0.741,0.913,1.179,1.56,1.65,0.913,0.805,0.713,0.69,0.55,0.35,0.55,0.744,0.83,0.988]
-        index_extreme2 = [0.69,0.55,0.35,0.55,0.744,0.83,0.988,1.215,1.355,1.56,1.65,1.121,0.805,0.713,0.69]
+        index_season1 = [0.713, 0.744, 0.83, 0.96, 1.09, 1.179, 1.253, 1.311, 1.261, 1.174, 1.1, 1, 0.88, 0.78, 0.72]
+        index_season2 = [1.179, 1.253, 1.311, 1.261, 1.174, 1.092, 1.015, 0.913, 0.805, 0.741, 0.713, 0.744, 0.83,
+                         0.988, 1.116]
+        index_season3 = [1.1, 1, 0.88, 0.78, 0.72, 0.713, 0.744, 0.83, 0.96, 1.09, 1.179, 1.253, 1.311, 1.261, 1.174]
+        index_extreme1 = [0.741, 0.913, 1.179, 1.56, 1.65, 0.913, 0.805, 0.713, 0.69, 0.55, 0.35, 0.55, 0.744, 0.83,
+                          0.988]
+        index_extreme2 = [0.69, 0.55, 0.35, 0.55, 0.744, 0.83, 0.988, 1.215, 1.355, 1.56, 1.65, 1.121, 0.805, 0.713,
+                          0.69]
         i = 0
         demand_r1 = 0
         demand_r2 = 0
         demand_r3 = 0
-        index2 = []
+        #index2 = []
         if self.step_count < 24:  # 25
-            #print("step count =", self.step_count)
+            # print("step count =", self.step_count)
             if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
-                # print("y = ", y)
-                # print("len(demand_array2) =", len(demand_array2))
-                # print("len(self.demand_all)  =", len(self.demand_all))
-                # y = self.step_count
-                # rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
-                # np.random.seed(rng3)
-                # aaa = np.random.randint(1, 8)  #อันนี้สุ่ม 1-7
-                # idrv = round(random.uniform(0.40, 1.00), 2)  # สุ่มค่า index ของ Random variation ระหว่าง 0.4 ถึง 1.0
-                # for j in range(1,91):
-                #     idrv = round(random.uniform(0.40, 1.00), 2)
-                #     idrv_set.append(idrv)
 
-                # if aaa == 1:
-                #     index2 = idrv_set
-                # if aaa == 2:
-                #     index2 = idrv_set
-                # if aaa == 3:
-                #     #index = [0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174,1.1,1,0.88,0.78,0.72]  # season 1
-                #     index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.72, 0.72, 0.72]
-                # if aaa == 4:
-                #     #index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
-                #     index2 = [0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.092, 1.092, 1.092, 0.0, 0.0, 0.0, 1.015, 1.015, 1.015, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.116, 1.116, 1.116]
-                # if aaa == 5:
-                #     #index = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]  # season 3
-                #     index2 = [0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.174, 1.174, 1.174]
-                # if aaa == 6:
-                #     #index = [0.741,0.913,1.179,1.56,1.65,0.913,0.805,0.713,0.69,0.55,0.35,0.55,0.744,0.83,0.988]  # extreme1
-                #     index2 = [0.0, 0.0, 0.0, 0.741, 0.741, 0.741, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0, 0.0, 0.913, 0.913, 0.913, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988]
-                # if aaa == 7:
-                #     #index = [0.69,0.55,0.35,0.55,0.744,0.83,0.988,1.215,1.355,1.56,1.65,1.121,0.805,0.713,0.69]  # extreme2
-                #     index2 = [0.0, 0.0, 0.0, 0.69, 0.69, 0.69, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.35, 0.35, 0.35, 0.0, 0.0, 0.0, 0.55, 0.55, 0.55, 0.0, 0.0, 0.0, 0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.988, 0.988, 0.988, 0.0, 0.0, 0.0, 1.215, 1.215, 1.215, 0.0, 0.0, 0.0, 1.355, 1.355, 1.355, 0.0, 0.0, 0.0, 1.56, 1.56, 1.56, 0.0, 0.0, 0.0, 1.65, 1.65, 1.65, 0.0, 0.0, 0.0, 1.121, 1.121, 1.121, 0.0, 0.0, 0.0, 0.805, 0.805, 0.805, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.69, 0.69, 0.69]
-
-                # if aaa >= 3:
-                #     demand_r1 = self.demand_max_r1
-                #     demand_r2 = self.demand_max_r2
-                #     demand_r3 = self.demand_max_r3
-                # if aaa < 3:
-                #     demand_r1 = self.demand_avg_random_r1
-                #     demand_r2 = self.demand_avg_random_r2
-                #     demand_r3 = self.demand_avg_random_r3
-
-                # demand_max_r1 =  4500
-                # demand_max_r2 =  3500
-                # demand_max_r3 =  2500
-                # demand_avg_random_r1 = np.random.randint(2975, 4025)  #(2500, 4500)
-                # demand_avg_random_r2 = np.random.randint(2338, 3163)   #2000, 3500
-                # demand_avg_random_r3 = np.random.randint(1488, 2013)    #1000, 2500
-
-                # print("step y =", y)
-                # if y % 2 == 0:
-                #     i = int(y / 2) - 1
-                #     print("index position = ", i)
-                #     print("index =", index[i])
-
-                #แทนที่ตัวเลขใน demand array2 ที่เป็น 1-90 ด้วยค่า demandจริง
-                # demand_array2[y * 3] = demand_r1*index2[y*3] #######
-                # self.demand_all.append(demand_array2[y * 3])
-                # demand_array2[y * 3 + 1] = demand_r2*index2[y*3+1]  #######
-                # self.demand_all.append(demand_array2[y * 3 + 1])
-                # demand_array2[y * 3 + 2] = demand_r3*index2[y*3+2]  #######
-                # self.demand_all.append(demand_array2[y * 3 + 2])
-                # demand_array2[y * 3 + 3] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 3])
-                # demand_array2[y * 3 + 4] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 4])
-                # demand_array2[y * 3 + 5] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 5])
-                # demand_array2[y * 3 + 6] = demand_r1*index2[y*3 + 6]    #######
-                # self.demand_all.append(demand_array2[y * 3 + 6])
-                # demand_array2[y * 3 + 7] = demand_r2*index2[y*3  + 7]   #######
-                # self.demand_all.append(demand_array2[y * 3 + 7])
-                # demand_array2[y * 3 + 8] = demand_r3*index2[y*3  + 8]    #######
-                # self.demand_all.append(demand_array2[y * 3 + 8])
-                # demand_array2[y * 3 + 9] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 9])
-                # demand_array2[y * 3 + 10] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 10])
-                # demand_array2[y * 3 + 11] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 11])
                 d1 = demand_array2[y * 3]
                 d2 = demand_array2[y * 3 + 1]
                 d3 = demand_array2[y * 3 + 2]
@@ -1152,37 +1139,11 @@ class InvEnv4(gym.Env):
                 d8 = demand_array2[y * 3 + 7]
                 d9 = demand_array2[y * 3 + 8]
 
-                #print("self.demand_all= ", self.demand_all)
+                # print("self.demand_all= ", self.demand_all)
         if self.step_count == 24:
             if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
                 y = self.step_count + 1
-                # y = self.step_count
-                # rng3 = randint(0, 10000000)  # train with 50,000,000 set of demand data
-                # np.random.seed(rng3)
-                # demand_array2[y * 3] = demand_r1*index2[y*3]   #######
-                # self.demand_all.append(demand_array2[y * 3])
-                # demand_array2[y * 3 + 1] = demand_r2*index2[y*3  + 1]   #######
-                # self.demand_all.append(demand_array2[y * 3 + 1])
-                # demand_array2[y * 3 + 2] = demand_r3*index2[y*3 + 2]   #######
-                # self.demand_all.append(demand_array2[y * 3 + 2])
-                # demand_array2[y * 3 + 3] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 3])
-                # demand_array2[y * 3 + 4] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 4])
-                # demand_array2[y * 3 + 5] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 5])
-                # demand_array2[y * 3 + 6] = demand_r1*index2[y*3 + 6]    #######
-                # self.demand_all.append(demand_array2[y * 3 + 6])
-                # demand_array2[y * 3 + 7] = demand_r2*index2[y*3 + 7]      #######
-                # self.demand_all.append(demand_array2[y * 3 + 7])
-                # demand_array2[y * 3 + 8] = demand_r3*index2[y*3 + 8]      #######
-                # self.demand_all.append(demand_array2[y * 3 + 8])
-                # demand_array2[y * 3 + 9] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 9])
-                # demand_array2[y * 3 + 10] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 10])
-                # demand_array2[y * 3 + 11] = 0
-                # self.demand_all.append(demand_array2[y * 3 + 11])
+
                 d1 = demand_array2[y * 3]
                 d2 = demand_array2[y * 3 + 1]
                 d3 = demand_array2[y * 3 + 2]
@@ -1192,7 +1153,7 @@ class InvEnv4(gym.Env):
                 d7 = demand_array2[y * 3 + 6]
                 d8 = demand_array2[y * 3 + 7]
                 d9 = demand_array2[y * 3 + 8]
-                #print("demand_all2= ", self.demand_all)
+                # print("demand_all2= ", self.demand_all)
 
         # assign demand of next period from array of demand data
 
@@ -1204,9 +1165,9 @@ class InvEnv4(gym.Env):
         #         demand1 = self.demand_all[(self.step_count + 1) * 3]
         #         demand2 = self.demand_all[(self.step_count + 1) * 3 + 1]
         #         demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
-        
+
         y = self.step_count + 1
-        #y = self.step_count
+        # y = self.step_count
 
         if self.step_count < 24:
             # print("len(demand_all)  =", len(self.demand_all))
@@ -1223,9 +1184,9 @@ class InvEnv4(gym.Env):
             demand7 = self.demand_all[y * 3 + 6]
             demand8 = self.demand_all[y * 3 + 7]
             demand9 = self.demand_all[y * 3 + 8]
-        if self.step_count < 28 :  # =27
-            #y = self.step_count + 1
-            #print("len(demand_all) at step27 =",len(self.demand_all))
+        if self.step_count < 28:  # =27
+            # y = self.step_count + 1
+            # print("len(demand_all) at step27 =",len(self.demand_all))
             demand1 = self.demand_all[y * 3]
             demand2 = self.demand_all[y * 3 + 1]
             demand3 = self.demand_all[y * 3 + 2]
@@ -1235,8 +1196,8 @@ class InvEnv4(gym.Env):
             demand7 = self.demand_all[y * 3 + 6]
             demand8 = self.demand_all[y * 3 + 7]
             demand9 = self.demand_all[y * 3 + 8]
-        if self.step_count == 28 :
-            #y = self.step_count + 1
+        if self.step_count == 28:
+            # y = self.step_count + 1
             demand1 = self.demand_all[y * 3]
             demand2 = self.demand_all[y * 3 + 1]
             demand3 = self.demand_all[y * 3 + 2]
@@ -1246,8 +1207,8 @@ class InvEnv4(gym.Env):
             demand7 = 0
             demand8 = 0
             demand9 = 0
-        if self.step_count == 29 :
-            #y = self.step_count + 1
+        if self.step_count == 29:
+            # y = self.step_count + 1
             demand1 = self.demand_all[y * 3]
             demand2 = self.demand_all[y * 3 + 1]
             demand3 = self.demand_all[y * 3 + 2]
@@ -1257,6 +1218,8 @@ class InvEnv4(gym.Env):
             demand7 = 0
             demand8 = 0
             demand9 = 0
+
+
 
         # print("Action =", action)
         # print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
@@ -1538,6 +1501,8 @@ class InvEnv4(gym.Env):
         self.state[0] = 0
         self.state[1] = 0
         self.state[2] = 0
+        self.state[26] = 0
+        self.state[27] = 0
         # update demand data this period
         self.state[3] = demand1
         self.state[4] = demand2
@@ -1568,12 +1533,29 @@ class InvEnv4(gym.Env):
         self.state[24] = demand8
         self.state[25] = demand9
         self.state[26] = extra_p_on
-        #         self.state[27] = M1P1
-        #         self.state[28] = M1P2
-        #         self.state[29] = M1P3
-        #         self.state[30] = M2P1
-        #         self.state[31] = M2P2
-        #         self.state[32] = M2P3
+
+        self.state[27] = aaa3
+        self.state[28] = dr1_4
+        self.state[29] = dr2_4
+        self.state[30] = dr3_4
+        self.state[31] = dr1_8
+        self.state[32] = dr2_8
+        self.state[33] = dr3_8
+        self.state[34] = dr1_12
+        self.state[35] = dr2_12
+        self.state[36] = dr3_12
+        self.state[37] = dr1_16
+        self.state[38] = dr2_16
+        self.state[39] = dr3_16
+        self.state[40] = dr1_20
+        self.state[41] = dr2_20
+        self.state[42] = dr3_20
+        self.state[43] = dr1_24
+        self.state[44] = dr2_24
+        self.state[45] = dr3_24
+        self.state[46] = dr1_28
+        self.state[47] = dr2_28
+        self.state[48] = dr3_28    # so all number state variables are 48 variables
 
         #         print("value หลัง normalize")
         #         print("demand1 =", demand1,"=state[3]=",self.state[3])
@@ -1590,32 +1572,6 @@ class InvEnv4(gym.Env):
         N2P2_ = 0
         N2P3_ = 0
 
-        '''
-        if R1 > 0:
-            print("Recieve product 1 =", R1)
-            if M1P1 > 0:
-                print("Machine 1 produce P1 =", M1P1)
-            if M2P1 > 0:
-                print("Machine 2 produce P1 =", M2P1)
-        if R2 > 0:
-            print("Recieve product 2 =", R2)
-            if M1P2 > 0:
-                print("Machine 1 produce P2 =", M1P2)
-            if M2P2 > 0:
-                print("Machine 2 produce P2 =", M2P2)
-        if R3 > 0:
-            print("Recieve product 3 =", R3)
-            if M1P3 > 0:
-                print("Machine 1 produce P3 =", M1P3)
-            if M2P3 > 0:
-                print("Machine 2 produce P3 =", M2P3)
-        if sales1 > 0:
-            print("sale P1 : ", sales1)
-        if sales2 > 0:
-            print("sale P2 : ", sales2)
-        if sales3 > 0:
-            print("sale P3 : ", sales3)
-        '''
 
         # print("state[7]_2 =", self.state[7])
         # print("state_2 =", self.state)
