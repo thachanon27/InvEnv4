@@ -1497,6 +1497,28 @@ class InvEnv4(gym.Env):
         overage2_3 = (overage2_3 - minr2) / (maxr2 - minr2)
         overage3_3 = (overage3_3 - minr3) / (maxr3 - minr3)
 
+        dr1_4 = (dr1_4 - mind1) / (maxd1 - mind1)
+        dr2_4 = (dr2_4 - mind2) / (maxd2 - mind2)
+        dr3_4 = (dr3_4 - mind3) / (maxd3 - mind3)
+        dr1_8 = (dr1_8 - mind1) / (maxd1 - mind1)
+        dr2_8 = (dr2_8 - mind2) / (maxd2 - mind2)
+        dr3_8 = (dr3_8 - mind3) / (maxd3 - mind3)
+        dr1_12 = (dr1_12 - mind1) / (maxd1 - mind1)
+        dr2_12 = (dr2_12 - mind2) / (maxd2 - mind2)
+        dr3_12 = (dr3_12 - mind3) / (maxd3 - mind3)
+        dr1_16 = (dr1_16 - mind1) / (maxd1 - mind1)
+        dr2_16 = (dr2_16 - mind2) / (maxd2 - mind2)
+        dr3_16 = (dr3_16 - mind3) / (maxd3 - mind3)
+        dr1_20 = (dr1_20 - mind1) / (maxd1 - mind1)
+        dr2_20 = (dr2_20 - mind2) / (maxd2 - mind2)
+        dr3_20 = (dr3_20 - mind3) / (maxd3 - mind3)
+        dr1_24 = (dr1_24 - mind1) / (maxd1 - mind1)
+        dr2_24 = (dr2_24 - mind2) / (maxd2 - mind2)
+        dr3_24 = (dr3_24 - mind3) / (maxd3 - mind3)
+        dr1_28 = (dr1_28 - mind1) / (maxd1 - mind1)
+        dr2_28 = (dr2_28 - mind1) / (maxd1 - mind1)
+        dr3_28 = (dr3_28 - mind3) / (maxd3 - mind3)
+
         # inv data
         self.state[0] = 0
         self.state[1] = 0
@@ -1588,4 +1610,3 @@ class InvEnv4(gym.Env):
         # demand_array2 = []
         # เนื่องจาก reward ตอนที่ A3C คิดน่าจะ เป็น sum_reward ในแต่ละ episode อยู่แล้ว ดังนั้น reward ที่ return ควรเป็น reward
         return np.array(self.state, dtype=np.float32), reward, done, info
-
