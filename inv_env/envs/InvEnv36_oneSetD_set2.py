@@ -817,7 +817,7 @@ class InvEnv7(gym.Env):
         self.sum_ex_penalty_array.append(sum_ex_pen)
         # print("penalty array =", self.sum_ex_penalty_array)
 
-        # assign demand of next period from array of demand data
+        # assign demand of next period from array of demand data @
         period = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         demand_array2 =  [2514, 2486, 1219, 0, 0, 0, 4362, 2456, 1436, 0, 0, 0, 2559, 2468, 2132, 0, 0, 0,
                           2528, 2910, 1090, 0, 0, 0, 2550, 2342, 1077, 0, 0, 0, 3193, 2194, 1127, 0, 0, 0,
