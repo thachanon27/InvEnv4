@@ -69,6 +69,29 @@ register(
     id='inv-v5-10',
     entry_point='inv_env.envs:InvEnv15',
 )
+
+register(
+    id='inv-v5-11',
+    entry_point='inv_env.envs:InvEnv16',
+)
+register(
+    id='inv-v5-12',
+    entry_point='inv_env.envs:InvEnv17',
+)
+register(
+    id='inv-v5-13',
+    entry_point='inv_env.envs:InvEnv18',
+)
+register(
+    id='inv-v5-14',
+    entry_point='inv_env.envs:InvEnv19',
+)
+register(
+    id='inv-v5-15',
+    entry_point='inv_env.envs:InvEnv20',
+)
+
+
 register(
     id='inv-sen1',
     entry_point='inv_env.envs:InvSen1',
