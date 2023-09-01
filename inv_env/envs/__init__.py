@@ -18,6 +18,12 @@ from inv_env.envs.InvEnv36_oneSetD_set8 import InvEnv13  #id= 'inv-v5-8'
 from inv_env.envs.InvEnv36_oneSetD_set9 import InvEnv14  #id= 'inv-v5-9'
 from inv_env.envs.InvEnv36_oneSetD_set10 import InvEnv15  #id= 'inv-v5-10'
 
+from inv_env.envs.InvEnv36_oneSetD_set11 import InvEnv16  #id= 'inv-v5-11'
+from inv_env.envs.InvEnv36_oneSetD_set12 import InvEnv17  #id= 'inv-v5-12'
+from inv_env.envs.InvEnv36_oneSetD_set13 import InvEnv18  #id= 'inv-v5-13'
+from inv_env.envs.InvEnv36_oneSetD_set14 import InvEnv19  #id= 'inv-v5-14'
+from inv_env.envs.InvEnv36_oneSetD_set15 import InvEnv20  #id= 'inv-v5-15'
+
 from inv_env.envs.Inv_env_sen_set1 import InvSen1  #id= 'inv-sen1'
 from inv_env.envs.Inv_env_sen_set2 import InvSen2  #id= 'inv-sen2'
 from inv_env.envs.Inv_env_sen_set3 import InvSen3  #id= 'inv-sen3'
