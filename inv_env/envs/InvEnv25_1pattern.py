@@ -23,7 +23,7 @@ from random import randint, choice
 # print("new env @18-2-66")
 
 
-class InvEnv4(gym.Env):
+class InvEnv4_m(gym.Env):
     def __init__(self):
         self.step_count = 0
         self.overall_time_trained = 0
