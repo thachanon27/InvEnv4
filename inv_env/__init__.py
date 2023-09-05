@@ -12,10 +12,17 @@ register(
     id='inv-v2',
     entry_point='inv_env.envs:InvEnv3',
 )
+#========================================================
 register(
     id='inv-v3',
     entry_point='inv_env.envs:InvEnv4',
 )
+register(
+    id='inv-v3_m',
+    entry_point='inv_env.envs:InvEnv4_m',
+)     #ใช้อันนี้กรณีต้องการเปลี่ยนมาเทรนแบบ season เต็มๆ
+#========================================================
+
 register(
     id='inv-v4',
     entry_point='inv_env.envs:InvEnv5',
