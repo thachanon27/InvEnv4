@@ -236,9 +236,9 @@ class InvEnv4_m(gym.Env):
         #               0.0, 0.0, 0.0, 0.69, 0.69, 0.69]
 
         if aaa >= 3:
-            demand_r1 =  np.random.randint(4300,4700)
-            demand_r2 =  np.random.randint(3300,3700)
-            demand_r3 =  np.random.randint(2300, 2700)
+            demand_r1 =  np.random.randint(2700,3200)
+            demand_r2 =  np.random.randint(2300,2600)
+            demand_r3 =  np.random.randint(1500, 1700)
         if aaa == 1:
             demand_r1 =  np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
             demand_r2 =  np.random.randint(2338, 3163)  # 2000, 3500
