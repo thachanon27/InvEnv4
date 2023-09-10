@@ -1,3 +1,4 @@
+#ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
 #ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
 # ตัดพวกที่ print และ comment ออกไปใ เพื่อเอาไปใส่ใน gym
@@ -43,15 +44,9 @@ class InvEnv4_m(gym.Env):
             0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
             0, 0, 0,  # d4, d5, d6     #20 21 22
             0, 0, 0,  # d7, d8, d9     #23 24 25
+            0, 0, 0,  # d10, d11, d12     #23 24 25
             0,  # extra_p_on    ---->  State 26
-            0,  #Demand pattern #27
-            0, 0, 0, # Demand r1-3 at 4 rd period  # 29 30 31
-            0, 0, 0, # Demand r1-3 at 8 th period  # 32 33 34
-            0, 0, 0,  # Demand r1-3 at 12 th period  # 35 36 37
-            0, 0, 0,  # Demand r1-3 at 16 th period  # 38 39 40
-            0, 0, 0,  # Demand r1-3 at 20 th period  # 41 42 43
-            0, 0, 0,  # Demand r1-3 at 24 th period  # 44 45 46
-            0, 0, 0   # Demand r1-3 at 28 th period  # 47 48 49
+            0  #Demand pattern #27
         ])
         self.statehigh = np.array([
             np.inf, np.inf, np.inf,  # initial inventory
@@ -62,15 +57,9 @@ class InvEnv4_m(gym.Env):
             np.inf, np.inf, np.inf,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3
             np.inf, np.inf, np.inf,  # future demand d4, d5, d6
             np.inf, np.inf, np.inf,  # initial demand d7, d8, d9
+            np.inf, np.inf, np.inf,  # initial demand d10, d11, d12
             1,  # extra_p_on
             np.inf,  # Demand pattern
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 4 rd period
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 8 th period
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 12 th period
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 16 th period
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 20 th period
-            np.inf, np.inf, np.inf,  # Demand r1-3 at 24 th period
-            np.inf, np.inf, np.inf  # Demand r1-3 at 28 th period
         ])
         #self.state[49] = 0
         self.observation_space = Box(self.statelow, self.statehigh,
@@ -112,15 +101,9 @@ class InvEnv4_m(gym.Env):
                       0, 0, 0,     # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
                       0, 0, 0,   # future demand # d4, d5, d6     #20 21 22
                       0, 0, 0,  # future demand # d7, d8, d9     #23 24 25
+                      0, 0, 0,  # future demand # d10, d11, d12
                       1, #extra_p_on   ---->  State 26
-                      0,  # Demand pattern   #27
-                      0, 0, 0,  # Demand r1-3 at 4 rd period
-                      0, 0, 0,  # Demand r1-3 at 8 th period
-                      0, 0, 0,  # Demand r1-3 at 12 th period
-                      0, 0, 0,  # Demand r1-3 at 16 th period
-                      0, 0, 0,  # Demand r1-3 at 20 th period
-                      0, 0, 0,  # Demand r1-3 at 24 th period
-                      0, 0, 0  # Demand r1-3 at 28 th period
+                      0 # Demand pattern   #27
                       ]
 
 
@@ -144,16 +127,9 @@ class InvEnv4_m(gym.Env):
             0, 0, 0, 0,  # initial machine status (0 = idle)
             0, 0, 0, 0,
             0, 0, 0, 0, 0, 0,  # future inventory
-            0, 0, 0, 0, 0, 0,  # future demand
+            0, 0, 0, 0, 0, 0, 0, 0, 0,  # future demand
             1,  # เริ่มต้น step แรกคือ เป็นช่วง onpeak
             1,  # Demand pattern
-            0, 0, 0,  # Demand r1-3 at 4 rd period
-            0, 0, 0,  # Demand r1-3 at 8 th period
-            0, 0, 0,  # Demand r1-3 at 12 th period
-            0, 0, 0,  # Demand r1-3 at 16 th period
-            0, 0, 0,  # Demand r1-3 at 20 th period
-            0, 0, 0,  # Demand r1-3 at 24 th period
-            0, 0, 0  # Demand r1-3 at 28 th period
         ])
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -497,40 +473,34 @@ class InvEnv4_m(gym.Env):
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, demand4, demand5, \
         demand6, demand7, demand8, demand9, \
+        demand10, demand11, demand12, \
         extra_p_on, \
-        aaa3, \
-        dr1_4, dr2_4, dr3_4,  \
-        dr1_8, dr2_8, dr3_8, \
-        dr1_12, dr2_12, dr3_12, \
-        dr1_16, dr2_16, dr3_16,  \
-        dr1_20, dr2_20, dr3_20, \
-        dr1_24, dr2_24, dr3_24,  \
-        dr1_28, dr2_28, dr3_28 = self.state
+        aaa3       = self.state
 
         aaa3 = self.aaa
 
         #print("self.demand_all =", self.demand_all)
-        dr1_4 = self.demand_all[9]
-        dr2_4 = self.demand_all[10]
-        dr3_4 = self.demand_all[11]
-        dr1_8 = self.demand_all[21]
-        dr2_8 = self.demand_all[22]
-        dr3_8 = self.demand_all[23]
-        dr1_12 = self.demand_all[33]
-        dr2_12 = self.demand_all[34]
-        dr3_12 = self.demand_all[35]
-        dr1_16 = self.demand_all[45]
-        dr2_16 = self.demand_all[46]
-        dr3_16 = self.demand_all[47]
-        dr1_20 = self.demand_all[57]
-        dr2_20 = self.demand_all[58]
-        dr3_20 = self.demand_all[59]
-        dr1_24 = self.demand_all[69]
-        dr2_24 = self.demand_all[70]
-        dr3_24 = self.demand_all[71]
-        dr1_28 = self.demand_all[81]
-        dr2_28 = self.demand_all[82]
-        dr3_28 = self.demand_all[83]
+        # dr1_4 = self.demand_all[9]
+        # dr2_4 = self.demand_all[10]
+        # dr3_4 = self.demand_all[11]
+        # dr1_8 = self.demand_all[21]
+        # dr2_8 = self.demand_all[22]
+        # dr3_8 = self.demand_all[23]
+        # dr1_12 = self.demand_all[33]
+        # dr2_12 = self.demand_all[34]
+        # dr3_12 = self.demand_all[35]
+        # dr1_16 = self.demand_all[45]
+        # dr2_16 = self.demand_all[46]
+        # dr3_16 = self.demand_all[47]
+        # dr1_20 = self.demand_all[57]
+        # dr2_20 = self.demand_all[58]
+        # dr3_20 = self.demand_all[59]
+        # dr1_24 = self.demand_all[69]
+        # dr2_24 = self.demand_all[70]
+        # dr3_24 = self.demand_all[71]
+        # dr1_28 = self.demand_all[81]
+        # dr2_28 = self.demand_all[82]
+        # dr3_28 = self.demand_all[83]
 
         # parameter for normalize
         mind1 = 0  # min demand1
@@ -557,6 +527,9 @@ class InvEnv4_m(gym.Env):
         demand7 = demand7 * (maxd1 - mind1) + mind1
         demand8 = demand8 * (maxd2 - mind2) + mind2
         demand9 = demand9 * (maxd3 - mind3) + mind3
+        demand10 = demand10 * (maxd1 - mind1) + mind1
+        demand11 = demand11 * (maxd2 - mind2) + mind2
+        demand12 = demand12 * (maxd3 - mind3) + mind3
 
 
         # print("demand in this period =", demand1, demand2, demand3)
@@ -1125,35 +1098,35 @@ class InvEnv4_m(gym.Env):
         demand_r2 = 0
         demand_r3 = 0
         #index2 = []
-        if self.step_count < 24:  # 25
-            # print("step count =", self.step_count)
-            if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
-                y = self.step_count + 1
-
-                d1 = demand_array2[y * 3]
-                d2 = demand_array2[y * 3 + 1]
-                d3 = demand_array2[y * 3 + 2]
-                d4 = demand_array2[y * 3 + 3]
-                d5 = demand_array2[y * 3 + 4]
-                d6 = demand_array2[y * 3 + 5]
-                d7 = demand_array2[y * 3 + 6]
-                d8 = demand_array2[y * 3 + 7]
-                d9 = demand_array2[y * 3 + 8]
+        # if self.step_count < 24:  # 25
+        #     # print("step count =", self.step_count)
+        #     if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
+        #         y = self.step_count + 1
+        #
+        #         d1 = demand_array2[y * 3]
+        #         d2 = demand_array2[y * 3 + 1]
+        #         d3 = demand_array2[y * 3 + 2]
+        #         d4 = demand_array2[y * 3 + 3]
+        #         d5 = demand_array2[y * 3 + 4]
+        #         d6 = demand_array2[y * 3 + 5]
+        #         d7 = demand_array2[y * 3 + 6]
+        #         d8 = demand_array2[y * 3 + 7]
+        #         d9 = demand_array2[y * 3 + 8]
 
                 # print("self.demand_all= ", self.demand_all)
-        if self.step_count == 24:
-            if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
-                y = self.step_count + 1
-
-                d1 = demand_array2[y * 3]
-                d2 = demand_array2[y * 3 + 1]
-                d3 = demand_array2[y * 3 + 2]
-                d4 = demand_array2[y * 3 + 3]
-                d5 = demand_array2[y * 3 + 4]
-                d6 = demand_array2[y * 3 + 5]
-                d7 = demand_array2[y * 3 + 6]
-                d8 = demand_array2[y * 3 + 7]
-                d9 = demand_array2[y * 3 + 8]
+        # if self.step_count == 24:
+        #     if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
+        #         y = self.step_count + 1
+        #
+        #         d1 = demand_array2[y * 3]
+        #         d2 = demand_array2[y * 3 + 1]
+        #         d3 = demand_array2[y * 3 + 2]
+        #         d4 = demand_array2[y * 3 + 3]
+        #         d5 = demand_array2[y * 3 + 4]
+        #         d6 = demand_array2[y * 3 + 5]
+        #         d7 = demand_array2[y * 3 + 6]
+        #         d8 = demand_array2[y * 3 + 7]
+        #         d9 = demand_array2[y * 3 + 8]
                 # print("demand_all2= ", self.demand_all)
 
         # assign demand of next period from array of demand data
@@ -1185,7 +1158,11 @@ class InvEnv4_m(gym.Env):
             demand7 = self.demand_all[y * 3 + 6]
             demand8 = self.demand_all[y * 3 + 7]
             demand9 = self.demand_all[y * 3 + 8]
-        if self.step_count < 28:  # =27
+            demand10 = self.demand_all[y * 3 + 9]
+            demand11 = self.demand_all[y * 3 + 10]
+            demand12 = self.demand_all[y * 3 + 11]
+
+        if self.step_count < 27:  # =27
             # y = self.step_count + 1
             # print("len(demand_all) at step27 =",len(self.demand_all))
             demand1 = self.demand_all[y * 3]
@@ -1197,6 +1174,26 @@ class InvEnv4_m(gym.Env):
             demand7 = self.demand_all[y * 3 + 6]
             demand8 = self.demand_all[y * 3 + 7]
             demand9 = self.demand_all[y * 3 + 8]
+            demand10 = self.demand_all[y * 3 + 9]
+            demand11 = self.demand_all[y * 3 + 10]
+            demand12 = self.demand_all[y * 3 + 11]
+
+        if self.step_count == 27:  # =27
+            # y = self.step_count + 1
+            # print("len(demand_all) at step27 =",len(self.demand_all))
+            demand1 = self.demand_all[y * 3]
+            demand2 = self.demand_all[y * 3 + 1]
+            demand3 = self.demand_all[y * 3 + 2]
+            demand4 = self.demand_all[y * 3 + 3]
+            demand5 = self.demand_all[y * 3 + 4]
+            demand6 = self.demand_all[y * 3 + 5]
+            demand7 = self.demand_all[y * 3 + 6]
+            demand8 = self.demand_all[y * 3 + 7]
+            demand9 = self.demand_all[y * 3 + 8]
+            demand10 = 0
+            demand11 = 0
+            demand12 = 0
+
         if self.step_count == 28:
             # y = self.step_count + 1
             demand1 = self.demand_all[y * 3]
@@ -1208,6 +1205,9 @@ class InvEnv4_m(gym.Env):
             demand7 = 0
             demand8 = 0
             demand9 = 0
+            demand10 = 0
+            demand11 = 0
+            demand12 = 0
         if self.step_count == 29:
             # y = self.step_count + 1
             demand1 = self.demand_all[y * 3]
@@ -1219,12 +1219,16 @@ class InvEnv4_m(gym.Env):
             demand7 = 0
             demand8 = 0
             demand9 = 0
+            demand10 = 0
+            demand11 = 0
+            demand12 = 0
 
 
-
+        # print("self.step_count =", self.step_count)
         # print("Action =", action)
         # print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
         # print("d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
+        # print("d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
 
         # demand1 from random
@@ -1487,6 +1491,10 @@ class InvEnv4_m(gym.Env):
         demand7 = (demand7 - mind1) / (maxd1 - mind1)
         demand8 = (demand8 - mind2) / (maxd2 - mind2)
         demand9 = (demand9 - mind3) / (maxd3 - mind3)
+        demand10 = (demand10 - mind1) / (maxd1 - mind1)
+        demand11 = (demand11 - mind2) / (maxd2 - mind2)
+        demand12 = (demand12 - mind3) / (maxd3 - mind3)
+
 
         overage1 = (overage1 - minr1) / (maxr1 - minr1)
         overage2 = (overage2 - minr2) / (maxr2 - minr2)
@@ -1498,27 +1506,27 @@ class InvEnv4_m(gym.Env):
         overage2_3 = (overage2_3 - minr2) / (maxr2 - minr2)
         overage3_3 = (overage3_3 - minr3) / (maxr3 - minr3)
 
-        dr1_4 = (dr1_4 - mind1) / (maxd1 - mind1)
-        dr2_4 = (dr2_4 - mind2) / (maxd2 - mind2)
-        dr3_4 = (dr3_4 - mind3) / (maxd3 - mind3)
-        dr1_8 = (dr1_8 - mind1) / (maxd1 - mind1)
-        dr2_8 = (dr2_8 - mind2) / (maxd2 - mind2)
-        dr3_8 = (dr3_8 - mind3) / (maxd3 - mind3)
-        dr1_12 = (dr1_12 - mind1) / (maxd1 - mind1)
-        dr2_12 = (dr2_12 - mind2) / (maxd2 - mind2)
-        dr3_12 = (dr3_12 - mind3) / (maxd3 - mind3)
-        dr1_16 = (dr1_16 - mind1) / (maxd1 - mind1)
-        dr2_16 = (dr2_16 - mind2) / (maxd2 - mind2)
-        dr3_16 = (dr3_16 - mind3) / (maxd3 - mind3)
-        dr1_20 = (dr1_20 - mind1) / (maxd1 - mind1)
-        dr2_20 = (dr2_20 - mind2) / (maxd2 - mind2)
-        dr3_20 = (dr3_20 - mind3) / (maxd3 - mind3)
-        dr1_24 = (dr1_24 - mind1) / (maxd1 - mind1)
-        dr2_24 = (dr2_24 - mind2) / (maxd2 - mind2)
-        dr3_24 = (dr3_24 - mind3) / (maxd3 - mind3)
-        dr1_28 = (dr1_28 - mind1) / (maxd1 - mind1)
-        dr2_28 = (dr2_28 - mind1) / (maxd1 - mind1)
-        dr3_28 = (dr3_28 - mind3) / (maxd3 - mind3)
+        # dr1_4 = (dr1_4 - mind1) / (maxd1 - mind1)
+        # dr2_4 = (dr2_4 - mind2) / (maxd2 - mind2)
+        # dr3_4 = (dr3_4 - mind3) / (maxd3 - mind3)
+        # dr1_8 = (dr1_8 - mind1) / (maxd1 - mind1)
+        # dr2_8 = (dr2_8 - mind2) / (maxd2 - mind2)
+        # dr3_8 = (dr3_8 - mind3) / (maxd3 - mind3)
+        # dr1_12 = (dr1_12 - mind1) / (maxd1 - mind1)
+        # dr2_12 = (dr2_12 - mind2) / (maxd2 - mind2)
+        # dr3_12 = (dr3_12 - mind3) / (maxd3 - mind3)
+        # dr1_16 = (dr1_16 - mind1) / (maxd1 - mind1)
+        # dr2_16 = (dr2_16 - mind2) / (maxd2 - mind2)
+        # dr3_16 = (dr3_16 - mind3) / (maxd3 - mind3)
+        # dr1_20 = (dr1_20 - mind1) / (maxd1 - mind1)
+        # dr2_20 = (dr2_20 - mind2) / (maxd2 - mind2)
+        # dr3_20 = (dr3_20 - mind3) / (maxd3 - mind3)
+        # dr1_24 = (dr1_24 - mind1) / (maxd1 - mind1)
+        # dr2_24 = (dr2_24 - mind2) / (maxd2 - mind2)
+        # dr3_24 = (dr3_24 - mind3) / (maxd3 - mind3)
+        # dr1_28 = (dr1_28 - mind1) / (maxd1 - mind1)
+        # dr2_28 = (dr2_28 - mind1) / (maxd1 - mind1)
+        # dr3_28 = (dr3_28 - mind3) / (maxd3 - mind3)
 
         # inv data
         self.state[0] = 0
@@ -1555,30 +1563,33 @@ class InvEnv4_m(gym.Env):
         self.state[23] = demand7
         self.state[24] = demand8
         self.state[25] = demand9
-        self.state[26] = extra_p_on
+        self.state[26] = demand10
+        self.state[27] = demand11
+        self.state[28] = demand12
+        self.state[29] = extra_p_on
 
-        self.state[27] = aaa3
-        self.state[28] = dr1_4
-        self.state[29] = dr2_4
-        self.state[30] = dr3_4
-        self.state[31] = dr1_8
-        self.state[32] = dr2_8
-        self.state[33] = dr3_8
-        self.state[34] = dr1_12
-        self.state[35] = dr2_12
-        self.state[36] = dr3_12
-        self.state[37] = dr1_16
-        self.state[38] = dr2_16
-        self.state[39] = dr3_16
-        self.state[40] = dr1_20
-        self.state[41] = dr2_20
-        self.state[42] = dr3_20
-        self.state[43] = dr1_24
-        self.state[44] = dr2_24
-        self.state[45] = dr3_24
-        self.state[46] = dr1_28
-        self.state[47] = dr2_28
-        self.state[48] = dr3_28    # so all number state variables are 48 variables
+        self.state[30] = aaa3
+        # self.state[28] = dr1_4
+        # self.state[29] = dr2_4
+        # self.state[30] = dr3_4
+        # self.state[31] = dr1_8
+        # self.state[32] = dr2_8
+        # self.state[33] = dr3_8
+        # self.state[34] = dr1_12
+        # self.state[35] = dr2_12
+        # self.state[36] = dr3_12
+        # self.state[37] = dr1_16
+        # self.state[38] = dr2_16
+        # self.state[39] = dr3_16
+        # self.state[40] = dr1_20
+        # self.state[41] = dr2_20
+        # self.state[42] = dr3_20
+        # self.state[43] = dr1_24
+        # self.state[44] = dr2_24
+        # self.state[45] = dr3_24
+        # self.state[46] = dr1_28
+        # self.state[47] = dr2_28
+        # self.state[48] = dr3_28    # so all number state variables are 48 variables
 
         #         print("value หลัง normalize")
         #         print("demand1 =", demand1,"=state[3]=",self.state[3])
