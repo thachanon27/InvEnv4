@@ -27,7 +27,7 @@ from random import randint, choice
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 
 
-class InvSen1(gym.Env):
+class InvSen2(gym.Env):
     def __init__(self):
         self.step_count = 0
         self.overall_time_trained = 0
