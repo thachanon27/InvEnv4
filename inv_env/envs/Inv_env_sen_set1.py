@@ -393,8 +393,8 @@ class InvSen1(gym.Env):
         extra_penalty3_3 = 0
 
 
-        #         print("=========================================================================================")
-        #         print("step :", self.step_count)
+        print("=========================================================================================")
+        print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -657,13 +657,13 @@ class InvSen1(gym.Env):
             N2P3 = 1
             M2P3 = 1359
 
-            # print("action =", action)
-            # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-            # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-            # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-            # print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-            # print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-            # print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+            print("action =", action)
+            print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+            print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+            print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+            print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
+            print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
+            print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -1240,9 +1240,9 @@ class InvSen1(gym.Env):
 
         # print("self.step_count =", self.step_count)
         # print("Action =", action)
-        # print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
-        # print("d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
-        # print("d10-d12 =", demand10, demand11, demand12)
+        print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
+        print("d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
+        print("d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
 
         # demand1 from random
@@ -1425,6 +1425,9 @@ class InvSen1(gym.Env):
                        - fix_production_cost
                        - (self.variable_cost_m1 + self.variable_cost_m2)) / 34.84  # แปลงจากบาท to dollar
 
+        print("overage1 =", overage1)
+        print("overage2 =", overage2)
+        print("overage3 =", overage3)
         #         print("############################################################# ")
         #         print("stepcount ", self.step_count )
         #         print("self.changeover_cost_of_m1 ", self.changeover_cost_of_m1 )
