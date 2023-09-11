@@ -18,7 +18,7 @@ register(
     entry_point='inv_env.envs:InvEnv4',
 )
 register(
-    id='inv-v3_m',
+    id='inv-v3_m2',
     entry_point='inv_env.envs:InvEnv4_m',
 )     #ใช้อันนี้กรณีต้องการเปลี่ยนมาเทรนแบบ season เต็มๆ
 #========================================================
