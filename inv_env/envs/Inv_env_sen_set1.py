@@ -1238,12 +1238,12 @@ class InvSen1(gym.Env):
             demand12 = 0
 
 
-        print("self.step_count =", self.step_count)
-        print("Action =", action)
-        print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
-        print("d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
-        print("d10-d12 =", demand10, demand11, demand12)
-        print("self.demand_all", self.demand_all)
+        # print("self.step_count =", self.step_count)
+        # print("Action =", action)
+        # print("d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
+        # print("d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
+        # print("d10-d12 =", demand10, demand11, demand12)
+        # print("self.demand_all", self.demand_all)
 
         # demand1 from random
         # print("demand1",demand1)
