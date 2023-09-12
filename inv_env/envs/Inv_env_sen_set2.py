@@ -477,7 +477,7 @@ class InvSen2(gym.Env):
         extra_p_on, \
         aaa3       = self.state
 
-        aaa3 = self.aaa
+        aaa3 = 3
 
         #print("self.demand_all =", self.demand_all)
         # dr1_4 = self.demand_all[9]
