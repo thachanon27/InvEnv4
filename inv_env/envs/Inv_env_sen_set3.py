@@ -91,7 +91,7 @@ class InvSen3(gym.Env):
         self.variable_cost_m2 = 0
         self.demand_real = []
 
-        (self.demand_all, self.aaa) = self.create_demand_all()
+        #(self.demand_all, self.aaa) = self.create_demand_all()
 
         self.state = [self.on_hand1, self.on_hand2, self.on_hand3,  # initial inventory #0 1 2
                       0, 0, 0,    # initial demand    #3 4 5
@@ -147,7 +147,7 @@ class InvSen3(gym.Env):
         self.variable_cost_m1 = 0
         self.variable_cost_m2 = 0
         self.demand_real = []
-        (self.demand_all, self.aaa) = self.create_demand_all()
+        #(self.demand_all, self.aaa) = self.create_demand_all()
 
         if not return_info:
             return np.array(self.state, dtype=np.float32)
@@ -477,7 +477,7 @@ class InvSen3(gym.Env):
         extra_p_on, \
         aaa3       = self.state
 
-        aaa3 = self.aaa
+        aaa3 = 3
 
         #print("self.demand_all =", self.demand_all)
         # dr1_4 = self.demand_all[9]
