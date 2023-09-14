@@ -3,7 +3,7 @@ from inv_env.envs.InventoryEnv22_gym_Dset2 import InventoryEnv2
 from inv_env.envs.InvEnv25_3act import InvEnv3
 
 from inv_env.envs.InvEnv25_16act import InvEnv4   #id='inv-v3'
-from inv_env.envs.InvEnv25_1pattern import InvEnv4_m   #id='inv-v3_a2'  #อันนี้คือ กรณีเปลี่ยนรูปแบบ demand ให้มีแต่ season ป่องกลางอย่างเดียว
+from inv_env.envs.InvEnv25_1pattern import InvEnv4_a2   #id='inv-v3_a2'  #อันนี้คือ กรณีเปลี่ยนรูปแบบ demand ให้มีแต่ season ป่องกลางอย่างเดียว
 
 
 from inv_env.envs.InventoryEnv31_30T import InvEnv5
