@@ -1568,7 +1568,7 @@ class InvEnv5_a2(gym.Env):
 
         last_sum_real_reward = 0
         last_sum_reward = 0
-        if self.step_count == 29:
+        if self.step_count == 59:
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
 
