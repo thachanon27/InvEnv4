@@ -909,9 +909,9 @@ class InvEnv5_a1(gym.Env):
         #         stp = 0
         #         stp = self.step_count + 1
 
-        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
-        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28]
-        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
+        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30,31,32,33, 44, 45, 46, 47 ]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34,36,38,40,42, 48,50,52,54 ]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35,37,39,41,43, 49,51,53,55 ]
         stp = 0
         #         stp = self.step_count + 1
         stp = self.step_count
