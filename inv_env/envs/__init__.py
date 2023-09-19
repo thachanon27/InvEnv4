@@ -8,6 +8,10 @@ from inv_env.envs.InvEnv25_1pattern import InvEnv4_a2   #id='inv-v3_a2'  #อั
 from inv_env.envs.InvEnv26_A1_RandomV_noP import InvEnv5_a1   #id='inv-v3_a-1'
 from inv_env.envs.InvEnv26_A2_season5_noP import InvEnv5_a2   #id='inv-v3_a-2'
 
+from inv_env.envs.InvEnv26_A1_60T_RandomV2_noP2 import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
+from inv_env.envs.InvEnv26_A2_60T_season6_noP2 import InvEnv5_60T_a2   #id='inv-v3_60t_a-2'
+
+
 
 from inv_env.envs.InventoryEnv31_30T import InvEnv5
 from inv_env.envs.Robot_in_room import RobotInRoom
