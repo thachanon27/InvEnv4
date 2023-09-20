@@ -11,6 +11,9 @@ from inv_env.envs.InvEnv26_A2_season5_noP import InvEnv5_a2   #id='inv-v3_a-2'
 #from inv_env.envs.InvEnv26_A1_60T_RandomV2_noP2 import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
 from inv_env.envs.InvEnv26_A2_season6_60T_add_action2_noP import InvEnv5_60T_a2   #id='inv-v3_60t_a-2'
 
+#test 60T 
+from inv_env.envs.InvEnv_A2_season_test_set1_60T_m3 import Inv_season_testset1_a2_60T  #id= 'inv_a2_testset1'
+
 
 
 from inv_env.envs.InventoryEnv31_30T import InvEnv5
