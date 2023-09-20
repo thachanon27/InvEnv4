@@ -28,8 +28,8 @@ register(
     entry_point='inv_env.envs:InvEnv5_a1',
 )     #agent1 random variation
 register(
-    id='inv-v3_a-2',
-    entry_point='inv_env.envs:InvEnv5_a2',
+    id='inv-v3_60T_a-2',
+    entry_point='inv_env.envs:InvEnv5_60T_a2',
 )     #agent2 seasonal
 
 #========================================================
