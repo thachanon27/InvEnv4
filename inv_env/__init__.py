@@ -151,6 +151,11 @@ register(
     id='inv-sen10',
     entry_point='inv_env.envs:InvSen10',
 )
+#========================================================
+register(
+    id='inv-season_testset1_a2_60T',
+    entry_point='inv_env.envs:Inv_season_testset1_a2_60T',
+)
 
 
 
