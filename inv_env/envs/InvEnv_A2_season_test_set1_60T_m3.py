@@ -16,6 +16,7 @@ from gym import spaces
 from gym.spaces import Box, Discrete
 import random
 import numpy as np
+import itertools
 
 from random import randint, choice
 
@@ -23,6 +24,131 @@ from random import randint, choice
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
 
+############################################################
+
+class ProductionTable:
+
+    def __init__(
+            self, no_machines, no_products, lottbl_onpeak=None, lottbl_offpeak=None
+    ):
+        if lottbl_onpeak is None: lottbl_onpeak = {}
+        if lottbl_offpeak is None: lottbl_offpeak = {}
+
+        self.no_machines = no_machines
+        self.no_products = no_products
+        self.lottbl_onpeak = lottbl_onpeak
+        self.lottbl_offpeak = lottbl_offpeak
+
+        self.lotsize_tbl = {}
+        self.switch_tbl = {}
+        self.action_counter = 0
+
+        if len(self.lottbl_onpeak) > 0 and len(self.lottbl_offpeak) > 0:
+            self.init_tables()
+
+    def add_prod_lotsize(self, machine_id, prod_id, onpeak, offpeak):
+        if machine_id not in self.lottbl_onpeak:
+            self.lottbl_onpeak[machine_id] = {}
+        if machine_id not in self.lottbl_offpeak:
+            self.lottbl_offpeak[machine_id] = {}
+        self.lottbl_onpeak[machine_id][prod_id] = onpeak
+        self.lottbl_offpeak[machine_id][prod_id] = offpeak
+
+    def init_tables(self):
+        args = []
+        for machine_id in range(self.no_machines):
+            entry = [-1] + list(range(self.no_products))  # Product IDs for each machine, including halt (-1)
+            args.append(entry)
+        # args.append([True, False])  # On-peak and off-peak
+
+        action_id = 0
+        for plan in itertools.product(*args):
+            switches = np.zeros((2, self.no_machines, self.no_products))
+            lotsizes = np.zeros((2, self.no_machines, self.no_products))
+            # is_onpeak = plan[self.no_machines]
+            
+            for is_onpeak in [False, True]:
+                peak_idx = 1 if is_onpeak else 0
+                for machine_id in range(self.no_machines):
+                    prod_id = plan[machine_id]
+                    if plan[machine_id] >= 0:
+                        switches[peak_idx, machine_id, prod_id] = 1.0
+                        if is_onpeak:
+                            lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_onpeak[machine_id][prod_id]
+                        else:
+                            lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_offpeak[machine_id][prod_id]
+
+            self.switch_tbl[action_id] = switches
+            self.lotsize_tbl[action_id] = lotsizes
+
+            action_id += 1
+
+        self.action_counter = action_id
+
+    def action_ids(self):
+        return self.switch_tbl.keys()
+
+    def __iter__(self):
+        return iter(self.switch_tbl)
+
+    def get_lotsize(self, action_id, is_onpeak):
+        peak_idx = 1 if is_onpeak else 0
+        return self.lotsize_tbl[action_id][peak_idx]
+
+    def get_switches(self, action_id, is_onpeak):
+        peak_idx = 1 if is_onpeak else 0
+        return self.switch_tbl[action_id][peak_idx]
+
+    def display(self):
+        print('>>> Production Table\n')
+        for action_id in self:
+            switches = self.switch_tbl[action_id]
+            lotsize_onpeak = self.lotsize_tbl[action_id][1]
+            lotsize_offpeak = self.lotsize_tbl[action_id][0]
+            print(f'Action ID: {action_id}')
+            print(f'Switches:\n{switches}')
+            print(f'Off-peak lot-size:\n{lotsize_offpeak}')
+            print(f'On-peak lot-size:\n{lotsize_onpeak}')
+            print()
+
+
+############################################################
+
+''' Production Plan
+
+On-peak Lotsizes
+Machine 1 
+    p1 =  3211
+    p2 =  2223
+    p3 =  1668
+Machine 2  
+    p1 =  2717
+    p2 =  1853
+    p3 =  1359
+
+Off-peak Lotsizes 
+Machine 1 
+    p1 =  2717
+    p2 =  1881
+    p3 =  1411
+Machine 2  
+    p1 =  2299
+    p2 =  1568
+    p3 =  1150
+'''
+prodtbl = ProductionTable(no_machines=2, no_products=3)
+prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
+prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
+prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
+prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
+prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
+prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
+prodtbl.init_tables()
+
+# prodtbl.display()
+# input()
+
+############################################################
 
 class Inv_season_testset1_a2_60T(gym.Env):
     def __init__(self):
@@ -33,7 +159,9 @@ class Inv_season_testset1_a2_60T(gym.Env):
         self.on_hand2 = (np.random.randint(2500, 4500) - 12000) / (12000 - 0)  # 3051
         self.on_hand3 = (np.random.randint(2000, 3500) - 12000) / (12000 - 0)  # 2084
         # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
-        self.action_space = spaces.Discrete(16)
+        
+        self.action_space = spaces.Discrete(prodtbl.action_counter)
+        
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
             0, 0, 0,  # initial inventory #0 1 2            ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27
@@ -130,7 +258,20 @@ class Inv_season_testset1_a2_60T(gym.Env):
                       0, 0, 0,  # Demand r1-3 at 24 th period
                       0, 0, 0  # Demand r1-3 at 28 th period
                       ]
+        self.prodtbl = prodtbl
 
+        self.weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30, 31, 32, 33, 44, 45, 46, 47, 59, 60]
+        self.on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34, 36, 38, 40, 42, 48, 50, 52, 54, 56]
+        self.off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 49, 51, 53, 55, 57]
+
+    def is_weekend(self):
+        return self.step_count in self.weekend_stepcount
+
+    def is_onpeak(self):
+        return self.step_count in self.on_peak_stepcount
+
+    def is_offpeak(self):
+        return self.step_count in self.off_peak_stepcount
 
     def reset(
             self,
@@ -638,110 +779,120 @@ class Inv_season_testset1_a2_60T(gym.Env):
         # print("onhand2 from last period =", on_hand2)
         # print("onhand3 from last period =", on_hand3)
 
-        if action == 0:
-            case = [[1, 0], [2, 3]]
-            N1P = 0
-            M1P = 0
-            N2P3 = 1
-            M2P3 = 1359
-        if action == 1:
-            case = [[1, 2], [2, 2]]
-            N1P2 = 1
-            M1P2 = 2223
-            N2P2 = 1
-            M2P2 = 1853
-        if action == 2:
-            case = [[1, 0], [2, 2]]
-            N1P = 0
-            M1P = 0
-            N2P2 = 1
-            M2P2 = 1853
-        if action == 3:
-            case = [[1, 2], [2, 1]]
-            N1P2 = 1
-            M1P2 = 2223
-            N2P1 = 1
-            M2P1 = 2717
-        if action == 4:
-            case = [[1, 1], [2, 1]]
-            N1P1 = 1
-            M1P1 = 3211
-            N2P1 = 1
-            M2P1 = 2717
-        if action == 5:
-            case = [[1, 1], [2, 3]]
-            N1P1 = 1
-            M1P1 = 3211
-            N2P3 = 1
-            M2P3 = 1359
-        if action == 6:
-            case = [[1, 3], [2, 2]]
-            N1P3 = 1
-            M1P3 = 1668
-            N2P2 = 1
-            M2P2 = 1853
-        if action == 7:
-            case = [[1, 2], [2, 0]]
-            N1P2 = 1
-            M1P2 = 2223
-            N2P = 0
-            M2P = 0
-        if action == 8:
-            case = [[1, 1], [2, 2]]
-            N1P1 = 1
-            M1P1 = 3211
-            N2P2 = 1
-            M2P2 = 1853
-        if action == 9:
-            case = [[1, 0], [2, 0]]
-            N1P = 0
-            M1P = 0
-            N2P = 0
-            M2P = 0
-        if action == 10:
-            case = [[1, 3], [2, 3]]
-            N1P3 = 1
-            M1P3 = 1668
-            N2P3 = 1
-            M2P3 = 1359
-        if action == 11:
-            case = [[1, 3], [2, 1]]
-            N1P3 = 1
-            M1P3 = 1668  # 1668   #ลองแกล้งเปลี่ยน action 11 ให้ไม่ผลิตเลยดู ว่ามันจะเลือก action ไหนแทน
-            N2P1 = 1
-            M2P1 = 2717  # 2717
-        if action == 12:
-            case = [[1, 0], [2, 1]]
-            N1P = 0
-            M1P = 0
-            N2P1 = 1
-            M2P1 = 2717
-        if action == 13:
-            case = [[1, 3], [2, 0]]
-            N1P3 = 1
-            M1P3 = 1668
-            N2P = 0
-            M2P = 0
-        if action == 14:
-            case = [[1, 1], [2, 0]]
-            N1P1 = 1
-            M1P1 = 3211
-            N2P = 0
-            M2P = 0
-        if action == 15:
-            case = [[1, 2], [2, 3]]
-            N1P2 = 1
-            M1P2 = 2223
-            N2P3 = 1
-            M2P3 = 1359
+        switches = self.prodtbl.get_switches(action_id=action, is_onpeak=self.is_onpeak())
+        lotsizes = self.prodtbl.get_lotsize(action_id=action, is_onpeak=self.is_onpeak())
 
-            print("===action =", action)
-            print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-            print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-            print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-            print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-            print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-            print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+        [N1P1, N1P2, N1P3] = switches[0]
+        [N2P1, N2P2, N2P3] = switches[1]
+        [M1P1, M1P2, M1P3] = lotsizes[0]
+        [M2P1, M2P2, M2P3] = lotsizes[1]
+        N1P = 1 if N1P1 + N1P2 + N1P3 > 0 else 0
+        N2P = 1 if N2P1 + N2P2 + N2P3 > 0 else 0
+
+        # if action == 0:
+        #     case = [[1, 0], [2, 3]]
+        #     N1P = 0
+        #     M1P = 0
+        #     N2P3 = 1
+        #     M2P3 = 1359
+        # if action == 1:
+        #     case = [[1, 2], [2, 2]]
+        #     N1P2 = 1
+        #     M1P2 = 2223
+        #     N2P2 = 1
+        #     M2P2 = 1853
+        # if action == 2:
+        #     case = [[1, 0], [2, 2]]
+        #     N1P = 0
+        #     M1P = 0
+        #     N2P2 = 1
+        #     M2P2 = 1853
+        # if action == 3:
+        #     case = [[1, 2], [2, 1]]
+        #     N1P2 = 1
+        #     M1P2 = 2223
+        #     N2P1 = 1
+        #     M2P1 = 2717
+        # if action == 4:
+        #     case = [[1, 1], [2, 1]]
+        #     N1P1 = 1
+        #     M1P1 = 3211
+        #     N2P1 = 1
+        #     M2P1 = 2717
+        # if action == 5:
+        #     case = [[1, 1], [2, 3]]
+        #     N1P1 = 1
+        #     M1P1 = 3211
+        #     N2P3 = 1
+        #     M2P3 = 1359
+        # if action == 6:
+        #     case = [[1, 3], [2, 2]]
+        #     N1P3 = 1
+        #     M1P3 = 1668
+        #     N2P2 = 1
+        #     M2P2 = 1853
+        # if action == 7:
+        #     case = [[1, 2], [2, 0]]
+        #     N1P2 = 1
+        #     M1P2 = 2223
+        #     N2P = 0
+        #     M2P = 0
+        # if action == 8:
+        #     case = [[1, 1], [2, 2]]
+        #     N1P1 = 1
+        #     M1P1 = 3211
+        #     N2P2 = 1
+        #     M2P2 = 1853
+        # if action == 9:
+        #     case = [[1, 0], [2, 0]]
+        #     N1P = 0
+        #     M1P = 0
+        #     N2P = 0
+        #     M2P = 0
+        # if action == 10:
+        #     case = [[1, 3], [2, 3]]
+        #     N1P3 = 1
+        #     M1P3 = 1668
+        #     N2P3 = 1
+        #     M2P3 = 1359
+        # if action == 11:
+        #     case = [[1, 3], [2, 1]]
+        #     N1P3 = 1
+        #     M1P3 = 1668  # 1668   #ลองแกล้งเปลี่ยน action 11 ให้ไม่ผลิตเลยดู ว่ามันจะเลือก action ไหนแทน
+        #     N2P1 = 1
+        #     M2P1 = 2717  # 2717
+        # if action == 12:
+        #     case = [[1, 0], [2, 1]]
+        #     N1P = 0
+        #     M1P = 0
+        #     N2P1 = 1
+        #     M2P1 = 2717
+        # if action == 13:
+        #     case = [[1, 3], [2, 0]]
+        #     N1P3 = 1
+        #     M1P3 = 1668
+        #     N2P = 0
+        #     M2P = 0
+        # if action == 14:
+        #     case = [[1, 1], [2, 0]]
+        #     N1P1 = 1
+        #     M1P1 = 3211
+        #     N2P = 0
+        #     M2P = 0
+        # if action == 15:
+        #     case = [[1, 2], [2, 3]]
+        #     N1P2 = 1
+        #     M1P2 = 2223
+        #     N2P3 = 1
+        #     M2P3 = 1359
+        print("=== #############################")
+        print("===action =", action)
+        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+        print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+        print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+        print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+        print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+        print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -910,9 +1061,9 @@ class Inv_season_testset1_a2_60T(gym.Env):
         # weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
         # on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28]
         # off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
-        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30, 31, 32, 33, 44, 45, 46, 47]
-        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34, 36, 38, 40, 42, 48, 50, 52, 54]
-        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 49, 51, 53, 55]
+        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30, 31, 32, 33, 44, 45, 46, 47, 59, 60]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34, 36, 38, 40, 42, 48, 50, 52, 54, 56]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 49, 51, 53, 55, 57]
         stp = 0
         #         stp = self.step_count + 1
         stp = self.step_count
@@ -1042,6 +1193,11 @@ class Inv_season_testset1_a2_60T(gym.Env):
                 extra_r_weekend2_3 = reward_weekend * M2P3
                 # extra_p_on_set.append(extra_p_on2_3)
 
+        if extra_p_on == 1:
+            print("produced in On-Peak")
+        else:
+            print("produced in Off-Peak")
+        print("=== #############################")
         #         print("penalty_onpeak =", penalty_onpeak)
         #         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
         #         print("reward_weekend =", reward_weekend)
@@ -1345,7 +1501,7 @@ class Inv_season_testset1_a2_60T(gym.Env):
         print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
         print("===d10-d12 =", demand10, demand11, demand12)
         print("===self.demand_all", self.demand_all)
-        print("===Len self.demand_all", len(self.demand_all))
+        # print("===Len self.demand_all", len(self.demand_all))
 
         # demand1 from random
         # print("demand1",demand1)
@@ -1381,7 +1537,9 @@ class Inv_season_testset1_a2_60T(gym.Env):
         overage2_4 = overage2_3 - demand11
         overage3_4 = overage3_3 - demand12
         # print("overage1_2 =", overage1_2)
-        # print("overage1 = ",overage1)
+        print("===overage1 = ", overage1)
+        print("===overage2 = ", overage2)
+        print("===overage3 = ", overage3)
         # print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
 
         #         if overage1_2 < 1500:
@@ -1765,4 +1923,137 @@ class Inv_season_testset1_a2_60T(gym.Env):
         # demand_array2 = []
         # เนื่องจาก reward ตอนที่ A3C คิดน่าจะ เป็น sum_reward ในแต่ละ episode อยู่แล้ว ดังนั้น reward ที่ return ควรเป็น reward
         return np.array(self.state, dtype=np.float32), reward, done, info
+
+############################################################
+
+# env = Inv_season_testset1_a2_60T()
+# state = env.reset()
+
+# done = False
+# N = 2
+# runs = int(N)   #รัน 30 peroids จำนวน N รอบ
+# for i in range(runs):
+#     maxrun = 0
+#     done = False
+#     rand = randint(0,999)
+#     #print("rand", rand)
+#     env.reset()
+#     #env.seed(rand)
+#     period = 0
+#     demand_all = []
+#     # print("============Round====", i)
+#     while(done==False):
+#         action = env.action_space.sample()
+#         #print("period", period)
+#         #print("state", state)
+#         #print("action = ", action)
+#         state, reward, done, info = env.step(action)
+#         period += 1
+#         #print("####################################################period##############",period)
+#         #print("state",state)
+#         #print("action =",action)
+#         #print("action =",action)
+
+#         demand1 = state[3]
+#         demand2 = state[4]
+#         demand3 = state[5]
+#         #print("d1-d3 input in next state =", state[3], state[4], state[5])
+#         # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
+#         # print("extra_p_on ###### =", state[26])
+#         #print("aaa3 =",state[27], info[25])
+#         #demand_all.append(demand1)
+#         #demand_all.append(demand2)
+#         #demand_all.append(demand3)
+
+#         #sum_rw_ += reward
+#         #print("sum_rw",sum_rw_)
+#         #maxrun += 1
+#         reward2 = reward
+#         # print("reward", reward)
+#         # print("demand =", demand_all)
+#         # print("next_state",state)
+#         #print("====================================================================")
+#         # print(info[24])
+
+############################################################
+
+def main():
+
+    env = Inv_season_testset1_a2_60T()
+    state = env.reset()
+
+    done = False
+    N = 2
+    runs = int(N)   #รัน 30 peroids จำนวน N รอบ
+    for i in range(runs):
+        maxrun = 0
+        done = False
+        rand = randint(0,999)
+        #print("rand", rand)
+        env.reset()
+        #env.seed(rand)
+        period = 0
+        demand_all = []
+        #print("============Round====", i)
+        while(done==False):
+            action = env.action_space.sample()
+            #print("period", period)
+            #print("state", state)
+            #print("action = ", action)
+            state, reward, done, info = env.step(action)
+            period += 1
+            #print("####################################################period##############",period)
+            #print("state",state)
+            #print("action =",action)
+            #print("action =",action)
+
+            demand1 = state[3]
+            demand2 = state[4]
+            demand3 = state[5]
+            #print("d1-d3 input in next state =", state[3], state[4], state[5])
+            # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
+            # print("extra_p_on ###### =", state[26])
+            print("aaa3 =",state[33], info[25])
+            #demand_all.append(demand1)
+            #demand_all.append(demand2)
+            #demand_all.append(demand3)
+
+            #sum_rw_ += reward
+            #print("sum_rw",sum_rw_)
+            #maxrun += 1
+            reward2 = reward
+            # print("reward", reward)
+            # print("demand =", demand_all)
+            # print("next_state",state)
+            #print("====================================================================")
+            # print(info[24])
+
+    print(f'Total actions = {list(prodtbl.action_ids())}')
+
+############################################################
+
+def test_production_table():
+
+    prodtbl = ProductionTable(
+        no_machines=2, no_products=3
+    )
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
+    prodtbl.init_tables()
+    print(prodtbl.lotsize_tbl)
+    prodtbl.display()
+
+    print(prodtbl.get_switches(8, True))
+
+    print(prodtbl.get_lotsize(8, True))
+    print(prodtbl.get_lotsize(8, False))
+
+    for action_id in prodtbl:
+        print(f'===Action ID = {action_id}')
+
+############################################################
 
