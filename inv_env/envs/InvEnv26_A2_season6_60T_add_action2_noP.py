@@ -1,5 +1,5 @@
-#ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
-#ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
+# ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
+# ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
 # ตัดพวกที่ print และ comment ออกไปใ เพื่อเอาไปใส่ใน gym
 # คือ ต่อจากไฟล์ 25_16 act แต่ลองปรับ env ตาม moutain car เพื่อให้ appecnd ใน colab ถูก
@@ -7,8 +7,6 @@
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
 # ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
-
-'''class InvEnv5_60T_a2(gym.Env):'''
 
 from typing import Optional
 
@@ -22,6 +20,7 @@ import itertools
 
 from random import randint, choice
 
+
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
 
@@ -30,11 +29,11 @@ from random import randint, choice
 class ProductionTable:
 
     def __init__(
-        self, no_machines, no_products, lottbl_onpeak=None, lottbl_offpeak=None
+            self, no_machines, no_products, lottbl_onpeak=None, lottbl_offpeak=None
     ):
         if lottbl_onpeak is None: lottbl_onpeak = {}
         if lottbl_offpeak is None: lottbl_offpeak = {}
-        
+
         self.no_machines = no_machines
         self.no_products = no_products
         self.lottbl_onpeak = lottbl_onpeak
@@ -42,10 +41,11 @@ class ProductionTable:
 
         self.lotsize_tbl = {}
         self.switch_tbl = {}
+        self.action_counter = 0
 
         if len(self.lottbl_onpeak) > 0 and len(self.lottbl_offpeak) > 0:
             self.init_tables()
-        
+
     def add_prod_lotsize(self, machine_id, prod_id, onpeak, offpeak):
         if machine_id not in self.lottbl_onpeak:
             self.lottbl_onpeak[machine_id] = {}
@@ -57,45 +57,48 @@ class ProductionTable:
     def init_tables(self):
         args = []
         for machine_id in range(self.no_machines):
-            entry = [-1] + list(range(self.no_products))    # Product IDs for each machine, including halt (-1)
+            entry = [-1] + list(range(self.no_products))  # Product IDs for each machine, including halt (-1)
             args.append(entry)
-        args.append([True, False])    # On-peak and off-peak
+        # args.append([True, False])  # On-peak and off-peak
 
         action_id = 0
         for plan in itertools.product(*args):
             switches = np.zeros((2, self.no_machines, self.no_products))
             lotsizes = np.zeros((2, self.no_machines, self.no_products))
-            is_onpeak = plan[self.no_machines]
-            peak_idx = 1 if is_onpeak else 0
+            # is_onpeak = plan[self.no_machines]
 
-            for machine_id in range(self.no_machines):
-                prod_id = plan[machine_id]
-                if plan[machine_id] >= 0:
-                    switches[peak_idx, machine_id, prod_id] = 1.0
-                    if is_onpeak:
-                        lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_onpeak[machine_id][prod_id]
-                    else:
-                        lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_offpeak[machine_id][prod_id]
+            for is_onpeak in [False, True]:
+                peak_idx = 1 if is_onpeak else 0
+                for machine_id in range(self.no_machines):
+                    prod_id = plan[machine_id]
+                    if plan[machine_id] >= 0:
+                        switches[peak_idx, machine_id, prod_id] = 1.0
+                        if is_onpeak:
+                            lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_onpeak[machine_id][prod_id]
+                        else:
+                            lotsizes[peak_idx, machine_id, prod_id] = self.lottbl_offpeak[machine_id][prod_id]
 
             self.switch_tbl[action_id] = switches
             self.lotsize_tbl[action_id] = lotsizes
-            
+
             action_id += 1
+
+        self.action_counter = action_id
 
     def action_ids(self):
         return self.switch_tbl.keys()
-    
+
     def __iter__(self):
         return iter(self.switch_tbl)
 
     def get_lotsize(self, action_id, is_onpeak):
         peak_idx = 1 if is_onpeak else 0
         return self.lotsize_tbl[action_id][peak_idx]
-    
+
     def get_switches(self, action_id, is_onpeak):
         peak_idx = 1 if is_onpeak else 0
         return self.switch_tbl[action_id][peak_idx]
-    
+
     def display(self):
         print('>>> Production Table\n')
         for action_id in self:
@@ -104,9 +107,10 @@ class ProductionTable:
             lotsize_offpeak = self.lotsize_tbl[action_id][0]
             print(f'Action ID: {action_id}')
             print(f'Switches:\n{switches}')
-            print(f'On-peak lot-size:\n{lotsize_onpeak}')
             print(f'Off-peak lot-size:\n{lotsize_offpeak}')
+            print(f'On-peak lot-size:\n{lotsize_onpeak}')
             print()
+
 
 ############################################################
 
@@ -141,6 +145,11 @@ prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
 prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
 prodtbl.init_tables()
 
+
+# prodtbl.display()
+# input()
+
+############################################################
 ############################################################
 
 class InvEnv5_60T_a2(gym.Env):
@@ -152,7 +161,7 @@ class InvEnv5_60T_a2(gym.Env):
         self.on_hand2 = (np.random.randint(2500, 4500) - 12000) / (12000 - 0)  # 3051
         self.on_hand3 = (np.random.randint(2000, 3500) - 12000) / (12000 - 0)  # 2084
         # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
-        self.action_space = spaces.Discrete(32)
+        self.action_space = spaces.Discrete(prodtbl.action_counter)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
             0, 0, 0,  # initial inventory #0 1 2            ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27
@@ -354,7 +363,7 @@ class InvEnv5_60T_a2(gym.Env):
                       0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
                       0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
                       0.0, 0.0, 0.0, 0.701, 0.701, 0.701]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-            #print("Len(index2) = ",len(index2))
+            # print("Len(index2) = ",len(index2))
         if aaa == 4:
             # index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
             index2 = [0,0,0, 0.613,0.613,0.613, #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
@@ -501,7 +510,7 @@ class InvEnv5_60T_a2(gym.Env):
                 # demand_array2[y * 3 + 14] = 1
                 # demand_all.append(demand_array2[y * 3 + 14])
                 demand_array2[y * 3 + 12] = demand_r1 * index2[y * 3 + 12]  ####### ตำแหน่งที่ 59
-                # print("===demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
+                # print("demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
                 demand_all.append(demand_array2[y * 3 + 12])
                 demand_array2[y * 3 + 13] = demand_r2 * index2[y * 3 + 13]  #######
                 demand_all.append(demand_array2[y * 3 + 13])
@@ -545,7 +554,7 @@ class InvEnv5_60T_a2(gym.Env):
         ), f"{action!r} ({type(action)}) invalid"
         info = {}
 
-        #print("=================================================self.step_count =", self.step_count)
+        # print("=================================================self.step_count =", self.step_count)
         # all model parameters
         # holding cost
         h1 = 49.12  # 50.96
@@ -756,7 +765,7 @@ class InvEnv5_60T_a2(gym.Env):
         demand12 = demand12 * (maxd3 - mind3) + mind3
 
 
-        #print("===demand in this period =", demand1, demand2, demand3)
+        # print("===demand in this period =", demand1, demand2, demand3)
 
         # self.demand_real = info[24]   #เรียก info มาปริ้นข้างใน env ไม่ได้ จะ error เพราะ info ส่งผ่านไปข้างนอกอย่างเดียว ไม่ได้รับกลับเข้าในแต่ละ step ของ env
         self.demand_real.append(demand1)
@@ -894,14 +903,15 @@ class InvEnv5_60T_a2(gym.Env):
         #     N2P3 = 1
         #     M2P3 = 1359
 
+        # print("=== #############################")
         # print("===action =", action)
-        # print("Produce on onpeak period ? : ",extra_p_on)
+        # # print("Produce on onpeak period ? : ",extra_p_on)
         # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
         # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
         # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        # print("N2P1= ",N2P1 ," ,M1P1 =", M2P1)
-        # print("N2P2= ", N2P2, " ,M1P2 =", M2P2)
-        # print("N2P3= ", N2P3, " ,M1P3 =", M2P3)
+        # print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+        # print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+        # print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -1203,6 +1213,11 @@ class InvEnv5_60T_a2(gym.Env):
                 extra_r_weekend2_3 = reward_weekend * M2P3
                 # extra_p_on_set.append(extra_p_on2_3)
 
+        # if extra_p_on == 1:
+        #     print("===produced in On-Peak")
+        # else:
+        #     print("===produced in Off-Peak")
+        # print("=== #############################")
         #         print("penalty_onpeak =", penalty_onpeak)
         #         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
         #         print("reward_weekend =", reward_weekend)
@@ -1917,7 +1932,8 @@ class InvEnv5_60T_a2(gym.Env):
 
 ############################################################
 
-def main1():
+
+def main():
 
     env = InvEnv5_60T_a2()
     state = env.reset()
@@ -1968,35 +1984,35 @@ def main1():
             #print("====================================================================")
             # print(info[24])
 
-    # print(f'===Total actions = {list(prodtbl.action_ids())}')
+    # print(f'Total actions = {list(prodtbl.action_ids())}')
 
 ############################################################
 
-def main2():
+def test_production_table():
 
     prodtbl = ProductionTable(
         no_machines=2, no_products=3
     )
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=10, offpeak=5)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=20, offpeak=6)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=30, offpeak=7)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=40, offpeak=8)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=50, offpeak=9)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=60, offpeak=10)
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
+    prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
+    prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
     prodtbl.init_tables()
     print(prodtbl.lotsize_tbl)
     prodtbl.display()
 
-    print(prodtbl.get_switches(8))
+    print(prodtbl.get_switches(8, True))
 
     print(prodtbl.get_lotsize(8, True))
     print(prodtbl.get_lotsize(8, False))
 
     for action_id in prodtbl:
-        print(f'Action ID = {action_id}')
+        print(f'===Action ID = {action_id}')
 
 ############################################################
 
-if __name__ == '__main__':
-    main1()
-    # main2()
+# if __name__ == '__main__':
+#     main()
+#     #test_production_table()
