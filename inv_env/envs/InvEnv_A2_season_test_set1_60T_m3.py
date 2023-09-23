@@ -1197,6 +1197,7 @@ class Inv_season_testset1_a2_60T(gym.Env):
             print("produced in On-Peak")
         else:
             print("produced in Off-Peak")
+        print("demand pattern (self.aaa) = ",self.aaa)
         print("=== #############################")
         #         print("penalty_onpeak =", penalty_onpeak)
         #         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
@@ -1744,7 +1745,7 @@ class Inv_season_testset1_a2_60T(gym.Env):
 
         last_sum_real_reward = 0
         last_sum_reward = 0
-        if self.step_count == 29:
+        if self.step_count == 59:
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
 
@@ -2013,7 +2014,7 @@ def main():
             #print("d1-d3 input in next state =", state[3], state[4], state[5])
             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
             # print("extra_p_on ###### =", state[26])
-            print("aaa3 =",state[33], info[25])
+            # print("aaa3 =",state[33], info[25])
             #demand_all.append(demand1)
             #demand_all.append(demand2)
             #demand_all.append(demand3)
@@ -2057,3 +2058,6 @@ def test_production_table():
 
 ############################################################
 
+# if __name__ == '__main__':
+#     main()
+#     #test_production_table()
