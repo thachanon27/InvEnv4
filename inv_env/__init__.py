@@ -33,7 +33,7 @@ register(
 )     #agent2 seasonal  #InvEnv26_A2_season6_60T_add_action2_noP
 
 #========================================================
-#test 60T set
+#test  A2 60T set
 register(
     id='inv_a2_testset1',
     entry_point='inv_env.envs:InvEnv5_60T_a2_set1',
@@ -42,7 +42,10 @@ register(
     id='inv_a2_testset2',
     entry_point='inv_env.envs:InvEnv5_60T_a2_set2',
 )
-
+register(
+    id='inv_a2_testset3',
+    entry_point='inv_env.envs:InvEnv5_60T_a2_set3',
+)
 
 
 
