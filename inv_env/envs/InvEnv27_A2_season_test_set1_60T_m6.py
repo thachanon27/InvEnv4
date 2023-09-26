@@ -1,3 +1,4 @@
+# for test A2 set1 #InvEnv27_A2_season_test_set1_60T_m7
 # ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
 # ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
@@ -395,7 +396,7 @@ class InvEnv5_60T_a2_set1(gym.Env):
                       0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
                       0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
                       0.0, 0.0, 0.0, 0.701, 0.701, 0.701]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-            print("=== Len(index2) = ",len(index2))
+            # print("=== Len(index2) = ",len(index2))
         # if aaa == 4:
         #     # index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
         #     index2 = [0,0,0, 0.613,0.613,0.613, #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
@@ -542,7 +543,7 @@ class InvEnv5_60T_a2_set1(gym.Env):
                 # demand_array2[y * 3 + 14] = 1
                 # demand_all.append(demand_array2[y * 3 + 14])
                 demand_array2[y * 3 + 12] = demand_r1 * index2[y * 3 + 12]  ####### ตำแหน่งที่ 59
-                print("=== demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
+                # print("=== demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
                 demand_all.append(demand_array2[y * 3 + 12])
                 demand_array2[y * 3 + 13] = demand_r2 * index2[y * 3 + 13]  #######
                 demand_all.append(demand_array2[y * 3 + 13])
@@ -747,8 +748,9 @@ class InvEnv5_60T_a2_set1(gym.Env):
         dr1_56, dr2_56, dr3_56, dr1_60, dr2_60, dr3_60  = self.state
 
         aaa3 = self.aaa
-        print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
-        print("===self.demand_all =", self.demand_all)
+        # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
+        if self.step_count == 0:
+            print("===self.demand_all =", self.demand_all)
         dr1_4 = self.demand_all[9]
         dr2_4 = self.demand_all[10]
         dr3_4 = self.demand_all[11]
@@ -1602,9 +1604,8 @@ class InvEnv5_60T_a2_set1(gym.Env):
 
         # print("=================================================self.step_count =", self.step_count)
         # print("Action =", action)
-        print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
-        print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
-        print("===d10-d12 =", demand10, demand11, demand12)
+        print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3,)
+        print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9, "// d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
 
         # demand1 from random
@@ -1956,8 +1957,8 @@ class InvEnv5_60T_a2_set1(gym.Env):
         dr2_60 = (dr2_60 - mind1) / (maxd1 - mind1)
         dr3_60 = (dr3_60 - mind1) / (maxd1 - mind1)
 
-        print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
-        print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56, dr3_56)
+        # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
+        # print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56, dr3_56)
         # inv data
         self.state[0] = 0
         self.state[1] = 0
