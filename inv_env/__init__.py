@@ -36,8 +36,14 @@ register(
 #test 60T set
 register(
     id='inv_a2_testset1',
-    entry_point='inv_env.envs:Inv_season_testset1_a2_60T',
+    entry_point='inv_env.envs:InvEnv5_60T_a2_set1',
 )
+register(
+    id='inv_a2_testset2',
+    entry_point='inv_env.envs:InvEnv5_60T_a2_set2',
+)
+
+
 
 
 ############################################
