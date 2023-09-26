@@ -1,4 +1,4 @@
-#InvEnv26_A2_season6_60T_add_action5_noP
+#InvEnv26_A2_season6_60T_add_action5_noP  #for train Env
 # ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
 # ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
