@@ -47,7 +47,11 @@ register(
     entry_point='inv_env.envs:InvEnv5_60T_a2_set3',
 )
 
-
+#test  A1 60T set
+register(
+    id='inv_a1_testset1',
+    entry_point='inv_env.envs:InvEnv5_60T_a1_set1',
+)
 
 ############################################
 register(
