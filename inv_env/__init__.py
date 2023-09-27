@@ -23,10 +23,14 @@ register(
 )     #ใช้อันนี้กรณีต้องการเปลี่ยนมาเทรนแบบ season เต็มๆ
 #========================================================
 #Multi_agents
+# register(
+#     id='inv-v3_a-1',
+#     entry_point='inv_env.envs:InvEnv5_a1',
+# )     #agent1 random variation
 register(
-    id='inv-v3_a-1',
-    entry_point='inv_env.envs:InvEnv5_a1',
-)     #agent1 random variation
+    id='inv-v3_60T_a-1',
+    entry_point='inv_env.envs:InvEnv5_60T_a1',
+)     #agent1 random variation #InvEnv26_A1_randomV_60T_add_action2_noP
 register(
     id='inv-v3_60T_a-2',
     entry_point='inv_env.envs:InvEnv5_60T_a2',
