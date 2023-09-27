@@ -19,6 +19,8 @@ from inv_env.envs.InvEnv27_A2_season_test_set2_60T import InvEnv5_60T_a2_set2  #
 from inv_env.envs.InvEnv27_A2_season_test_set3_60T import InvEnv5_60T_a2_set3  #id= 'inv_a2_testset3'
 
 from inv_env.envs.InvEnv27_A1_season_test_set1_60T_m2 import InvEnv5_60T_a1_set1  #id= 'inv_a1_testset1'
+from inv_env.envs.InvEnv27_A1_season_test_set2_60T_m2 import InvEnv5_60T_a1_set2  #id= 'inv_a1_testset1'
+from inv_env.envs.InvEnv27_A1_season_test_set3_60T_m import InvEnv5_60T_a1_set3  #id= 'inv_a1_testset1'
 
 
 
