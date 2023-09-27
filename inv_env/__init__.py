@@ -56,6 +56,15 @@ register(
     id='inv_a1_testset1',
     entry_point='inv_env.envs:InvEnv5_60T_a1_set1',
 )
+register(
+    id='inv_a1_testset2',
+    entry_point='inv_env.envs:InvEnv5_60T_a1_set2',
+)
+register(
+    id='inv_a1_testset3',
+    entry_point='inv_env.envs:InvEnv5_60T_a1_set3',
+)
+
 
 ############################################
 register(
