@@ -5,11 +5,12 @@ from inv_env.envs.InvEnv25_3act import InvEnv3
 from inv_env.envs.InvEnv25_16act import InvEnv4   #id='inv-v3'
 from inv_env.envs.InvEnv25_1pattern import InvEnv4_a2   #id='inv-v3_a2'  #อันนี้คือ กรณีเปลี่ยนรูปแบบ demand ให้มีแต่ season ป่องกลางอย่างเดียว
 
-from inv_env.envs.InvEnv26_A1_RandomV_noP import InvEnv5_a1   #id='inv-v3_a-1'
+#from inv_env.envs.InvEnv26_A1_RandomV_noP import InvEnv5_a1   #id='inv-v3_a-1'
 # from inv_env.envs.InvEnv26_A2_season5_noP import InvEnv5_a2   #id='inv-v3_a-2'
 
 #Train 60T
 #from inv_env.envs.InvEnv26_A1_60T_RandomV2_noP2 import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
+from inv_env.envs.InvEnv26_A1_randomV_60T_add_action2_noP import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
 from inv_env.envs.InvEnv26_A2_season6_60T_add_action4_noP import InvEnv5_60T_a2   #id='inv-v3_60t_a-2'
 
 #test 60T 
