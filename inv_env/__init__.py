@@ -35,6 +35,11 @@ register(
     id='inv-v3_60T_a-2',
     entry_point='inv_env.envs:InvEnv5_60T_a2',
 )     #agent2 seasonal  #InvEnv26_A2_season6_60T_add_action2_noP
+register(
+    id='inv-v3_60T_a-3',
+    entry_point='inv_env.envs:InvEnv5_60T_a3',
+)     #agent3 seasonal  #InvEnv26_A3_midseason_60T_add_action6_noP
+
 
 #========================================================
 #test  A2 60T set
@@ -64,6 +69,20 @@ register(
     id='inv_a1_testset3',
     entry_point='inv_env.envs:InvEnv5_60T_a1_set3',
 )
+#test  A3 60T set
+register(
+    id='inv_a3_testset1',
+    entry_point='inv_env.envs:InvEnv5_60T_a3_set1',
+)
+register(
+    id='inv_a3_testset2',
+    entry_point='inv_env.envs:InvEnv5_60T_a3_set2',
+)
+register(
+    id='inv_a3_testset3',
+    entry_point='inv_env.envs:InvEnv5_60T_a3_set3',
+)
+
 
 
 ############################################
