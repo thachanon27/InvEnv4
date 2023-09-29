@@ -153,7 +153,7 @@ prodtbl.init_tables()
 ############################################################
 ############################################################
 
-class InvEnv5_60T_a2(gym.Env):
+class InvEnv5_60T_a3(gym.Env):
     def __init__(self):
         self.step_count = 0
         self.overall_time_trained = 0
@@ -2072,7 +2072,7 @@ class InvEnv5_60T_a2(gym.Env):
 
 def main():
 
-    env = InvEnv5_60T_a2()
+    env = InvEnv5_60T_a3()
     state = env.reset()
 
     done = False
@@ -2150,6 +2150,6 @@ def test_production_table():
 
 ############################################################
 
-if __name__ == '__main__':
-    main()
-    #test_production_table()
+# if __name__ == '__main__':
+#     main()
+#     #test_production_table()
