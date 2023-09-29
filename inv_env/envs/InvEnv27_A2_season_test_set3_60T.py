@@ -271,7 +271,7 @@ class InvEnv5_60T_a2_set3(gym.Env):
                            0.0, 0.0, 0.0, 2251.08, 1794.0, 1114.62, 0.0, 0.0, 0.0, 2027.1005, 1616.5485, 1181.0305,
                            0.0, 0.0, 0.0, 1669.25, 1544.815, 988.803, 0.0, 0.0, 0.0, 1714.635, 1477.125, 948.285,
                            0, 0, 0, 1579.40908, 1176.059989, 757.716508, 0, 0, 0]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-        self.aaa = 3
+        self.aaa = 5
 
         self.state = [self.on_hand1, self.on_hand2, self.on_hand3,  # initial inventory #0 1 2
                       0, 0, 0,    # initial demand    #3 4 5
@@ -393,7 +393,7 @@ class InvEnv5_60T_a2_set3(gym.Env):
                            0.0, 0.0, 0.0, 1669.25, 1544.815, 988.803, 0.0, 0.0, 0.0, 1714.635, 1477.125, 948.285,
                            0, 0, 0, 1579.40908, 1176.059989, 757.716508, 0, 0,
                            0]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-        self.aaa = 3
+        self.aaa = 5
 
         if not return_info:
             return np.array(self.state, dtype=np.float32)
@@ -405,7 +405,7 @@ class InvEnv5_60T_a2_set3(gym.Env):
     def create_index2(self):
         rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
         np.random.seed(rng3)
-        aaa = 3 #np.random.randint(3, 6)  # อันนี้สุ่ม 3-5
+        aaa = 5 #np.random.randint(3, 6)  # อันนี้สุ่ม 3-5
 
         idrv_set = []
         for j in range(1, 210):
