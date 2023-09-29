@@ -12,6 +12,7 @@ from inv_env.envs.InvEnv25_1pattern import InvEnv4_a2   #id='inv-v3_a2'  #อั
 #from inv_env.envs.InvEnv26_A1_60T_RandomV2_noP2 import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
 from inv_env.envs.InvEnv26_A1_randomV_60T_add_action2_noP import InvEnv5_60T_a1   #id='inv-v3_60t_a-1'
 from inv_env.envs.InvEnv26_A2_season6_60T_add_action4_noP import InvEnv5_60T_a2   #id='inv-v3_60t_a-2'
+from inv_env.envs.InvEnv26_A3_midseason_60T_add_action6_noP import InvEnv5_60T_a3   #id='inv-v3_60t_a-3'
 
 #test 60T 
 from inv_env.envs.InvEnv27_A2_season_test_set1_60T_m6 import InvEnv5_60T_a2_set1  #id= 'inv_a2_testset1'
@@ -21,6 +22,11 @@ from inv_env.envs.InvEnv27_A2_season_test_set3_60T import InvEnv5_60T_a2_set3  #
 from inv_env.envs.InvEnv27_A1_randomV_test_set1_60T_m2 import InvEnv5_60T_a1_set1  #id= 'inv_a1_testset1'
 from inv_env.envs.InvEnv27_A1_randomV_test_set2_60T_m2 import InvEnv5_60T_a1_set2  #id= 'inv_a1_testset1'
 from inv_env.envs.InvEnv27_A1_randomV_test_set3_60T_m import InvEnv5_60T_a1_set3  #id= 'inv_a1_testset1'
+
+from inv_env.envs.InvEnv27_A3_season_test_set1_60T import InvEnv5_60T_a3_set1  #id= 'inv_a3_testset1'
+from inv_env.envs.InvEnv27_A3_season_test_set2_60T import InvEnv5_60T_a3_set2  #id= 'inv_a3_testset2'
+from inv_env.envs.InvEnv27_A3_season_test_set3_60T import InvEnv5_60T_a3_set3  #id= 'inv_a3_testset3'
+
 
 
 
