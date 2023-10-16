@@ -633,9 +633,9 @@ class InvEnv5_60T_a1_set1(gym.Env):
         k2 = 6200 * 25
         k3 = 9920 * 25
         # Sell price
-        p1 = 5100
-        p2 = 3100
-        p3 = 4960
+        sp1 = 5100
+        sp2 = 3100
+        sp3 = 4960
         # unit cost
         c1 = 1434.375  # 3060
         c2 = 871.875  # 1860
@@ -1031,7 +1031,7 @@ class InvEnv5_60T_a1_set1(gym.Env):
         sales2 = min(on_hand2, demand2)
         sales3 = min(on_hand3, demand3)
         # print("sales1 =", sales1)
-        sales_revenue = p1 * sales1 + p2 * sales2 + p3 * sales3
+        sales_revenue = sp1 * sales1 + sp2 * sales2 + sp3 * sales3
         overage1 = max(0, on_hand1 - sales1)
         overage2 = max(0, on_hand2 - sales2)
         overage3 = max(0, on_hand3 - sales3)
