@@ -1005,12 +1005,13 @@ class InvEnv5_60T_a1_set2(gym.Env):
         print("=== #############################")
         print("===action =", action)
         # print("Produce on onpeak period ? : ",extra_p_on)
-        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
-        print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
-        print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
+        # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+        # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+        # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+        # print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+        # print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+        # print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
+        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1,"/","N1P2= ", N1P2, " ,M1P2 =", M1P2,"/","N1P3= ", N1P3, " ,M1P3 =", M1P3,"//","N2P1= ",N2P1 ," ,M2P1 =", M2P1,"/","N2P2= ", N2P2, " ,M2P2 =", M2P2,"/","N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -1677,9 +1678,10 @@ class InvEnv5_60T_a1_set2(gym.Env):
         overage2_4 = overage2_3 - demand11
         overage3_4 = overage3_3 - demand12
         # print("overage1_2 =", overage1_2)
-        print("===overage1 = ", overage1)
-        print("===overage2 = ", overage2)
-        print("===overage3 = ", overage3)
+        # print("===overage1 = ", overage1)
+        # print("===overage2 = ", overage2)
+        # print("===overage3 = ", overage3)
+        print("===overage1,2,3 = ", overage1, overage2, overage3)
         print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
 
         #         if overage1_2 < 1500:
