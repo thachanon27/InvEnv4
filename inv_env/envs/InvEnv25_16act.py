@@ -2,6 +2,9 @@
 # ตัดพวกที่ print และ comment ออกไปใ เพื่อเอาไปใส่ใน gym
 # คือ ต่อจากไฟล์ 25_16 act แต่ลองปรับ env ตาม moutain car เพื่อให้ appecnd ใน colab ถูก
 # ล่าสุด 14-8-65 ตรงกับไฟล์ InvEnv38_16act.py
+# ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
+# pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
+
 import math
 from typing import Optional
 
