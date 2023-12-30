@@ -71,6 +71,10 @@ from inv_env.envs.Inv_env_sen_set8 import InvSen8  #id= 'inv-sen8'
 from inv_env.envs.Inv_env_sen_set9 import InvSen9  #id= 'inv-sen9'
 from inv_env.envs.Inv_env_sen_set10 import InvSen10  #id= 'inv-sen10'
 
+#======================================================
+## Original 30Periods & 27Observation 
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv_z-v5-1'
+
 
 
 
