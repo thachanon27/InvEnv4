@@ -231,7 +231,7 @@ register(
 #===========================================================
 #Test set ของโมเดล PPO original 30periods & 27 observation ที่ส่งจัวนอลที่1
 register(
-    id='inv_z-v5-1',
+    id='inv-z-v5-1',
     entry_point='inv_env.envs:Inv_z_Env6',
 )
 
