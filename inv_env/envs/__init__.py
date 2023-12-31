@@ -74,6 +74,15 @@ from inv_env.envs.Inv_env_sen_set10 import InvSen10  #id= 'inv-sen10'
 #======================================================
 ## Original 30Periods & 27Observation 
 from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z1'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z2'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z3'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z4'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z5'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z6'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z7'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z8'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z9'
+from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z10'
 
 
 
