@@ -75,14 +75,14 @@ from inv_env.envs.Inv_env_sen_set10 import InvSen10  #id= 'inv-sen10'
 ## Original 30Periods & 27Observation 
 from inv_env.envs.Inv_z_Env36_oneSetD_set1_27obs import Inv_z_Env6   #id='inv-v5-z1'
 from inv_env.envs.Inv_z_Env36_oneSetD_set2_27obs import Inv_z_Env7   #id='inv-v5-z2'
-from inv_env.envs.Inv_z_Env36_oneSetD_set3_27obs import Inv_z_Env8   #id='inv-v5-z3'
-from inv_env.envs.Inv_z_Env36_oneSetD_set4_27obs import Inv_z_Env9   #id='inv-v5-z4'
-from inv_env.envs.Inv_z_Env36_oneSetD_set5_27obs import Inv_z_Env10   #id='inv-v5-z5'
-from inv_env.envs.Inv_z_Env36_oneSetD_set6_27obs import Inv_z_Env11   #id='inv-v5-z6'
-from inv_env.envs.Inv_z_Env36_oneSetD_set7_27obs import Inv_z_Env12   #id='inv-v5-z7'
-from inv_env.envs.Inv_z_Env36_oneSetD_set8_27obs import Inv_z_Env13   #id='inv-v5-z8'
-from inv_env.envs.Inv_z_Env36_oneSetD_set9_27obs import Inv_z_Env14   #id='inv-v5-z9'
-from inv_env.envs.Inv_z_Env36_oneSetD_set10_27obs import Inv_z_Env15   #id='inv-v5-z10'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set3_27obs import Inv_z_Env8   #id='inv-v5-z3'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set4_27obs import Inv_z_Env9   #id='inv-v5-z4'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set5_27obs import Inv_z_Env10   #id='inv-v5-z5'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set6_27obs import Inv_z_Env11   #id='inv-v5-z6'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set7_27obs import Inv_z_Env12   #id='inv-v5-z7'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set8_27obs import Inv_z_Env13   #id='inv-v5-z8'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set9_27obs import Inv_z_Env14   #id='inv-v5-z9'
+# from inv_env.envs.Inv_z_Env36_oneSetD_set10_27obs import Inv_z_Env15   #id='inv-v5-z10'
 
 
 
