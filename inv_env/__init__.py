@@ -236,30 +236,30 @@ register(
 register(
     id='inv-v5-z2',
     entry_point='inv_env.envs:Inv_z_Env7',)
-register(
-    id='inv-v5-z3',
-    entry_point='inv_env.envs:Inv_z_Env8',)
-register(
-    id='inv-v5-z4',
-    entry_point='inv_env.envs:Inv_z_Env9',)
-register(
-    id='inv-v5-z5',
-    entry_point='inv_env.envs:Inv_z_Env10',)
-register(
-    id='inv-v5-z6',
-    entry_point='inv_env.envs:Inv_z_Env11',)
-register(
-    id='inv-v5-z7',
-    entry_point='inv_env.envs:Inv_z_Env12',)
-register(
-    id='inv-v5-z8',
-    entry_point='inv_env.envs:Inv_z_Env13',)
-register(
-    id='inv-v5-z9',
-    entry_point='inv_env.envs:Inv_z_Env14',)
-register(
-    id='inv-v5-z10',
-    entry_point='inv_env.envs:Inv_z_Env15',)
+# register(
+#     id='inv-v5-z3',
+#     entry_point='inv_env.envs:Inv_z_Env8',)
+# register(
+#     id='inv-v5-z4',
+#     entry_point='inv_env.envs:Inv_z_Env9',)
+# register(
+#     id='inv-v5-z5',
+#     entry_point='inv_env.envs:Inv_z_Env10',)
+# register(
+#     id='inv-v5-z6',
+#     entry_point='inv_env.envs:Inv_z_Env11',)
+# register(
+#     id='inv-v5-z7',
+#     entry_point='inv_env.envs:Inv_z_Env12',)
+# register(
+#     id='inv-v5-z8',
+#     entry_point='inv_env.envs:Inv_z_Env13',)
+# register(
+#     id='inv-v5-z9',
+#     entry_point='inv_env.envs:Inv_z_Env14',)
+# register(
+#     id='inv-v5-z10',
+#     entry_point='inv_env.envs:Inv_z_Env15',)
 
 
 
