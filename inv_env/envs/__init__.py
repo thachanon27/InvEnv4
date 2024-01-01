@@ -84,6 +84,18 @@ from inv_env.envs.Inv_z_Env36_oneSetD_set8_27obs import Inv_z_Env13   #id='inv-v
 from inv_env.envs.Inv_z_Env36_oneSetD_set9_27obs import Inv_z_Env14   #id='inv-v5-z9'
 from inv_env.envs.Inv_z_Env36_oneSetD_set10_27obs import Inv_z_Env15   #id='inv-v5-z10'
 
+from inv_env.envs.Inv_z_env_sen_set1 import InvSen1_z  #id= 'inv-sen1'
+from inv_env.envs.Inv_z_env_sen_set2 import InvSen2_z  #id= 'inv-sen2'
+from inv_env.envs.Inv_z_env_sen_set3 import InvSen3_z  #id= 'inv-sen3'
+from inv_env.envs.Inv_z_env_sen_set4 import InvSen4_z  #id= 'inv-sen4'
+from inv_env.envs.Inv_z_env_sen_set5 import InvSen5_z  #id= 'inv-sen5'
+from inv_env.envs.Inv_z_env_sen_set6 import InvSen6_z  #id= 'inv-sen6'
+from inv_env.envs.Inv_z_env_sen_set7 import InvSen7_z  #id= 'inv-sen7'
+from inv_env.envs.Inv_z_env_sen_set8 import InvSen8_z  #id= 'inv-sen8'
+from inv_env.envs.Inv_z_env_sen_set9 import InvSen9_z  #id= 'inv-sen9'
+from inv_env.envs.Inv_z_env_sen_set10 import InvSen10_z  #id= 'inv-sen10'
+#==============================================================
+
 
 
 
