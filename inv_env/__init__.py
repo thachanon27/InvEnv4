@@ -261,6 +261,37 @@ register(
     id='inv-v5-z10',
     entry_point='inv_env.envs:Inv_z_Env15',)
 
+register(
+    id='inv-z-sen1',
+    entry_point='inv_env.envs:InvSen1_z',)
+register(
+    id='inv-z-sen2',
+    entry_point='inv_env.envs:InvSen2_z',)
+register(
+    id='inv-z-sen3',
+    entry_point='inv_env.envs:InvSen3_z',)
+register(
+    id='inv-z-sen4',
+    entry_point='inv_env.envs:InvSen4_z',)
+register(
+    id='inv-z-sen5',
+    entry_point='inv_env.envs:InvSen5_z',)
+register(
+    id='inv-z-sen6',
+    entry_point='inv_env.envs:InvSen6_z',)
+register(
+    id='inv-z-sen7',
+    entry_point='inv_env.envs:InvSen7_z',)
+register(
+    id='inv-z-sen8',
+    entry_point='inv_env.envs:InvSen8_z',)
+register(
+    id='inv-z-sen9',
+    entry_point='inv_env.envs:InvSen9_z',)
+register(
+    id='inv-z-sen10',
+    entry_point='inv_env.envs:InvSen10_z',)
+
 
 
 
