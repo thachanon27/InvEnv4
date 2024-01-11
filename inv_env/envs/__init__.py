@@ -14,6 +14,7 @@ from inv_env.envs.InvEnv26_A1_randomV_60T_add_action2_noP import InvEnv5_60T_a1 
 from inv_env.envs.InvEnv26_A2_season6_60T_add_action4_noP import InvEnv5_60T_a2   #id='inv-v3_60t_a-2'
 from inv_env.envs.InvEnv26_A3_midseason_60T_add_action6_noP import InvEnv5_60T_a3   #id='inv-v3_60t_a-3'
 from inv_env.envs.InvEnv26_A4_highseason_60T_add_action_noP import InvEnv5_60T_a4   #id='inv-v3_60t_a-4'
+from inv_env.envs.InvEnv26_EveryPatternFor_agent_in_multiagent import InvEnv5_60T_MA   #id='inv-v3_60t_ma'
 
 
 #test 60T 
