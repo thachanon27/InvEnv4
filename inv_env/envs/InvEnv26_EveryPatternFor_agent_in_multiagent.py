@@ -672,6 +672,8 @@ class InvEnv5_60T_MA(gym.Env):
         #     0, 0, 0, 0, 0, 0
         # ])
         # #assert (len(demand_all) == 93)
+        #print("demand_all =", demand_all)
+        #print("len - demand_all =", len(demand_all))
         return (demand_all, aaa)
 
     def step(self, action):
@@ -1927,7 +1929,9 @@ class InvEnv5_60T_MA(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward, self.demand_real,  # info[23-24]
-                self.aaa] #info25
+                self.aaa, self.demand_all] #info25 , 26
+        # print("len [info]  = ", len(info))
+        # print(" info [26] =", info[26])
 
         #         print("value ก่อน normalize")
         #         print("demand1 =", demand1)
