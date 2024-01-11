@@ -43,8 +43,10 @@ register(
     id='inv-v3_60T_a-4',
     entry_point='inv_env.envs:InvEnv5_60T_a4',
 )     #agent4 seasonal  #InvEnv26_A4_highseason_60T_add_action_noP
-
-
+register(
+    id='inv-v3_60T_ma',
+    entry_point='inv_env.envs:InvEnv5_60T_MA',
+)     #multi-agent every demand pattern  #InvEnv26_EveryPatternFor_agent_in_multiagent
 
 
 #========================================================
