@@ -1,3 +1,4 @@
+# แก้ demand 3 state สุดท้าย เป็น self.state[76] = self.sum_reward, self.state[77] = self.sum_real_reward, self.state[78] = self.step_count  # so all
 # ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
 # ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
@@ -23,7 +24,7 @@ from random import randint, choice
 
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
-
+print_result = False
 ############################################################
 
 class ProductionTable:
@@ -190,7 +191,7 @@ class InvEnv5_60T_a1(gym.Env):
             0, 0, 0,  # Demand r1-3 at 48 th period  # 67 68 69
             0, 0, 0,  # Demand r1-3 at 52 th period  # 70 71 72
             0, 0, 0,  # Demand r1-3 at 56 th period  # 73 74 75
-            0, 0, 0  # Demand r1-3 at 56 th period  # 76 77 78  --> 0 - 78, so there are total 79 observations
+            0, 0, 0  # # reward,  real reward, period no.   # 76 77 78  --> 0 - 78, so there are total 79 observations
         ])
         self.statehigh = np.array([
             np.inf, np.inf, np.inf,  # initial inventory
@@ -219,7 +220,7 @@ class InvEnv5_60T_a1(gym.Env):
             np.inf, np.inf, np.inf,  # Demand r1-3 at 48 th period
             np.inf, np.inf, np.inf,  # Demand r1-3 at 52 th period
             np.inf, np.inf, np.inf,  # Demand r1-3 at 56 th period
-            np.inf, np.inf, np.inf  # Demand r1-3 at 56 th period
+            np.inf, np.inf, np.inf  # # reward,  real reward, period no.
         ])
 
         #self.state[49] = 0
@@ -280,7 +281,8 @@ class InvEnv5_60T_a1(gym.Env):
                       0, 0, 0,  # Demand r1-3 at 48 th period
                       0, 0, 0,  # Demand r1-3 at 52 th period
                       0, 0, 0,  # Demand r1-3 at 56 th period
-                      0, 0, 0  # Demand r1-3 at 56 th period
+                      #0, 0, 0  # Demand r1-3 at 56 th period
+                      0, 0, 0  # reward,  real reward, period no.
                       ]
         self.prodtbl = prodtbl
 
@@ -335,7 +337,7 @@ class InvEnv5_60T_a1(gym.Env):
             0, 0, 0,  # Demand r1-3 at 48 th period  # 67 68 69
             0, 0, 0,  # Demand r1-3 at 52 th period  # 70 71 72
             0, 0, 0,  # Demand r1-3 at 56 th period  # 73 74 75
-            0, 0, 0  # Demand r1-3 at 56 th period  # 76 77 78
+            0, 0, 0  # # reward,  real reward, period no.   # 76 77 78
         ])
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -412,7 +414,7 @@ class InvEnv5_60T_a1(gym.Env):
                       0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
                       0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
                       0.0, 0.0, 0.0, 0.701, 0.701, 0.701, 0, 0, 0, 0.699, 0.699, 0.699]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-            # print("=== Len(index2) = ",len(index2))
+            print("=== Len(index2) = ",len(index2))
         if aaa == 4:
             # index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
             index2 = [
@@ -559,7 +561,8 @@ class InvEnv5_60T_a1(gym.Env):
                 # demand_array2[y * 3 + 14] = 1
                 # demand_all.append(demand_array2[y * 3 + 14])
                 demand_array2[y * 3 + 12] =  demand_r1 * index2[y * 3 + 12]  ####### ตำแหน่งที่ 59
-                # print("=== demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
+                if print_result == True:
+                    print("=== demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
                 demand_all.append(demand_array2[y * 3 + 12])
                 demand_array2[y * 3 + 13] = demand_r2 * index2[y * 3 + 13]  #######
                 demand_all.append(demand_array2[y * 3 + 13])
@@ -622,7 +625,8 @@ class InvEnv5_60T_a1(gym.Env):
         ), f"{action!r} ({type(action)}) invalid"
         info = {}
 
-        # print("=================================================self.step_count =", self.step_count)
+        if print_result == True:
+            print("=================================================self.step_count =", self.step_count)
         # all model parameters
         # holding cost
         h1 = 49.12  # 50.96
@@ -783,8 +787,9 @@ class InvEnv5_60T_a1(gym.Env):
         dr1_56, dr2_56, dr3_56, dr1_60, dr2_60, dr3_60  = self.state
 
         aaa3 = self.aaa
-        # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
-        # print("===self.demand_all =", self.demand_all)
+        if print_result == True:
+            print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
+            print("===self.demand_all =", self.demand_all)
         dr1_4 = self.demand_all[9]
         dr2_4 = self.demand_all[10]
         dr3_4 = self.demand_all[11]
@@ -862,8 +867,8 @@ class InvEnv5_60T_a1(gym.Env):
         demand11 = demand11 * (maxd2 - mind2) + mind2
         demand12 = demand12 * (maxd3 - mind3) + mind3
 
-
-        # print("===demand in this period =", demand1, demand2, demand3)
+        if print_result == True:
+            print("===demand in this period =", demand1, demand2, demand3)
 
         # self.demand_real = info[24]   #เรียก info มาปริ้นข้างใน env ไม่ได้ จะ error เพราะ info ส่งผ่านไปข้างนอกอย่างเดียว ไม่ได้รับกลับเข้าในแต่ละ step ของ env
         self.demand_real.append(demand1)
@@ -1001,15 +1006,16 @@ class InvEnv5_60T_a1(gym.Env):
         #     N2P3 = 1
         #     M2P3 = 1359
 
-        # print("=== #############################")
-        # print("===action =", action)
-        # # print("Produce on onpeak period ? : ",extra_p_on)
-        # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        # print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
-        # print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
-        # print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
+        if print_result == True:
+            print("=== #############################")
+            print("===action =", action)
+            # print("Produce on onpeak period ? : ",extra_p_on)
+            print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+            print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+            print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+            print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+            print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+            print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -1311,11 +1317,12 @@ class InvEnv5_60T_a1(gym.Env):
                 extra_r_weekend2_3 = reward_weekend * M2P3
                 # extra_p_on_set.append(extra_p_on2_3)
 
-        # if extra_p_on == 1:
-        #     print("===produced in On-Peak")
-        # else:
-        #     print("===produced in Off-Peak")
-        # print("=== #############################")
+        if print_result == True:
+            if extra_p_on == 1:
+                print("===produced in On-Peak")
+            else:
+                print("===produced in Off-Peak")
+            print("=== #############################")
         #         print("penalty_onpeak =", penalty_onpeak)
         #         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
         #         print("reward_weekend =", reward_weekend)
@@ -1601,9 +1608,10 @@ class InvEnv5_60T_a1(gym.Env):
 
         # print("=================================================self.step_count =", self.step_count)
         # print("Action =", action)
-        # print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
-        # print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
-        # print("===d10-d12 =", demand10, demand11, demand12)
+        if print_result == True:
+            print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
+            print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
+            print("===d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
 
         # demand1 from random
@@ -1640,10 +1648,11 @@ class InvEnv5_60T_a1(gym.Env):
         overage2_4 = overage2_3 - demand11
         overage3_4 = overage3_3 - demand12
         # print("overage1_2 =", overage1_2)
-        # print("===overage1 = ", overage1)
-        # print("===overage2 = ", overage2)
-        # print("===overage3 = ", overage3)
-        # print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
+        if print_result == True:
+            print("===overage1 = ", overage1)
+            print("===overage2 = ", overage2)
+            print("===overage3 = ", overage3)
+            print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
 
         #         if overage1_2 < 1500:
         #             extra_penalty1_2 = s_penal*2000000
@@ -1955,8 +1964,9 @@ class InvEnv5_60T_a1(gym.Env):
         dr2_60 = (dr2_60 - mind1) / (maxd1 - mind1)
         dr3_60 = (dr3_60 - mind1) / (maxd1 - mind1)
 
-        # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
-        # print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56, dr3_56)
+        if print_result == True:
+            print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
+            print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56, dr3_56)
         # inv data
         self.state[0] = 0
         self.state[1] = 0
@@ -2044,9 +2054,9 @@ class InvEnv5_60T_a1(gym.Env):
         self.state[73] = dr1_56
         self.state[74] = dr2_56
         self.state[75] = dr3_56  # so all number state variables are 48 variables
-        self.state[76] = dr1_60
-        self.state[77] = dr2_60
-        self.state[78] = dr3_60  # so all number state variables are 48 variables
+        self.state[76] = self.sum_reward/100   # /100 เพื่อ normalize แบบง่ายๆ
+        self.state[77] = self.sum_real_reward/100
+        self.state[78] = self.step_count/100  # // หารแบบปัดเศษลง# so all number state variables are 79 variables
 
         #         print("value หลัง normalize")
         #         print("demand1 =", demand1,"=state[3]=",self.state[3])
@@ -2085,7 +2095,7 @@ class InvEnv5_60T_a1(gym.Env):
 
 def main():
 
-    env = InvEnv5_60T_a1()
+    env = InvEnv5_60T_a2()
     state = env.reset()
 
     done = False
@@ -2119,7 +2129,9 @@ def main():
             #print("d1-d3 input in next state =", state[3], state[4], state[5])
             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
             # print("extra_p_on ###### =", state[26])
-            # print("=== aaa3 =",state[33], info[25])
+            if print_result == True:
+                print("=== aaa3 =",state[33], info[25])
+                print("self.sum_reward, self.sum_real_reward, self.step_count", state[76]*100, state[77]*100 , state[78]*100 )
             #demand_all.append(demand1)
             #demand_all.append(demand2)
             #demand_all.append(demand3)
@@ -2134,7 +2146,8 @@ def main():
             #print("====================================================================")
             # print(info[24])
 
-    # print(f'=== Total actions = {list(prodtbl.action_ids())}')
+    if print_result == True:
+        print(f'=== Total actions = {list(prodtbl.action_ids())}')
 
 ############################################################
 
@@ -2150,16 +2163,15 @@ def test_production_table():
     prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
     prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
     prodtbl.init_tables()
-    print(prodtbl.lotsize_tbl)
+    #print(prodtbl.lotsize_tbl)
     prodtbl.display()
+    #print(prodtbl.get_switches(8, True))
 
-    print(prodtbl.get_switches(8, True))
+    #print(prodtbl.get_lotsize(8, True))
+    #print(prodtbl.get_lotsize(8, False))
 
-    print(prodtbl.get_lotsize(8, True))
-    print(prodtbl.get_lotsize(8, False))
-
-    for action_id in prodtbl:
-        print(f'===Action ID = {action_id}')
+    # for action_id in prodtbl:
+    #     print(f'===Action ID = {action_id}')
 
 ############################################################
 
