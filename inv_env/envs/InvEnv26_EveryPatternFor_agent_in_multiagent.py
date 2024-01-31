@@ -679,6 +679,7 @@ class InvEnv5_60T_MA(gym.Env):
         ), f"{action!r} ({type(action)}) invalid"
         info = {}
 
+        #print("====action in Env =======", action)
         if print_result == True:
             print("=================================================self.step_count =", self.step_count)
         # all model parameters
@@ -1905,6 +1906,8 @@ class InvEnv5_60T_MA(gym.Env):
         last_sum_real_reward = 0
         last_sum_reward = 0
         if self.step_count == 59:
+            print("===self.step_count in Env====", self.step_count)
+            print("====action in env======", action)
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
 
