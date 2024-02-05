@@ -1,5 +1,4 @@
 # แก้ demand 3 state สุดท้าย เป็น self.state[76] = self.sum_reward, self.state[77] = self.sum_real_reward, self.state[78] = self.step_count  # so all
-# InvEnv26_A4_highseason_60T_add_action_noP
 # ไฟล์นี้จะเป็นการ ลด obd ลง เพราะเดาว่า เอา demand มา ทำให้เทรนแล้วไม่คอนเวิจ
 # ไว้สำหรับเทรน ฤดูกาล รูปแบบเดียว
 # เพิ่ม future demand ลงไปใน state
@@ -9,6 +8,7 @@
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
 # ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
+# แก้ให้ env สามารถรับค่า demand_arr_inf เข้ามาโดยคำสั่ง env.step ได้
 
 from typing import Optional
 
@@ -617,10 +617,11 @@ class InvEnv5_60T_a4(gym.Env):
         # #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
         if print_result == True:
@@ -1859,6 +1860,7 @@ class InvEnv5_60T_a4(gym.Env):
         self.M2P2_set.append(M2P2)
         self.M2P3_set.append(M2P3)
 
+        # print("demand_arr_inf = ", demand_arr_inf)
         # pass CO data value to use in next state by save it in 'info' part
         # the real reward is at info[13]
         info = [self.CO_var_set1, self.CO_var_set2, self.sum_reward, last_sum_reward, last_sum_real_reward,
@@ -1870,7 +1872,7 @@ class InvEnv5_60T_a4(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward, self.demand_real,  # info[23-24]
-                self.aaa]  # info25
+                self.aaa, demand_arr_inf]  # info25
 
         #         print("value ก่อน normalize")
         #         print("demand1 =", demand1)
@@ -2085,89 +2087,91 @@ class InvEnv5_60T_a4(gym.Env):
 ############################################################
 
 
-def main():
-    env = InvEnv5_60T_a4()
-    state = env.reset()
+# def main():
+#     env = InvEnv5_60T_a4()
+#     state = env.reset()
 
-    done = False
-    N = 2
-    runs = int(N)  # รัน 30 peroids จำนวน N รอบ
-    for i in range(runs):
-        maxrun = 0
-        done = False
-        rand = randint(0, 999)
-        # print("rand", rand)
-        env.reset()
-        # env.seed(rand)
-        period = 0
-        demand_all = []
-        # print("============Round====", i)
-        while (done == False):
-            action = env.action_space.sample()
-            # print("period", period)
-            # print("state", state)
-            # print("action = ", action)
-            state, reward, done, info = env.step(action)
-            period += 1
-            # print("####################################################period##############",period)
-            # print("state",state)
-            # print("action =",action)
-            # print("action =",action)
+#     done = False
+#     N = 2
+#     runs = int(N)  # รัน 30 peroids จำนวน N รอบ
+#     demand_arr_inf = [0, 1, 2, 3]
+#     demand_arr_inf = np.array(demand_arr_inf)
+#     for i in range(runs):
+#         maxrun = 0
+#         done = False
+#         rand = randint(0, 999)
+#         # print("rand", rand)
+#         env.reset()
+#         # env.seed(rand)
+#         period = 0
+#         demand_all = []
+#         # print("============Round====", i)
+#         while (done == False):
+#             action = env.action_space.sample()
+#             # print("period", period)
+#             # print("state", state)
+#             # print("action = ", action)
+#             state, reward, done, info = env.step(action, demand_arr_inf)
+#             period += 1
+#             # print("####################################################period##############",period)
+#             # print("state",state)
+#             # print("action =",action)
+#             # print("action =",action)
 
-            demand1 = state[3]
-            demand2 = state[4]
-            demand3 = state[5]
-            # print("d1-d3 input in next state =", state[3], state[4], state[5])
-            # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
-            # print("extra_p_on ###### =", state[26])
-            if print_result == True:
-                print("=== aaa3 =", state[33], info[25])
-                print("self.sum_reward, self.sum_real_reward, self.step_count", state[76] * 100, state[77] * 100,
-                      state[78] * 100)
-            # demand_all.append(demand1)
-            # demand_all.append(demand2)
-            # demand_all.append(demand3)
+#             demand1 = state[3]
+#             demand2 = state[4]
+#             demand3 = state[5]
+#             # print("d1-d3 input in next state =", state[3], state[4], state[5])
+#             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
+#             # print("extra_p_on ###### =", state[26])
+#             if print_result == True:
+#                 print("=== aaa3 =", state[33], info[25])
+#                 print("self.sum_reward, self.sum_real_reward, self.step_count", state[76] * 100, state[77] * 100,
+#                       state[78] * 100)
+#             # demand_all.append(demand1)
+#             # demand_all.append(demand2)
+#             # demand_all.append(demand3)
 
-            # sum_rw_ += reward
-            # print("sum_rw",sum_rw_)
-            # maxrun += 1
-            reward2 = reward
-            # print("reward", reward)
-            # print("demand =", demand_all)
-            # print("next_state",state)
-            # print("====================================================================")
-            # print(info[24])
+#             # sum_rw_ += reward
+#             # print("sum_rw",sum_rw_)
+#             # maxrun += 1
+#             reward2 = reward
+#             # print("reward", reward)
+#             # print("demand =", demand_all)
+#             # print("next_state",state)
+#             # print("====================================================================")
+#             # print(info[24])
 
-    if print_result == True:
-        print(f'=== Total actions = {list(prodtbl.action_ids())}')
-
-
-############################################################
-
-def test_production_table():
-    prodtbl = ProductionTable(
-        no_machines=2, no_products=3
-    )
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
-    prodtbl.init_tables()
-    # print(prodtbl.lotsize_tbl)
-    prodtbl.display()
-    # print(prodtbl.get_switches(8, True))
-
-    # print(prodtbl.get_lotsize(8, True))
-    # print(prodtbl.get_lotsize(8, False))
-
-    # for action_id in prodtbl:
-    #     print(f'===Action ID = {action_id}')
+#     if print_result == True:
+#         print(f'=== Total actions = {list(prodtbl.action_ids())}')
 
 
-############################################################
+# ############################################################
 
-if __name__ == '__main__':
-    main()
-    # test_production_table()
+# def test_production_table():
+#     prodtbl = ProductionTable(
+#         no_machines=2, no_products=3
+#     )
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
+#     prodtbl.init_tables()
+#     # print(prodtbl.lotsize_tbl)
+#     prodtbl.display()
+#     # print(prodtbl.get_switches(8, True))
+
+#     # print(prodtbl.get_lotsize(8, True))
+#     # print(prodtbl.get_lotsize(8, False))
+
+#     # for action_id in prodtbl:
+#     #     print(f'===Action ID = {action_id}')
+
+
+# ############################################################
+
+# if __name__ == '__main__':
+#     main()
+#     # test_production_table()
