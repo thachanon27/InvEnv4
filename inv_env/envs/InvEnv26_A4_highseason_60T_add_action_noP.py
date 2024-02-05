@@ -1830,6 +1830,9 @@ class InvEnv5_60T_a4(gym.Env):
         done = bool(self.step_count >= 60)  # planning time frame period = 15
         self.overall_time_trained += 1
 
+        if self.step_count == 60:
+            print("demand_arr_inf = ", demand_arr_inf)
+
         # if done == True:
         #   self.rn = np.random.random_integers(1, high=100000, size=None)
 
