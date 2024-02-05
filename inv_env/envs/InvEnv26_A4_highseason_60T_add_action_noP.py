@@ -1831,7 +1831,7 @@ class InvEnv5_60T_a4(gym.Env):
         self.overall_time_trained += 1
 
         if self.step_count == 60:
-            print("demand_arr_inf = ", demand_arr_inf)
+            print("demand_arr_inf in env at step 60 = ", demand_arr_inf)
 
         # if done == True:
         #   self.rn = np.random.random_integers(1, high=100000, size=None)
