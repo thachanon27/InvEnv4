@@ -1501,7 +1501,8 @@ class InvEnv5_60T_a4(gym.Env):
 
         y = self.step_count + 1
         # y = self.step_count
-
+        self.demand_all = demand_arr_inf
+        
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
             # print(f'y * 3 = {y * 3}')
