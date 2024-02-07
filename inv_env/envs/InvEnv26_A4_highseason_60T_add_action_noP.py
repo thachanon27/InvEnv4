@@ -1831,6 +1831,8 @@ class InvEnv5_60T_a4(gym.Env):
         done = bool(self.step_count >= 60)  # planning time frame period = 15
         self.overall_time_trained += 1
 
+        if self.step_count == 59:
+            print("demand_arr_inf in env at step 59 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
         if self.step_count == 60:
             print("demand_arr_inf in env at step 60 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
 
