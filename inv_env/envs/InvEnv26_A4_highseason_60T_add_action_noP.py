@@ -1880,8 +1880,8 @@ class InvEnv5_60T_a4(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward, self.demand_real,  # info[23-24]
-                self.aaa, demand_arr_inf,  # info25
-                self.step_count] # info26
+                self.aaa, demand_arr_inf,  # info 26
+                self.step_count] # info 27
                 
         #         print("value ก่อน normalize")
         #         print("demand1 =", demand1)
