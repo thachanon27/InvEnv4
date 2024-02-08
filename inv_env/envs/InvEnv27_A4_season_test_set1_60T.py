@@ -21,6 +21,7 @@ import itertools
 
 from random import randint, choice
 
+print_demand_set = True
 
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
@@ -1539,6 +1540,8 @@ class InvEnv5_60T_a4_set1(gym.Env):
         y = self.step_count + 1
         #y = self.step_count
 
+        self.demand_all = demand_arr_inf
+        
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
             # print(f'y * 3 = {y * 3}')
@@ -1867,6 +1870,12 @@ class InvEnv5_60T_a4_set1(gym.Env):
         done = bool(self.step_count >= 60)  # planning time frame period = 15
         self.overall_time_trained += 1
 
+        if print_demand_set == True:
+            if self.step_count == 59:
+                print("demand_arr_inf in test_env at step 59 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
+            if self.step_count == 60:
+                print("demand_arr_inf in test_env at step 60 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
+        
         # if done == True:
         #   self.rn = np.random.random_integers(1, high=100000, size=None)
 
