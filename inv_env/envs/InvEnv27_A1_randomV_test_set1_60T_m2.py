@@ -616,10 +616,11 @@ class InvEnv5_60T_a1_set1(gym.Env):
         #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
         print("=================================================self.step_count =", self.step_count)
@@ -1516,7 +1517,7 @@ class InvEnv5_60T_a1_set1(gym.Env):
         #
         #         d1 = demand_array2[y * 3]
         #         d2 = demand_array2[y * 3 + 1]
-        #         d3 = demand_array2[y * 3 + 2]
+        #         d3 = demand_array2[y * 3 + 2]/
         #         d4 = demand_array2[y * 3 + 3]
         #         d5 = demand_array2[y * 3 + 4]
         #         d6 = demand_array2[y * 3 + 5]
@@ -1538,6 +1539,25 @@ class InvEnv5_60T_a1_set1(gym.Env):
 
         y = self.step_count + 1
         #y = self.step_count
+
+        #แทนที่ demand_arr_inf ที่สุ่มจากไฟล์ model main ที่ส่งเข้ามา ด้วย fix test demand ของ A1 ชุด 1/3
+        demand_arr_inf = [0, 0, 0, 2915, 2188, 2087, 0, 0, 0, 1988, 2972, 2244,
+                           0, 0, 0, 3635, 3300, 1172, 0, 0, 0, 4099, 3279, 912,
+                           0, 0, 0, 1953, 1529, 906, 0, 0, 0, 3560, 1983, 1478,
+                           0, 0, 0, 2364, 2439, 1956, 0, 0, 0, 3225, 2086, 1117,
+                           0, 0, 0, 2214, 2829, 1623, 0, 0, 0, 3484, 2910, 1033,
+                           0, 0, 0, 3021, 2840, 2340, 0, 0, 0, 3442, 1957, 2133,
+                           0, 0, 0, 3298, 2628, 1618, 0, 0, 0, 3259, 2354, 1538,
+                           0, 0, 0, 1986, 1786, 1617, 0, 0, 0, 3753, 3379, 2134,
+                           0, 0, 0, 2522, 1978, 767, 0, 0, 0, 2036, 1683, 1768,
+                           0, 0, 0, 3067, 1989, 1036, 0, 0, 0, 3025, 2767, 736,
+                           0, 0, 0, 1924, 3196, 1182, 0, 0, 0, 1901, 2683, 1401,
+                           0, 0, 0, 1971, 3006, 1305, 0, 0, 0, 2553, 2216, 2408,
+                           0, 0, 0, 2477, 2955, 1300, 0, 0, 0, 2245, 3375, 1960,
+                           0, 0, 0, 3250, 1894, 1496, 0, 0, 0, 1935, 1992, 2031,
+                           0, 0, 0, 3785, 1746, 1531, 0, 0, 0, 2424, 2209, 2403,
+                           0, 0, 0, 1579.40908, 1176.059989, 757.716508, 0, 0, 0]
+        self.demand_all = demand_arr_inf
 
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
