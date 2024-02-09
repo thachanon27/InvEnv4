@@ -8,6 +8,7 @@
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
 # ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
+# แก้ให้ env สามารถรับค่า demand_arr_inf เข้ามาโดยคำสั่ง env.step ได้
 
 from typing import Optional
 
@@ -21,10 +22,12 @@ import itertools
 
 from random import randint, choice
 
-
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
 print_result = False
+print_demand_set = False
+
+
 ############################################################
 
 class ProductionTable:
@@ -153,7 +156,7 @@ prodtbl.init_tables()
 ############################################################
 ############################################################
 
-class InvEnv5_60T_a1(gym.Env):
+class InvEnv5_60T_a4(gym.Env):
     def __init__(self):
         self.step_count = 0
         self.overall_time_trained = 0
@@ -168,15 +171,15 @@ class InvEnv5_60T_a1(gym.Env):
             0, 0, 0,  # initial inventory #0 1 2            ##ตอนนี้  state จะมีค่าพารามอเตอร์ทั้งหมด = 27
             0, 0, 0,  # initial demand    #3 4 5
             0, 0, 0, 0,  # initial machine status (0 = idle)   #6 7 8 9
-            0, 0, 0, 0,                                        #10 11 12 13
+            0, 0, 0, 0,  # 10 11 12 13
             0, 0, 0,  # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2    #14 15 16
             0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
-            0, 0, 0, # overage1_4 overage2_4 overage3_4 #20 21 22
+            0, 0, 0,  # overage1_4 overage2_4 overage3_4 #20 21 22
             0, 0, 0,  # d4, d5, d6     #23 24 25
             0, 0, 0,  # d7, d8, d9     #26 27 28
             0, 0, 0,  # d10, d11, d12     #29 30 31
             0,  # extra_p_on    ---->  State 32
-            0,  #Demand pattern #33
+            0,  # Demand pattern #33
             0, 0, 0,  # Demand r1-3 at 4 rd period  # 34 35 36
             0, 0, 0,  # Demand r1-3 at 8 th period  # 37 38 39
             0, 0, 0,  # Demand r1-3 at 12 th period  # 40 41 42
@@ -223,10 +226,9 @@ class InvEnv5_60T_a1(gym.Env):
             np.inf, np.inf, np.inf  # # reward,  real reward, period no.
         ])
 
-        #self.state[49] = 0
+        # self.state[49] = 0
         self.observation_space = Box(self.statelow, self.statehigh,
                                      dtype=np.float32)
-
 
         self.sum_reward = 0
         self.sum_real_reward = 0
@@ -256,17 +258,17 @@ class InvEnv5_60T_a1(gym.Env):
         (self.demand_all, self.aaa) = self.create_demand_all()
 
         self.state = [self.on_hand1, self.on_hand2, self.on_hand3,  # initial inventory #0 1 2
-                      0, 0, 0,    # initial demand    #3 4 5
-                      0, 0, 0, 0,    # initial machine status (0 = idle)   #6 7 8 9
-                      0, 0, 0, 0,          # 10, 11, 12, 13
-                      0, 0, 0,    # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2    #14 15 16
-                      0, 0, 0,     # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
-                      0, 0, 0,     # overage1_4 overage2_4 overage3_4
-                      0, 0, 0,   # future demand # d4, d5, d6     #20 21 22
+                      0, 0, 0,  # initial demand    #3 4 5
+                      0, 0, 0, 0,  # initial machine status (0 = idle)   #6 7 8 9
+                      0, 0, 0, 0,  # 10, 11, 12, 13
+                      0, 0, 0,  # future inventory i4 i5 i6 = overage1_2, overage2_2, overage3_2    #14 15 16
+                      0, 0, 0,  # future inventory i7 i8 i9 = overage1_3, overage2_3, overage3_3    #17 18 19
+                      0, 0, 0,  # overage1_4 overage2_4 overage3_4
+                      0, 0, 0,  # future demand # d4, d5, d6     #20 21 22
                       0, 0, 0,  # future demand # d7, d8, d9     #23 24 25
                       0, 0, 0,  # future demand # d10, d11, d12
-                      1, #extra_p_on   ---->  State 26
-                      0, # Demand pattern   #27
+                      1,  # extra_p_on   ---->  State 26
+                      0,  # Demand pattern   #27
                       0, 0, 0,  # Demand r1-3 at 4 rd period
                       0, 0, 0,  # Demand r1-3 at 8 th period
                       0, 0, 0,  # Demand r1-3 at 12 th period
@@ -281,21 +283,21 @@ class InvEnv5_60T_a1(gym.Env):
                       0, 0, 0,  # Demand r1-3 at 48 th period
                       0, 0, 0,  # Demand r1-3 at 52 th period
                       0, 0, 0,  # Demand r1-3 at 56 th period
-                      #0, 0, 0  # Demand r1-3 at 56 th period
+                      # 0, 0, 0  # Demand r1-3 at 56 th period
                       0, 0, 0  # reward,  real reward, period no.
                       ]
         self.prodtbl = prodtbl
 
-        self.weekend_stepcount = [ 2, 3, 4, 5, 16, 17, 18, 19, 30,31,32,33, 44, 45, 46, 47, 59, 60 ]
-        self.on_peak_stepcount = [ 0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34,36,38,40,42, 48,50,52,54,56 ]
-        self.off_peak_stepcount = [ 1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35,37,39,41,43, 49,51,53,55,57 ]
+        self.weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30, 31, 32, 33, 44, 45, 46, 47, 59, 60]
+        self.on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34, 36, 38, 40, 42, 48, 50, 52, 54, 56]
+        self.off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 49, 51, 53, 55, 57]
 
     def is_weekend(self):
         return self.step_count in self.weekend_stepcount
-    
+
     def is_onpeak(self):
         return self.step_count in self.on_peak_stepcount
-    
+
     def is_offpeak(self):
         return self.step_count in self.off_peak_stepcount
 
@@ -362,89 +364,89 @@ class InvEnv5_60T_a1(gym.Env):
         else:
             return np.array(self.state, dtype=np.float32), {}
 
-
-
     def create_index2(self):
         rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
         np.random.seed(rng3)
-        aaa = 1   # np.random.randint(3, 6)  # อันนี้สุ่ม 3-5
+        aaa = np.random.randint(9, 11)  # อันนี้สุ่ม 9-10
 
         idrv_set = []
         for j in range(1, 210):
-            idrv = round(random.uniform(0.50, 1.00), 2)
+            idrv = round(random.uniform(0.40, 1.00), 2)
             idrv_set.append(idrv)
 
-        if aaa == 1:
-            index2 = idrv_set
+        # if aaa == 1:
+        #     index2 = idrv_set
         # if aaa == 2:
         #     index2 = idrv_set
-        if aaa == 3:
-            # index = [0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174,1.1,1,0.88,0.78,0.72]  # season 1
-            # index2 = [0,0,0, 0.693,0.693,0.693, #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-            #           0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.7285, 0.7285, 0.7285, 0.0, 0.0, 0.0,
-            #           0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.787, 0.787, 0.787, 0.0, 0.0, 0.0,
-            #           0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.895, 0.895, 0.895, 0.0, 0.0, 0.0,
-            #           0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025, 0.0, 0.0, 0.0,
-            #           1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.1345, 1.1345, 1.1345, 0.0, 0.0, 0.0,
-            #           1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.216, 1.216, 1.216, 0.0, 0.0, 0.0,
-            #           1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.282, 1.282, 1.282, 0.0, 0.0, 0.0,
-            #           1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.286, 1.286, 1.286, 0.0, 0.0, 0.0,
-            #           1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.2175, 1.2175, 1.2175, 0.0, 0.0, 0.0,
-            #           1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.137, 1.137, 1.137, 0.0, 0.0, 0.0,
-            #           1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.05, 1.05, 1.05, 0.0, 0.0, 0.0,
-            #           1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94, 0.0, 0.0, 0.0,
-            #           0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0,
-            #           0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
-            #           0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
-            #           0.0, 0.0, 0.0, 0.701, 0.701, 0.701]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+        # if aaa == 3:
+        #     index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.7285, 0.7285, 0.7285, 0.0, 0.0, 0.0,
+        #               0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.787, 0.787, 0.787, 0.0, 0.0, 0.0,
+        #               0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.895, 0.895, 0.895, 0.0, 0.0, 0.0,
+        #               0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025, 0.0, 0.0, 0.0,
+        #               1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.1345, 1.1345, 1.1345, 0.0, 0.0, 0.0,
+        #               1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.216, 1.216, 1.216, 0.0, 0.0, 0.0,
+        #               1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.282, 1.282, 1.282, 0.0, 0.0, 0.0,
+        #               1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.286, 1.286, 1.286, 0.0, 0.0, 0.0,
+        #               1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.2175, 1.2175, 1.2175, 0.0, 0.0, 0.0,
+        #               1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.137, 1.137, 1.137, 0.0, 0.0, 0.0,
+        #               1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.05, 1.05, 1.05, 0.0, 0.0, 0.0,
+        #               1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94, 0.0, 0.0, 0.0,
+        #               0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0,
+        #               0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
+        #               0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
+        #               0.0, 0.0, 0.0, 0.701, 0.701, 0.701, 0, 0, 0, 0.699, 0.699, 0.699]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+        #     print("=== Len(index2) = ",len(index2))
 
-            index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.7285, 0.7285, 0.7285, 0.0, 0.0, 0.0,
-                      0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.787, 0.787, 0.787, 0.0, 0.0, 0.0,
-                      0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.895, 0.895, 0.895, 0.0, 0.0, 0.0,
-                      0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025, 0.0, 0.0, 0.0,
-                      1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.1345, 1.1345, 1.1345, 0.0, 0.0, 0.0,
-                      1.179, 1.179, 1.179, 0.0, 0.0, 0.0, 1.216, 1.216, 1.216, 0.0, 0.0, 0.0,
-                      1.253, 1.253, 1.253, 0.0, 0.0, 0.0, 1.282, 1.282, 1.282, 0.0, 0.0, 0.0,
-                      1.311, 1.311, 1.311, 0.0, 0.0, 0.0, 1.286, 1.286, 1.286, 0.0, 0.0, 0.0,
-                      1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.2175, 1.2175, 1.2175, 0.0, 0.0, 0.0,
-                      1.174, 1.174, 1.174, 0.0, 0.0, 0.0, 1.137, 1.137, 1.137, 0.0, 0.0, 0.0,
-                      1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.05, 1.05, 1.05, 0.0, 0.0, 0.0,
-                      1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94, 0.0, 0.0, 0.0,
-                      0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0,
-                      0.78, 0.78, 0.78, 0.0, 0.0, 0.0, 0.75, 0.75, 0.75, 0.0, 0.0, 0.0,
-                      0.72, 0.72, 0.72, 0.0, 0.0, 0.0, 0.713, 0.713, 0.713,
-                      0.0, 0.0, 0.0, 0.701, 0.701, 0.701, 0, 0, 0, 0.699, 0.699, 0.699]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-            print("=== Len(index2) = ",len(index2))
-        if aaa == 4:
-            # index = [1.179,1.253,1.311,1.261,1.174,1.092,1.015,0.913,0.805,0.741,0.713,0.744,0.83,0.988,1.116]   # season 2
-            index2 = [
-                      0.0, 0.0, 0.0, 0.627, 0.627, 0.627, 0.0, 0.0, 0.0, 0.647, 0.647, 0.647, 0.0, 0.0, 0.0,
-                      0.667, 0.667, 0.667, 0.0, 0.0, 0.0, 0.727301266, 0.727301266, 0.727301266, 0.0, 0.0, 0.0,
-                      0.787602531, 0.787602531, 0.787602531, 0.0, 0.0, 0.0, 0.873801266, 0.873801266, 0.873801266, 0.0, 0.0, 0.0,
-                      0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0,
-                      1.175, 1.175, 1.175, 0.0, 0.0, 0.0, 1.26, 1.26, 1.26, 0.0, 0.0, 0.0, 1.298, 1.298, 1.298, 0.0, 0.0, 0.0,
-                      1.336, 1.336, 1.336, 0.0, 0.0, 0.0, 1.3665, 1.3665, 1.3665, 0.0, 0.0, 0.0, 1.397, 1.397, 1.397, 0.0, 0.0, 0.0,
-                      1.371, 1.371, 1.371, 0.0, 0.0, 0.0, 1.345, 1.345, 1.345, 0.0, 0.0, 0.0, 1.3, 1.3, 1.3, 0.0, 0.0, 0.0,
-                      1.255, 1.255, 1.255, 0.0, 0.0, 0.0, 1.1775, 1.1775, 1.1775, 0.0, 0.0, 0.0, 1.1, 1.1, 1.1, 0.0, 0.0, 0.0,
-                      1.05, 1.05, 1.05, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94, 0.0, 0.0, 0.0,
-                      0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0,
-                      0.716, 0.716, 0.716, 0.0, 0.0, 0.0, 0.652, 0.652, 0.652, 0.0, 0.0, 0.0, 0.627, 0.627, 0.627,
-                      0.0, 0.0, 0.0, 0.610, 0.610, 0.610, 0, 0, 0, 0.599, 0.599, 0.599]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-        if aaa == 5:
-            # index = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]  # season 3
-            index2 = [
-                      0.0, 0.0, 0.0, 0.585, 0.585, 0.585, 0.0, 0.0, 0.0, 0.606, 0.606, 0.606, 0.0, 0.0, 0.0, 0.627, 0.627, 0.627,
-                      0.0, 0.0, 0.0, 0.694520188, 0.694520188, 0.694520188, 0.0, 0.0, 0.0, 0.762040376, 0.762040376, 0.762040376,
-                      0.0, 0.0, 0.0, 0.861020188, 0.861020188, 0.861020188, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025,
-                      0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.192, 1.192, 1.192, 0.0, 0.0, 0.0, 1.294, 1.294, 1.294, 0.0, 0.0, 0.0,
-                      1.3325, 1.3325, 1.3325, 0.0, 0.0, 0.0, 1.371, 1.371, 1.371, 0.0, 0.0, 0.0, 1.402, 1.402, 1.402, 0.0, 0.0, 0.0,
-                      1.433, 1.433, 1.433, 0.0, 0.0, 0.0, 1.406, 1.406, 1.406, 0.0, 0.0, 0.0, 1.379, 1.379, 1.379, 0.0, 0.0, 0.0,
-                      1.3335, 1.3335, 1.3335, 0.0, 0.0, 0.0, 1.288, 1.288, 1.288, 0.0, 0.0, 0.0, 1.194, 1.194, 1.194, 0.0, 0.0, 0.0,
-                      1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.05, 1.05, 1.05, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94,
-                      0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0,
-                      0.6935, 0.6935, 0.6935, 0.0, 0.0, 0.0, 0.607, 0.607, 0.607, 0.0, 0.0, 0.0, 0.585, 0.585, 0.585,
-                      0.0, 0.0, 0.0, 0.576, 0.576, 0.576, 0, 0, 0, 0.570, 0.570, 0.570]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
-        # if aaa == 6:
+        # if aaa == 5:
+        #     # index = [1.1,1,0.88,0.78,0.72,0.713,0.744,0.83,0.96,1.09,1.179,1.253,1.311,1.261,1.174]  # season 3
+        #     index2 = [
+        #               0.0, 0.0, 0.0, 0.585, 0.585, 0.585, 0.0, 0.0, 0.0, 0.606, 0.606, 0.606, 0.0, 0.0, 0.0, 0.627, 0.627, 0.627,
+        #               0.0, 0.0, 0.0, 0.694520188, 0.694520188, 0.694520188, 0.0, 0.0, 0.0, 0.762040376, 0.762040376, 0.762040376,
+        #               0.0, 0.0, 0.0, 0.861020188, 0.861020188, 0.861020188, 0.0, 0.0, 0.0, 0.96, 0.96, 0.96, 0.0, 0.0, 0.0, 1.025, 1.025, 1.025,
+        #               0.0, 0.0, 0.0, 1.09, 1.09, 1.09, 0.0, 0.0, 0.0, 1.192, 1.192, 1.192, 0.0, 0.0, 0.0, 1.294, 1.294, 1.294, 0.0, 0.0, 0.0,
+        #               1.3325, 1.3325, 1.3325, 0.0, 0.0, 0.0, 1.371, 1.371, 1.371, 0.0, 0.0, 0.0, 1.402, 1.402, 1.402, 0.0, 0.0, 0.0,
+        #               1.433, 1.433, 1.433, 0.0, 0.0, 0.0, 1.406, 1.406, 1.406, 0.0, 0.0, 0.0, 1.379, 1.379, 1.379, 0.0, 0.0, 0.0,
+        #               1.3335, 1.3335, 1.3335, 0.0, 0.0, 0.0, 1.288, 1.288, 1.288, 0.0, 0.0, 0.0, 1.194, 1.194, 1.194, 0.0, 0.0, 0.0,
+        #               1.1, 1.1, 1.1, 0.0, 0.0, 0.0, 1.05, 1.05, 1.05, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.94, 0.94, 0.94,
+        #               0.0, 0.0, 0.0, 0.88, 0.88, 0.88, 0.0, 0.0, 0.0, 0.83, 0.83, 0.83, 0.0, 0.0, 0.0, 0.78, 0.78, 0.78, 0.0, 0.0, 0.0,
+        #               0.6935, 0.6935, 0.6935, 0.0, 0.0, 0.0, 0.607, 0.607, 0.607, 0.0, 0.0, 0.0, 0.585, 0.585, 0.585,
+        #               0.0, 0.0, 0.0, 0.576, 0.576, 0.576, 0, 0, 0, 0.570, 0.570, 0.570]  #ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+        if aaa == 9:
+            index2 = [0.0, 0.0, 0.0, 0.436, 0.436, 0.436, 0.0, 0.0, 0.0, 0.4605, 0.4605, 0.4605,
+                      0.0, 0.0, 0.0, 0.485, 0.485, 0.485, 0.0, 0.0, 0.0, 0.573, 0.573, 0.573,
+                      0.0, 0.0, 0.0, 0.661, 0.661, 0.661, 0.0, 0.0, 0.0, 0.848, 0.848, 0.848,
+                      0.0, 0.0, 0.0, 1.035, 1.035, 1.035, 0.0, 0.0, 0.0, 1.1445, 1.1445, 1.1445,
+                      0.0, 0.0, 0.0, 1.254, 1.254, 1.254, 0.0, 0.0, 0.0, 1.338, 1.338, 1.338,
+                      0.0, 0.0, 0.0, 1.422, 1.422, 1.422, 0.0, 0.0, 0.0, 1.461, 1.461, 1.461,
+                      0.0, 0.0, 0.0, 1.5, 1.5, 1.5, 0.0, 0.0, 0.0, 1.534, 1.534, 1.534,
+                      0.0, 0.0, 0.0, 1.568, 1.568, 1.568, 0.0, 0.0, 0.0, 1.539, 1.539, 1.539,
+                      0.0, 0.0, 0.0, 1.51, 1.51, 1.51, 0.0, 0.0, 0.0, 1.463, 1.463, 1.463,
+                      0.0, 0.0, 0.0, 1.416, 1.416, 1.416, 0.0, 0.0, 0.0, 1.3385, 1.3385, 1.3385,
+                      0.0, 0.0, 0.0, 1.261, 1.261, 1.261, 0.0, 0.0, 0.0, 1.1935, 1.1935, 1.1935,
+                      0.0, 0.0, 0.0, 1.126, 1.126, 1.126, 0.0, 0.0, 0.0, 0.9265, 0.9265, 0.9265,
+                      0.0, 0.0, 0.0, 0.727, 0.727, 0.727, 0.0, 0.0, 0.0, 0.626, 0.626, 0.626,
+                      0.0, 0.0, 0.0, 0.525, 0.525, 0.525, 0.0, 0.0, 0.0, 0.489, 0.489, 0.489,
+                      0.0, 0.0, 0.0, 0.453, 0.453, 0.453, 0.0, 0.0, 0.0, 0.436, 0.436, 0.436,
+                      0.0, 0.0, 0.0, 0.501, 0.501, 0.501, 0, 0, 0, 0.499, 0.499, 0.499]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+            # print("=== Len(index2) = ", len(index2))
+        if aaa == 10:
+            index2 = [0.0, 0.0, 0.0, 0.404, 0.404, 0.404, 0.0, 0.0, 0.0, 0.429, 0.429, 0.429,
+                      0.0, 0.0, 0.0, 0.454, 0.454, 0.454, 0.0, 0.0, 0.0, 0.545, 0.545, 0.545,
+                      0.0, 0.0, 0.0, 0.636, 0.636, 0.636, 0.0, 0.0, 0.0, 0.836, 0.836, 0.836,
+                      0.0, 0.0, 0.0, 1.036, 1.036, 1.036, 0.0, 0.0, 0.0, 1.1515, 1.1515, 1.1515,
+                      0.0, 0.0, 0.0, 1.267, 1.267, 1.267, 0.0, 0.0, 0.0, 1.36, 1.36, 1.36,
+                      0.0, 0.0, 0.0, 1.453, 1.453, 1.453, 0.0, 0.0, 0.0, 1.492, 1.492, 1.492,
+                      0.0, 0.0, 0.0, 1.531, 1.531, 1.531, 0.0, 0.0, 0.0, 1.565, 1.565, 1.565,
+                      0.0, 0.0, 0.0, 1.599, 1.599, 1.599, 0.0, 0.0, 0.0, 1.5695, 1.5695, 1.5695,
+                      0.0, 0.0, 0.0, 1.54, 1.54, 1.54, 0.0, 0.0, 0.0, 1.493, 1.493, 1.493,
+                      0.0, 0.0, 0.0, 1.446, 1.446, 1.446, 0.0, 0.0, 0.0, 1.3605, 1.3605, 1.3605,
+                      0.0, 0.0, 0.0, 1.275, 1.275, 1.275, 0.0, 0.0, 0.0, 1.201, 1.201, 1.201,
+                      0.0, 0.0, 0.0, 1.127, 1.127, 1.127, 0.0, 0.0, 0.0, 0.9135, 0.9135, 0.9135,
+                      0.0, 0.0, 0.0, 0.7, 0.7, 0.7, 0.0, 0.0, 0.0, 0.5955, 0.5955, 0.5955,
+                      0.0, 0.0, 0.0, 0.491, 0.491, 0.491, 0.0, 0.0, 0.0, 0.4555, 0.4555, 0.4555,
+                      0.0, 0.0, 0.0, 0.42, 0.42, 0.42, 0.0, 0.0, 0.0, 0.404, 0.404, 0.404,
+                      0.0, 0.0, 0.0, 0.501, 0.501, 0.501, 0, 0, 0, 0.499, 0.499, 0.499]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+
         #     # index = [0.741,0.913,1.179,1.56,1.65,0.913,0.805,0.713,0.69,0.55,0.35,0.55,0.744,0.83,0.988]  # extreme1
         #     index2 = [0.0, 0.0, 0.0, 0.39215, 0.39215, 0.39215, 0.0, 0.0, 0.0, 0.5208, 0.5208, 0.5208, 0.0, 0.0, 0.0,
         #               0.664, 0.664, 0.664, 0.0, 0.0, 0.0, 0.816, 0.816, 0.816, 0.0, 0.0, 0.0, 1.09, 1.09, 1.09,
@@ -462,17 +464,17 @@ class InvEnv5_60T_a1(gym.Env):
         #               0.0, 0.0, 0.0, 0.69, 0.69, 0.69]
 
         if aaa >= 3:
-            demand_r1 =  np.random.randint(2700,3200)
-            demand_r2 =  np.random.randint(2300,2600)
-            demand_r3 =  np.random.randint(1500, 1700)
+            demand_r1 = np.random.randint(2700, 3200)
+            demand_r2 = np.random.randint(2300, 2600)
+            demand_r3 = np.random.randint(1500, 1700)
         if aaa == 1:
-            demand_r1 =  4000 #np.random.randint(1800, 4000)  # (2500, 4500) #avg + - 15%
-            demand_r2 =  3300 #np.random.randint(1500, 3300)  # 2000, 3500
-            demand_r3 =  2200 #np.random.randint(700, 2400)  # 1000, 2500
+            demand_r1 = 4000  # np.random.randint(1800, 4000)  # (2500, 4500) #avg + - 15%
+            demand_r2 = 3300  # np.random.randint(1500, 3300)  # 2000, 3500
+            demand_r3 = 2200  # np.random.randint(700, 2400)  # 1000, 2500
         if aaa == 2:
-            demand_r1 =  np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
-            demand_r2 =  np.random.randint(2338, 3163)  # 2000, 3500
-            demand_r3 =  np.random.randint(1488, 2013)  # 1000, 2500
+            demand_r1 = np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
+            demand_r2 = np.random.randint(2338, 3163)  # 2000, 3500
+            demand_r3 = np.random.randint(1488, 2013)  # 1000, 2500
 
         return index2, demand_r1, demand_r2, demand_r3, aaa
 
@@ -480,13 +482,12 @@ class InvEnv5_60T_a1(gym.Env):
         demand_array2 = list(range(1, 196))
         demand_all = [0, 0, 0]
 
-        #set_stepcount1 = [0, 4, 8, 12, 16, 20]
+        # set_stepcount1 = [0, 4, 8, 12, 16, 20]
         set_stepcount1 = [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52]
         set_stepcount3 = [56]
-        #print("self.step_count## ==", self.step_count)
-        #if self.step_count == 1:  #ให้ create แค่ period ที่ 1
+        # print("self.step_count## ==", self.step_count)
+        # if self.step_count == 1:  #ให้ create แค่ period ที่ 1
         (index2, demand_r1, demand_r2, demand_r3, aaa) = self.create_index2()
-
 
         for step_count in range(0, 60):
             # print("step count =", step_count)
@@ -528,8 +529,7 @@ class InvEnv5_60T_a1(gym.Env):
                     d8 = demand_array2[y * 3 + 7]
                     d9 = demand_array2[y * 3 + 8]
 
-
-            if step_count == 52:  #56
+            if step_count == 52:  # 56
                 demand_array2[y * 3] = demand_r1 * index2[y * 3]  #######
                 demand_all.append(demand_array2[y * 3])
                 demand_array2[y * 3 + 1] = demand_r2 * index2[y * 3 + 1]  #######
@@ -560,7 +560,7 @@ class InvEnv5_60T_a1(gym.Env):
                 # demand_all.append(demand_array2[y * 3 + 13])
                 # demand_array2[y * 3 + 14] = 1
                 # demand_all.append(demand_array2[y * 3 + 14])
-                demand_array2[y * 3 + 12] =  demand_r1 * index2[y * 3 + 12]  ####### ตำแหน่งที่ 59
+                demand_array2[y * 3 + 12] = demand_r1 * index2[y * 3 + 12]  ####### ตำแหน่งที่ 59
                 if print_result == True:
                     print("=== demand_array2[y * 3 + 12] =", demand_array2[y * 3 + 12])
                 demand_all.append(demand_array2[y * 3 + 12])
@@ -604,7 +604,6 @@ class InvEnv5_60T_a1(gym.Env):
                 d9 = demand_array2[y * 3 + 8]
                 # print("demand_all2= ", demand_all)
 
-
         # demand_all.extend([
         #     demand_r1 * index2[189],
         #     demand_r2 * index2[190],
@@ -619,10 +618,11 @@ class InvEnv5_60T_a1(gym.Env):
         # #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
         if print_result == True:
@@ -687,7 +687,6 @@ class InvEnv5_60T_a1(gym.Env):
         extra_penalty1_3 = 0
         extra_penalty2_3 = 0
         extra_penalty3_3 = 0
-
 
         #         print("=========================================================================================")
         #         print("step :", self.step_count)
@@ -763,8 +762,6 @@ class InvEnv5_60T_a1(gym.Env):
         M2P3 = 0
         extra_p_on = 0
 
-
-
         on_hand1, on_hand2, on_hand3, demand1, demand2, demand3, N1P, N1P1, \
         N1P2, N1P3, N2P, N2P1, N2P2, N2P3, overage1_2, overage2_2, overage3_2, \
         overage1_3, overage2_3, overage3_3, \
@@ -784,11 +781,11 @@ class InvEnv5_60T_a1(gym.Env):
         dr1_32, dr2_32, dr3_32, dr1_36, dr2_36, dr3_36, \
         dr1_40, dr2_40, dr3_40, dr1_44, dr2_44, dr3_44, \
         dr1_48, dr2_48, dr3_48, dr1_52, dr2_52, dr3_52, \
-        dr1_56, dr2_56, dr3_56, dr1_60, dr2_60, dr3_60  = self.state
+        dr1_56, dr2_56, dr3_56, dr1_60, dr2_60, dr3_60 = self.state
 
         aaa3 = self.aaa
         if print_result == True:
-            print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
+            print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
             print("===self.demand_all =", self.demand_all)
         dr1_4 = self.demand_all[9]
         dr2_4 = self.demand_all[10]
@@ -836,7 +833,6 @@ class InvEnv5_60T_a1(gym.Env):
         dr1_60 = self.demand_all[177]
         dr2_60 = self.demand_all[178]
         dr3_60 = self.demand_all[179]
-
 
         # parameter for normalize
         mind1 = 0  # min demand1
@@ -908,7 +904,7 @@ class InvEnv5_60T_a1(gym.Env):
         [M2P1, M2P2, M2P3] = lotsizes[1]
         N1P = 1 if N1P1 + N1P2 + N1P3 > 0 else 0
         N2P = 1 if N2P1 + N2P2 + N2P3 > 0 else 0
-        
+
         # if action == 0:
         #     case = [[1, 0], [2, 3]]
         #     N1P = 0
@@ -1010,10 +1006,10 @@ class InvEnv5_60T_a1(gym.Env):
             print("=== #############################")
             print("===action =", action)
             # print("Produce on onpeak period ? : ",extra_p_on)
-            print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+            print("N1P1= ", N1P1, " ,M1P1 =", M1P1)
             print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
             print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-            print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+            print("N2P1= ", N2P1, " ,M2P1 =", M2P1)
             print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
             print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
@@ -1184,17 +1180,17 @@ class InvEnv5_60T_a1(gym.Env):
         # weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19]
         # on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28]
         # off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29]
-        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30,31,32,33, 44, 45, 46, 47, 59, 60 ]
-        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34,36,38,40,42, 48,50,52,54,56 ]
-        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35,37,39,41,43, 49,51,53,55,57 ]
+        weekend_stepcount = [2, 3, 4, 5, 16, 17, 18, 19, 30, 31, 32, 33, 44, 45, 46, 47, 59, 60]
+        on_peak_stepcount = [0, 6, 8, 10, 12, 14, 20, 22, 24, 26, 28, 34, 36, 38, 40, 42, 48, 50, 52, 54, 56]
+        off_peak_stepcount = [1, 7, 9, 11, 13, 15, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 49, 51, 53, 55, 57]
 
         stp = 0
         #         stp = self.step_count + 1
         stp = self.step_count
-        #print("stp =",stp)
+        # print("stp =",stp)
         if stp in on_peak_stepcount:
-           #print("On-peak")
-           extra_p_on = 1
+            # print("On-peak")
+            extra_p_on = 1
         extra_p_on1_1 = 0  # extra penalty กรณีผลิตช่วง onpeak เพื่อให้ agent ฉลาดขึ้น
         extra_p_on1_2 = 0
         extra_p_on1_3 = 0
@@ -1245,7 +1241,7 @@ class InvEnv5_60T_a1(gym.Env):
             if M2P3 > 0:
                 extra_p_on2_3 = penalty_onpeak * M2P3
                 extra_p_on_set.append(extra_p_on2_3)
-        #if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
+        # if stp + 1 in on_peak_stepcount:  # check if next state in onpeak? to pass extra_p_on in the state[27]
         #    extra_p_on = 1  # = next step will be on-peak
         if stp == 0:
             penalty_onpeak = 50000
@@ -1269,7 +1265,7 @@ class InvEnv5_60T_a1(gym.Env):
                 extra_p_on_set.append(extra_p_on2_3)
 
         if stp in off_peak_stepcount:
-            #print("Off-peak")
+            # print("Off-peak")
             extra_p_on = 0
             penalty_onpeak = 0
             vcm1 = vc_m1_off
@@ -1461,7 +1457,7 @@ class InvEnv5_60T_a1(gym.Env):
         demand_r1 = 0
         demand_r2 = 0
         demand_r3 = 0
-        #index2 = []
+        # index2 = []
         # if self.step_count < 24:  # 25
         #     # print("step count =", self.step_count)
         #     if self.step_count in set_stepcount1:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
@@ -1477,7 +1473,7 @@ class InvEnv5_60T_a1(gym.Env):
         #         d8 = demand_array2[y * 3 + 7]
         #         d9 = demand_array2[y * 3 + 8]
 
-                # print("self.demand_all= ", self.demand_all)
+        # print("self.demand_all= ", self.demand_all)
         # if self.step_count == 24:
         #     if self.step_count in set_stepcount3:  # ถ้าปล่อยให้ถึง 29 ค่าindex y จะหลุดนอกสมาชิก array
         #         y = self.step_count + 1
@@ -1491,7 +1487,7 @@ class InvEnv5_60T_a1(gym.Env):
         #         d7 = demand_array2[y * 3 + 6]
         #         d8 = demand_array2[y * 3 + 7]
         #         d9 = demand_array2[y * 3 + 8]
-                # print("demand_all2= ", self.demand_all)
+        # print("demand_all2= ", self.demand_all)
 
         # assign demand of next period from array of demand data
 
@@ -1505,8 +1501,9 @@ class InvEnv5_60T_a1(gym.Env):
         #         demand3 = self.demand_all[(self.step_count + 1) * 3 + 2]
 
         y = self.step_count + 1
-        #y = self.step_count
-
+        # y = self.step_count
+        self.demand_all = demand_arr_inf
+        
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
             # print(f'y * 3 = {y * 3}')
@@ -1544,7 +1541,7 @@ class InvEnv5_60T_a1(gym.Env):
             demand11 = self.demand_all[y * 3 + 10]
             demand12 = self.demand_all[y * 3 + 11]
 
-        if self.step_count == 56 :  # =27
+        if self.step_count == 56:  # =27
             # y = self.step_count + 1
             # print("len(demand_all) at step27 =",len(self.demand_all))
             demand1 = self.demand_all[y * 3]
@@ -1577,7 +1574,7 @@ class InvEnv5_60T_a1(gym.Env):
             # demand12 = 0
 
         if self.step_count == 58:
-            #y = self.step_count + 1
+            # y = self.step_count + 1
             demand1 = self.demand_all[y * 3]
             demand2 = self.demand_all[y * 3 + 1]
             demand3 = self.demand_all[y * 3 + 2]
@@ -1605,11 +1602,10 @@ class InvEnv5_60T_a1(gym.Env):
         #     demand11 = 0
         #     demand12 = 0
 
-
         # print("=================================================self.step_count =", self.step_count)
         # print("Action =", action)
         if print_result == True:
-            print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3)
+            print("===d1-d3, demand of r1 r2 r3 in next periods =", demand1, demand2, demand3)
             print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9)
             print("===d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
@@ -1635,11 +1631,11 @@ class InvEnv5_60T_a1(gym.Env):
         #         overage1_3 = overage1 - d7 + R1
         #         overage2_3 = overage2 - d8 + R2
         #         overage3_3 = overage3 - d9 + R3
-        #Inv in next period
+        # Inv in next period
         overage1_2 = overage1 - demand4
         overage2_2 = overage2 - demand5
         overage3_2 = overage3 - demand6
-        #Inv in next 2 period
+        # Inv in next 2 period
         overage1_3 = overage1_2 - demand7
         overage2_3 = overage2_2 - demand8
         overage3_3 = overage3_2 - demand9
@@ -1652,7 +1648,7 @@ class InvEnv5_60T_a1(gym.Env):
             print("===overage1 = ", overage1)
             print("===overage2 = ", overage2)
             print("===overage3 = ", overage3)
-            print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
+            print("overage1_2,  overage1_3, overage1_4  = ", overage1_2, overage1_3, overage1_4)
 
         #         if overage1_2 < 1500:
         #             extra_penalty1_2 = s_penal*2000000
@@ -1686,7 +1682,6 @@ class InvEnv5_60T_a1(gym.Env):
         if overage3_4 <= -1000:
             extra_penalty3_4 = penal * 1000000 * 5
         # print("===extra penalty1_2,3,4 =", extra_penalty1_2, extra_penalty1_3, extra_penalty1_4)
-
 
         if overage1_2 > 10000:
             extra_penalty1_2 = penal * 1000000 * 30  # ยื่งตุนนาน ยิ่งโดนปรับเยอะ
@@ -1837,6 +1832,12 @@ class InvEnv5_60T_a1(gym.Env):
         done = bool(self.step_count >= 60)  # planning time frame period = 15
         self.overall_time_trained += 1
 
+        if print_demand_set == True:
+            if self.step_count == 59:
+                print("demand_arr_inf in env at step 59 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
+            if self.step_count == 60:
+                print("demand_arr_inf in env at step 60 = ", demand_arr_inf[:6])  #ปริ้นแค่หกตัวแรก
+
         # if done == True:
         #   self.rn = np.random.random_integers(1, high=100000, size=None)
 
@@ -1867,6 +1868,7 @@ class InvEnv5_60T_a1(gym.Env):
         self.M2P2_set.append(M2P2)
         self.M2P3_set.append(M2P3)
 
+        # print("demand_arr_inf = ", demand_arr_inf)
         # pass CO data value to use in next state by save it in 'info' part
         # the real reward is at info[13]
         info = [self.CO_var_set1, self.CO_var_set2, self.sum_reward, last_sum_reward, last_sum_real_reward,
@@ -1878,8 +1880,9 @@ class InvEnv5_60T_a1(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward, self.demand_real,  # info[23-24]
-                self.aaa] #info25
-
+                self.aaa, demand_arr_inf,  # info 26
+                self.step_count] # info 27
+                
         #         print("value ก่อน normalize")
         #         print("demand1 =", demand1)
         #         print("onhand at end of this period =", overage1, overage2, overage3)
@@ -1902,7 +1905,6 @@ class InvEnv5_60T_a1(gym.Env):
         demand10 = (demand10 - mind1) / (maxd1 - mind1)
         demand11 = (demand11 - mind2) / (maxd2 - mind2)
         demand12 = (demand12 - mind3) / (maxd3 - mind3)
-
 
         overage1 = (overage1 - minr1) / (maxr1 - minr1)
         overage2 = (overage2 - minr2) / (maxr2 - minr2)
@@ -1966,7 +1968,8 @@ class InvEnv5_60T_a1(gym.Env):
 
         if print_result == True:
             print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16", dr1_4, dr2_4, dr3_4, "//", dr1_16, dr2_16, dr3_16)
-            print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56, dr3_56)
+            print("===dr1_40, dr2_40, dr3_40 //dr1_56, dr2_56, dr3_56", dr1_40, dr2_40, dr3_40, "//", dr1_56, dr2_56,
+                  dr3_56)
         # inv data
         self.state[0] = 0
         self.state[1] = 0
@@ -2031,7 +2034,7 @@ class InvEnv5_60T_a1(gym.Env):
         self.state[51] = dr3_24
         self.state[52] = dr1_28
         self.state[53] = dr2_28
-        self.state[54] = dr3_28    # so all number state variables are 48 variables
+        self.state[54] = dr3_28  # so all number state variables are 48 variables
 
         self.state[55] = dr1_32
         self.state[56] = dr2_32
@@ -2054,9 +2057,9 @@ class InvEnv5_60T_a1(gym.Env):
         self.state[73] = dr1_56
         self.state[74] = dr2_56
         self.state[75] = dr3_56  # so all number state variables are 48 variables
-        self.state[76] = self.sum_reward/100   # /100 เพื่อ normalize แบบง่ายๆ
-        self.state[77] = self.sum_real_reward/100
-        self.state[78] = self.step_count/100  # // หารแบบปัดเศษลง# so all number state variables are 79 variables
+        self.state[76] = self.sum_reward / 100  # /100 เพื่อ normalize แบบง่ายๆ
+        self.state[77] = self.sum_real_reward / 100
+        self.state[78] = self.step_count / 100  # // หารแบบปัดเศษลง# so all number state variables are 79 variables
 
         #         print("value หลัง normalize")
         #         print("demand1 =", demand1,"=state[3]=",self.state[3])
@@ -2072,7 +2075,6 @@ class InvEnv5_60T_a1(gym.Env):
         N2P1_ = 0
         N2P2_ = 0
         N2P3_ = 0
-
 
         # print("state[7]_2 =", self.state[7])
         # print("state_2 =", self.state)
@@ -2090,91 +2092,95 @@ class InvEnv5_60T_a1(gym.Env):
         # เนื่องจาก reward ตอนที่ A3C คิดน่าจะ เป็น sum_reward ในแต่ละ episode อยู่แล้ว ดังนั้น reward ที่ return ควรเป็น reward
         return np.array(self.state, dtype=np.float32), reward, done, info
 
-############################################################
-
-
-def main():
-
-    env = InvEnv5_60T_a2()
-    state = env.reset()
-
-    done = False
-    N = 2
-    runs = int(N)   #รัน 30 peroids จำนวน N รอบ
-    for i in range(runs):
-        maxrun = 0
-        done = False
-        rand = randint(0,999)
-        #print("rand", rand)
-        env.reset()
-        #env.seed(rand)
-        period = 0
-        demand_all = []
-        #print("============Round====", i)
-        while(done==False):
-            action = env.action_space.sample()
-            #print("period", period)
-            #print("state", state)
-            #print("action = ", action)
-            state, reward, done, info = env.step(action)
-            period += 1
-            #print("####################################################period##############",period)
-            #print("state",state)
-            #print("action =",action)
-            #print("action =",action)
-
-            demand1 = state[3]
-            demand2 = state[4]
-            demand3 = state[5]
-            #print("d1-d3 input in next state =", state[3], state[4], state[5])
-            # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
-            # print("extra_p_on ###### =", state[26])
-            if print_result == True:
-                print("=== aaa3 =",state[33], info[25])
-                print("self.sum_reward, self.sum_real_reward, self.step_count", state[76]*100, state[77]*100 , state[78]*100 )
-            #demand_all.append(demand1)
-            #demand_all.append(demand2)
-            #demand_all.append(demand3)
-
-            #sum_rw_ += reward
-            #print("sum_rw",sum_rw_)
-            #maxrun += 1
-            reward2 = reward
-            # print("reward", reward)
-            # print("demand =", demand_all)
-            # print("next_state",state)
-            #print("====================================================================")
-            # print(info[24])
-
-    if print_result == True:
-        print(f'=== Total actions = {list(prodtbl.action_ids())}')
 
 ############################################################
 
-def test_production_table():
 
-    prodtbl = ProductionTable(
-        no_machines=2, no_products=3
-    )
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
-    prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
-    prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
-    prodtbl.init_tables()
-    #print(prodtbl.lotsize_tbl)
-    prodtbl.display()
-    #print(prodtbl.get_switches(8, True))
+# def main():
+#     env = InvEnv5_60T_a4()
+#     state = env.reset()
 
-    #print(prodtbl.get_lotsize(8, True))
-    #print(prodtbl.get_lotsize(8, False))
+#     done = False
+#     N = 2
+#     runs = int(N)  # รัน 30 peroids จำนวน N รอบ
+#     demand_arr_inf = [0, 1, 2, 3]
+#     demand_arr_inf = np.array(demand_arr_inf)
+#     for i in range(runs):
+#         maxrun = 0
+#         done = False
+#         rand = randint(0, 999)
+#         # print("rand", rand)
+#         env.reset()
+#         # env.seed(rand)
+#         period = 0
+#         demand_all = []
+#         # print("============Round====", i)
+#         while (done == False):
+#             action = env.action_space.sample()
+#             # print("period", period)
+#             # print("state", state)
+#             # print("action = ", action)
+#             state, reward, done, info = env.step(action, demand_arr_inf)
+#             period += 1
+#             # print("####################################################period##############",period)
+#             # print("state",state)
+#             # print("action =",action)
+#             # print("action =",action)
 
-    # for action_id in prodtbl:
-    #     print(f'===Action ID = {action_id}')
+#             demand1 = state[3]
+#             demand2 = state[4]
+#             demand3 = state[5]
+#             # print("d1-d3 input in next state =", state[3], state[4], state[5])
+#             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
+#             # print("extra_p_on ###### =", state[26])
+#             if print_result == True:
+#                 print("=== aaa3 =", state[33], info[25])
+#                 print("self.sum_reward, self.sum_real_reward, self.step_count", state[76] * 100, state[77] * 100,
+#                       state[78] * 100)
+#             # demand_all.append(demand1)
+#             # demand_all.append(demand2)
+#             # demand_all.append(demand3)
 
-############################################################
+#             # sum_rw_ += reward
+#             # print("sum_rw",sum_rw_)
+#             # maxrun += 1
+#             reward2 = reward
+#             # print("reward", reward)
+#             # print("demand =", demand_all)
+#             # print("next_state",state)
+#             # print("====================================================================")
+#             # print(info[24])
 
-if __name__ == '__main__':
-    main()
-    #test_production_table()
+#     if print_result == True:
+#         print(f'=== Total actions = {list(prodtbl.action_ids())}')
+
+
+# ############################################################
+
+# def test_production_table():
+#     prodtbl = ProductionTable(
+#         no_machines=2, no_products=3
+#     )
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=0, onpeak=3211, offpeak=2717)
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=1, onpeak=2223, offpeak=1881)
+#     prodtbl.add_prod_lotsize(machine_id=0, prod_id=2, onpeak=1668, offpeak=1411)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=0, onpeak=2717, offpeak=2299)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=1, onpeak=1853, offpeak=1568)
+#     prodtbl.add_prod_lotsize(machine_id=1, prod_id=2, onpeak=1359, offpeak=1150)
+#     prodtbl.init_tables()
+#     # print(prodtbl.lotsize_tbl)
+#     prodtbl.display()
+#     # print(prodtbl.get_switches(8, True))
+
+#     # print(prodtbl.get_lotsize(8, True))
+#     # print(prodtbl.get_lotsize(8, False))
+
+#     # for action_id in prodtbl:
+#     #     print(f'===Action ID = {action_id}')
+
+
+# ############################################################
+
+# if __name__ == '__main__':
+#     main()
+#     # test_production_table()
