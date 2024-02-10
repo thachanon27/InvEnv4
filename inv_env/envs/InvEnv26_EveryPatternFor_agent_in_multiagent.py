@@ -786,8 +786,8 @@ class InvEnv5_60T_MA(gym.Env):
 
         aaa3 = self.aaa
         # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
-        if self.step_count == 0:
-            # print("===self.demand_all =", self.demand_all)
+        # if self.step_count == 0:
+        #     print("===self.demand_all =", self.demand_all)
         dr1_4 = self.demand_all[9]
         dr2_4 = self.demand_all[10]
         dr3_4 = self.demand_all[11]
