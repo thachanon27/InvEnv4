@@ -20,6 +20,7 @@ import itertools
 
 from random import randint, choice
 
+print_result = False
 
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
@@ -623,7 +624,7 @@ class InvEnv5_60T_MA(gym.Env):
         assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
-        print("=================================================self.step_count =", self.step_count)
+        # print("=================================================self.step_count =", self.step_count)
         # all model parameters
         # holding cost
         h1 = 49.12  # 50.96
@@ -685,9 +686,9 @@ class InvEnv5_60T_MA(gym.Env):
         extra_penalty2_3 = 0
         extra_penalty3_3 = 0
 
-
-        #         print("=========================================================================================")
-        #         print("step :", self.step_count)
+        if print_result == True:
+            print("=========================================================================================")
+            print("step :", self.step_count)
         # print("state =", state)
 
         # variable use to remember production data from period
@@ -786,7 +787,7 @@ class InvEnv5_60T_MA(gym.Env):
         aaa3 = self.aaa
         # print("===dr1_4, dr2_4, dr3_4 //dr1_16, dr2_16, dr3_16",dr1_4, dr2_4, dr3_4,"//",dr1_16, dr2_16, dr3_16)
         if self.step_count == 0:
-            print("===self.demand_all =", self.demand_all)
+            # print("===self.demand_all =", self.demand_all)
         dr1_4 = self.demand_all[9]
         dr2_4 = self.demand_all[10]
         dr3_4 = self.demand_all[11]
@@ -864,8 +865,8 @@ class InvEnv5_60T_MA(gym.Env):
         demand11 = demand11 * (maxd2 - mind2) + mind2
         demand12 = demand12 * (maxd3 - mind3) + mind3
 
-
-        print("===demand in this period =", demand1, demand2, demand3)
+        if print_result == True:
+            print("===demand in this period =", demand1, demand2, demand3)
 
         # self.demand_real = info[24]   #เรียก info มาปริ้นข้างใน env ไม่ได้ จะ error เพราะ info ส่งผ่านไปข้างนอกอย่างเดียว ไม่ได้รับกลับเข้าในแต่ละ step ของ env
         self.demand_real.append(demand1)
@@ -1003,16 +1004,17 @@ class InvEnv5_60T_MA(gym.Env):
         #     N2P3 = 1
         #     M2P3 = 1359
 
-        print("=== #############################")
-        print("===action =", action)
-        # print("Produce on onpeak period ? : ",extra_p_on)
-        # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
-        # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
-        # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
-        # print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
-        # print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
-        # print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
-        print("N1P1= ",N1P1 ," ,M1P1 =", M1P1,"/","N1P2= ", N1P2, " ,M1P2 =", M1P2,"/","N1P3= ", N1P3, " ,M1P3 =", M1P3,"//","N2P1= ",N2P1 ," ,M2P1 =", M2P1,"/","N2P2= ", N2P2, " ,M2P2 =", M2P2,"/","N2P3= ", N2P3, " ,M2P3 =", M2P3)
+        if print_result == True:
+            print("=== #############################")
+            print("===action =", action)
+            # print("Produce on onpeak period ? : ",extra_p_on)
+            # print("N1P1= ",N1P1 ," ,M1P1 =", M1P1)
+            # print("N1P2= ", N1P2, " ,M1P2 =", M1P2)
+            # print("N1P3= ", N1P3, " ,M1P3 =", M1P3)
+            # print("N2P1= ",N2P1 ," ,M2P1 =", M2P1)
+            # print("N2P2= ", N2P2, " ,M2P2 =", M2P2)
+            # print("N2P3= ", N2P3, " ,M2P3 =", M2P3)
+            print("N1P1= ",N1P1 ," ,M1P1 =", M1P1,"/","N1P2= ", N1P2, " ,M1P2 =", M1P2,"/","N1P3= ", N1P3, " ,M1P3 =", M1P3,"//","N2P1= ",N2P1 ," ,M2P1 =", M2P1,"/","N2P2= ", N2P2, " ,M2P2 =", M2P2,"/","N2P3= ", N2P3, " ,M2P3 =", M2P3)
 
         ##if there a production --> NP=1
         if N1P1 == 1 or N1P2 == 1 or N1P3 == 1:
@@ -1314,11 +1316,12 @@ class InvEnv5_60T_MA(gym.Env):
                 extra_r_weekend2_3 = reward_weekend * M2P3
                 # extra_p_on_set.append(extra_p_on2_3)
 
-        if extra_p_on == 1:
-            print("===produced in On-Peak")
-        else:
-            print("===produced in Off-Peak")
-        print("=== #############################")
+        if print_result == True:
+            if extra_p_on == 1:
+                print("===produced in On-Peak")
+            else:
+                print("===produced in Off-Peak")
+            print("=== #############################")
         #         print("penalty_onpeak =", penalty_onpeak)
         #         print(extra_p_on1_1,extra_p_on1_2,extra_p_on1_3,extra_p_on2_1,extra_p_on2_2,extra_p_on2_3)
         #         print("reward_weekend =", reward_weekend)
@@ -1660,8 +1663,9 @@ class InvEnv5_60T_MA(gym.Env):
 
         # print("=================================================self.step_count =", self.step_count)
         # print("Action =", action)
-        print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3,)
-        print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9, "// d10-d12 =", demand10, demand11, demand12)
+        if print_result == True:
+            print("===d1-d3, demand of r1 r2 r3 in next periods =",demand1,demand2,demand3,)
+        # print("===d4-d9 =", demand4, demand5, demand6, demand7, demand8, demand9, "// d10-d12 =", demand10, demand11, demand12)
         # print("self.demand_all", self.demand_all)
 
         # demand1 from random
@@ -1698,8 +1702,9 @@ class InvEnv5_60T_MA(gym.Env):
         overage2_4 = overage2_3 - demand11
         overage3_4 = overage3_3 - demand12
         # print("overage1_2 =", overage1_2)
-        print("===overage1,2,3 = ", overage1, overage2, overage3)
-        print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
+        if print_result == True:
+            print("===overage1,2,3 = ", overage1, overage2, overage3)
+        # print("overage1_2,  overage1_3, overage1_4  = ",overage1_2,  overage1_3, overage1_4 )
 
         #         if overage1_2 < 1500:
         #             extra_penalty1_2 = s_penal*2000000
@@ -2176,7 +2181,7 @@ def main():
             #print("d1-d3 input in next state =", state[3], state[4], state[5])
             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
             # print("extra_p_on ###### =", state[26])
-            print("=== aaa3 =",state[33], info[25])
+            # print("=== aaa3 =",state[33], info[25])
             #demand_all.append(demand1)
             #demand_all.append(demand2)
             #demand_all.append(demand3)
