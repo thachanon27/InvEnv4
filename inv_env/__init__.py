@@ -51,7 +51,10 @@ register(
     id='inv-v3_60T_ma',
     entry_point='inv_env.envs:InvEnv5_60T_MA',
 )     #multi-agent every demand pattern  #InvEnv26_EveryPatternFor_agent_in_multiagent
-
+register(
+    id='inv-v3_60T_ma2',
+    entry_point='inv_env.envs:InvEnv5_60T_MA2',
+)     #multi-agent every demand pattern  #InvEnv26_For_only_Ensemble_model_train3
 
 #========================================================
 #test  A2 60T set
