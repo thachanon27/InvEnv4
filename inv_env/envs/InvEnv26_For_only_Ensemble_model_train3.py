@@ -409,62 +409,62 @@ class InvEnv5_60T_MA2(gym.Env):
 ############################################################
 
 
-def main():
-    env = InvEnv5_60T_MA()
-    state = env.reset()
+# def main():
+#     env = InvEnv5_60T_MA()
+#     state = env.reset()
 
-    done = False
-    N = 2
-    runs = int(N)  # รัน 30 peroids จำนวน N รอบ
-    for i in range(runs):
-        maxrun = 0
-        done = False
-        rand = randint(0, 999)
-        # print("rand", rand)
-        env.reset()
-        # env.seed(rand)
-        period = 0
-        demand_all = []
-        # print("============Round====", i)
-        while (done == False):
-            action = env.action_space.sample()
-            # print("period", period)
-            # print("state", state)
-            print("action = ", action)
-            state, reward, done, info = env.step(action)
-            period += 1
-            # print("####################################################period##############",period)
-            # print("state",state)
-            # print("action =",action)
-            # print("action =",action)
+#     done = False
+#     N = 2
+#     runs = int(N)  # รัน 30 peroids จำนวน N รอบ
+#     for i in range(runs):
+#         maxrun = 0
+#         done = False
+#         rand = randint(0, 999)
+#         # print("rand", rand)
+#         env.reset()
+#         # env.seed(rand)
+#         period = 0
+#         demand_all = []
+#         # print("============Round====", i)
+#         while (done == False):
+#             action = env.action_space.sample()
+#             # print("period", period)
+#             # print("state", state)
+#             print("action = ", action)
+#             state, reward, done, info = env.step(action)
+#             period += 1
+#             # print("####################################################period##############",period)
+#             # print("state",state)
+#             # print("action =",action)
+#             # print("action =",action)
 
-            demand1 = state[1]
-            demand2 = state[2]
-            demand3 = state[3]
-            # print("d1-d3 input in next state =", state[3], state[4], state[5])
-            # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
-            # print("extra_p_on ###### =", state[26])
-            if print_result == True:
-                print("=== aaa3 =", state[0])
-                print("self.sum_reward, self.sum_real_reward, self.step_count", state[4] * 100, state[5] * 100,
-                      state[6] * 100)
-            # demand_all.append(demand1)
-            # demand_all.append(demand2)
-            # demand_all.append(demand3)
+#             demand1 = state[1]
+#             demand2 = state[2]
+#             demand3 = state[3]
+#             # print("d1-d3 input in next state =", state[3], state[4], state[5])
+#             # print("d4-d9 =", state[21], state[22], state[23], state[24], state[25], state[26])
+#             # print("extra_p_on ###### =", state[26])
+#             if print_result == True:
+#                 print("=== aaa3 =", state[0])
+#                 print("self.sum_reward, self.sum_real_reward, self.step_count", state[4] * 100, state[5] * 100,
+#                       state[6] * 100)
+#             # demand_all.append(demand1)
+#             # demand_all.append(demand2)
+#             # demand_all.append(demand3)
 
-            # sum_rw_ += reward
-            # print("sum_rw",sum_rw_)
-            # maxrun += 1
-            reward2 = reward
-            print("reward", reward)
-            # print("demand =", demand_all)
-            # print("next_state",state)
-            # print("====================================================================")
-            # print(info[24])
+#             # sum_rw_ += reward
+#             # print("sum_rw",sum_rw_)
+#             # maxrun += 1
+#             reward2 = reward
+#             print("reward", reward)
+#             # print("demand =", demand_all)
+#             # print("next_state",state)
+#             # print("====================================================================")
+#             # print(info[24])
 
-############################################################
+# ############################################################
 
 
-if __name__ == '__main__':
-    main()
-    # test_production_table()
+# if __name__ == '__main__':
+#     main()
+#     # test_production_table()
