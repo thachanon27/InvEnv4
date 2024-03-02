@@ -162,6 +162,8 @@ class InvEnv5_60T_MA(gym.Env):
         self.on_hand2 = (np.random.randint(2500, 4500) - 12000) / (12000 - 0)  # 3051
         self.on_hand3 = (np.random.randint(2000, 3500) - 12000) / (12000 - 0)  # 2084
         # np.random.randint(3500, 6500), np.random.randint(2500, 4500), np.random.randint(2000, 3500),
+        print("action_counter @@@@@@@@ = , action_counter")
+        print("prodtbl.action_counter @@@@@@@@ = , prodtbl.action_counter")    
         self.action_space = spaces.Discrete(prodtbl.action_counter)
         # self.observation_space = spaces.Box(-np.inf, np.inf, shape=(14,), dtype=np.float32)
         self.statelow = np.array([
