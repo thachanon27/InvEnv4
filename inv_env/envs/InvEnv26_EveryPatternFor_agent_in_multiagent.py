@@ -1910,13 +1910,13 @@ class InvEnv5_60T_MA(gym.Env):
 
         last_sum_real_reward = 0
         last_sum_reward = 0
-        print("self.step_count = ", self.step_count)
+        #print("self.step_count = ", self.step_count)
         if self.step_count == 60:
             last_sum_reward = self.sum_reward
             last_sum_real_reward = self.sum_real_reward
             if print_result == True:
                 print("total testing & real testing reward: ",last_sum_reward, "&" , last_sum_real_reward)
-            print("total testing & real testing reward: ",last_sum_reward, "&" , last_sum_real_reward)
+            #print("total testing & real testing reward: ",last_sum_reward, "&" , last_sum_real_reward)
 
         self.M1P1_set.append(M1P1)
         self.M1P2_set.append(M1P2)
