@@ -6,6 +6,7 @@
 # ล่าสุด 14-8-65 ตรงกับไฟล์ InvEnv38_16act.py
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
 # ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
+## ถ้าเราก๊อปอันนี้ไปใส่ใน github ให้ตัด function ส่วน get_demand บรรทัดที่ 48 ออกได้เลย เพราะจะรับค่า Demand_Gen มาจากในคอม
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
 
 from typing import Optional
@@ -43,6 +44,23 @@ print_result = False
 #     # demand_arr_inf = demand_values_set
 #     # demand_arr_inf = np.array(demand_arr_inf)
 #     return Demand_Gen
+
+############################################################
+## ถ้าเราก๊อปอันนี้ไปใส่ใน github ให้ตัด function ส่วน get_demand บรรทัดที่ 48 ออกได้เลย เพราะจะรับค่า Demand_Gen มาจากในคอม
+# def get_demand_for_gen_demand_class():
+#     # เรียกคลาส Generate_Demand แล้วใส่ key input = number_of_data_set
+#     number_of_data_set = 1
+#     Demand_Gen = Generate_Demand(number_of_data_set)
+#     Demand_Gen = Demand_Gen.gen_demand_pat_and_value_sets()
+#     # Demand_Gen = np.array(Demand_Gen)
+#     # เรียกใช้ function gen_demand_pat_and_value_sets ในคลาส Generate_Demand แล้วให้้ปริ้นผล
+#     # print("Demand_Gen", Demand_Gen2)
+#     # demand_values_set = Demand_Gen2[0][1]
+#     # print("demand_values", demand_values_set)
+#     # demand_arr_inf = demand_values_set
+#     # demand_arr_inf = np.array(demand_arr_inf)
+#     return Demand_Gen
+
 
 class ProductionTable:
 
