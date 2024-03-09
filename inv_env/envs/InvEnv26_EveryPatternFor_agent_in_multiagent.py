@@ -29,21 +29,6 @@ print_result = False
 # file 18  is demand set1  but file22 will demand set2 ต่างกันแค่นี้
 # print("new env @18-2-66")
 
-############################################################
-## ถ้าเราก๊อปอันนี้ไปใส่ใน github ให้ตัด function ส่วนนี้ออกได้เลย เพราะจะรับค่า Demand_Gen
-# def get_demand_for_gen_demand_class():
-#     # เรียกคลาส Generate_Demand แล้วใส่ key input = number_of_data_set
-#     number_of_data_set = 1
-#     Demand_Gen = Generate_Demand(number_of_data_set)
-#     Demand_Gen = Demand_Gen.gen_demand_pat_and_value_sets()
-#     # Demand_Gen = np.array(Demand_Gen)
-#     # เรียกใช้ function gen_demand_pat_and_value_sets ในคลาส Generate_Demand แล้วให้้ปริ้นผล
-#     # print("Demand_Gen", Demand_Gen2)
-#     # demand_values_set = Demand_Gen2[0][1]
-#     # print("demand_values", demand_values_set)
-#     # demand_arr_inf = demand_values_set
-#     # demand_arr_inf = np.array(demand_arr_inf)
-#     return Demand_Gen
 
 ############################################################
 ## ถ้าเราก๊อปอันนี้ไปใส่ใน github ให้ตัด function ส่วน get_demand บรรทัดที่ 48 ออกได้เลย เพราะจะรับค่า Demand_Gen มาจากในคอม
