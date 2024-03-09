@@ -678,6 +678,7 @@ class InvEnv5_60T_MA(gym.Env):
         assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
+        print("action in Env step", action)
         # print("=================================================self.step_count =", self.step_count)
         # all model parameters
         # holding cost
