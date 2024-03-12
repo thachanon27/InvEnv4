@@ -9,6 +9,9 @@
 ## ถ้าเราก๊อปอันนี้ไปใส่ใน github ให้ตัด function ส่วน get_demand บรรทัดที่ 48 ออกได้เลย เพราะจะรับค่า Demand_Gen มาจากในคอม
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
 
+#ถ้าต้องการใช้ปริ้นผลการเทรนแบบละเอียด ให้แก้ตรงนี้เป็น = True ###########
+print_check_ensemble_detail = False
+    
 from typing import Optional
 
 import gym
@@ -681,7 +684,8 @@ class InvEnv5_60T_MA(gym.Env):
         assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
-        print("action in Env step", action)
+        if print_check_ensemble_detail == True:
+            print("action in Env step", action)
         # print("=================================================self.step_count =", self.step_count)
         # all model parameters
         # holding cost
