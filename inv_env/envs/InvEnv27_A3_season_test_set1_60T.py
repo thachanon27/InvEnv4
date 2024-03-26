@@ -404,7 +404,7 @@ class InvEnv5_60T_a3_set1(gym.Env):
     def create_index2(self):
         rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
         np.random.seed(rng3)
-        aaa = 6 #np.random.randint(3, 6)  # อันนี้สุ่ม 3-5
+        aaa = 5 #np.random.randint(3, 6)  # อันนี้สุ่ม 3-5
 
         idrv_set = []
         for j in range(1, 210):
