@@ -1574,7 +1574,7 @@ class InvEnv5_60T_a0(gym.Env):
 
         y = self.step_count + 1
         # y = self.step_count
-        self.demand_all = demand_arr_inf
+        # self.demand_all = demand_arr_inf
 
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
