@@ -31,6 +31,12 @@ register(
 #     id='inv-v3_a-1',
 #     entry_point='inv_env.envs:InvEnv5_a1',
 # )     #agent1 random variation
+
+register(
+    id='inv-v3_60T_a-0',
+    entry_point='inv_env.envs:InvEnv5_60T_a0',
+)     #agent0 train every pattern #InvEnv26_A0_trainevery_pattern
+
 register(
     id='inv-v3_60T_a-1',
     entry_point='inv_env.envs:InvEnv5_60T_a1',
