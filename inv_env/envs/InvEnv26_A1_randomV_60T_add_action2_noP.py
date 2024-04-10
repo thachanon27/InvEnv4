@@ -367,17 +367,17 @@ class InvEnv5_60T_a1(gym.Env):
     def create_index2(self):
         rng3 = randint(0, 10000000)  # 24-01-66=10000 # train with 500 set of demand data  #5000
         np.random.seed(rng3)
-        aaa = np.random.randint(9, 11)  # อันนี้สุ่ม 9-10
+        aaa = np.random.randint(1, 3)  # อันนี้สุ่ม 1-2
 
         idrv_set = []
         for j in range(1, 210):
             idrv = round(random.uniform(0.40, 1.00), 2)
             idrv_set.append(idrv)
 
-        # if aaa == 1:
-        #     index2 = idrv_set
-        # if aaa == 2:
-        #     index2 = idrv_set
+        if aaa == 1:
+            index2 = idrv_set
+        if aaa == 2:
+            index2 = idrv_set
         # if aaa == 3:
         #     index2 = [0.0, 0.0, 0.0, 0.713, 0.713, 0.713, 0.0, 0.0, 0.0, 0.7285, 0.7285, 0.7285, 0.0, 0.0, 0.0,
         #               0.744, 0.744, 0.744, 0.0, 0.0, 0.0, 0.787, 0.787, 0.787, 0.0, 0.0, 0.0,
