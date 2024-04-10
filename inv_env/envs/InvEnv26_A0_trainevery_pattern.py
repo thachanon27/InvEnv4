@@ -156,7 +156,7 @@ prodtbl.init_tables()
 ############################################################
 ############################################################
 
-class InvEnv5_60T_a1(gym.Env):
+class InvEnv5_60T_a0(gym.Env):
     def __init__(self):
         self.step_count = 0
         self.overall_time_trained = 0
