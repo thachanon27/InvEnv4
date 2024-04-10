@@ -18,6 +18,7 @@ from inv_env.envs.InvEnv26_A3_midseason_60T_add_action6_noP import InvEnv5_60T_a
 from inv_env.envs.InvEnv26_A4_highseason_60T_add_action_noP import InvEnv5_60T_a4   #id='inv-v3_60t_a-4'
 from inv_env.envs.InvEnv26_EveryPatternFor_agent_in_multiagent import InvEnv5_60T_MA   #id='inv-v3_60t_ma'
 from inv_env.envs.InvEnv26_For_only_Ensemble_model_train3 import InvEnv5_60T_MA2   #id='inv-v3_60t_ma2'
+from inv_env.envs.InvEnv26_A0_trainevery_pattern import InvEnv5_60T_a0   #id='inv-v3_60t_a-0'
 
 #test 60T 
 from inv_env.envs.InvEnv27_A2_season_test_set1_60T_m6 import InvEnv5_60T_a2_set1  #id= 'inv_a2_testset1'
