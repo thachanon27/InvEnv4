@@ -629,11 +629,13 @@ class InvEnv5_60T_a2(gym.Env):
         # #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
+
 
         if print_result == True:
             print("=================================================self.step_count =", self.step_count)
@@ -1512,6 +1514,7 @@ class InvEnv5_60T_a2(gym.Env):
 
         y = self.step_count + 1
         # y = self.step_count
+        self.demand_all = demand_arr_inf
 
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
@@ -1882,7 +1885,8 @@ class InvEnv5_60T_a2(gym.Env):
                 self.M1P1_set, self.M1P2_set, self.M1P3_set,  # info[17-19]
                 self.M2P1_set, self.M2P2_set, self.M2P3_set,  # info[20-22]
                 raw_reward, self.demand_real,  # info[23-24]
-                self.aaa]  # info25
+                self.aaa, demand_arr_inf,  # info 26
+                self.step_count] # info 27
 
         #         print("value ก่อน normalize")
         #         print("demand1 =", demand1)
