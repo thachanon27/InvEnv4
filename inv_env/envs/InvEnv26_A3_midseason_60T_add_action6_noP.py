@@ -601,12 +601,13 @@ class InvEnv5_60T_a3(gym.Env):
         # #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
-
+        
         if print_result == True:
             print("=================================================self.step_count =", self.step_count)
         # all model parameters
@@ -1484,6 +1485,7 @@ class InvEnv5_60T_a3(gym.Env):
 
         y = self.step_count + 1
         # y = self.step_count
+        self.demand_all = demand_arr_inf
 
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
