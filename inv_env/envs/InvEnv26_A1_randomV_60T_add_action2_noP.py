@@ -474,7 +474,7 @@ class InvEnv5_60T_a1(gym.Env):
         if aaa == 2:
             demand_r1 = np.random.randint(0, 4200)  # (2500, 4500) #avg + - 15%
             demand_r2 = np.random.randint(0, 3600)  # 2000, 3500
-            demand_r3 = np.random.randint(00, 2500)  # 1000, 2500
+            demand_r3 = np.random.randint(0, 2500)  # 1000, 2500
 
         return index2, demand_r1, demand_r2, demand_r3, aaa
 
