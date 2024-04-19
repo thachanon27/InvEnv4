@@ -371,7 +371,7 @@ class InvEnv5_60T_a0(gym.Env):
 
         idrv_set = []
         for j in range(1, 210):
-            idrv = round(random.uniform(0.40, 1.00), 2)
+            idrv = round(random.uniform(0.99, 1.00), 2)
             idrv_set.append(idrv)
 
         if aaa == 1:
@@ -536,18 +536,18 @@ class InvEnv5_60T_a0(gym.Env):
                       0.0, 0.0, 0.0, 0.501, 0.501, 0.501, 0, 0, 0, 0.499, 0.499, 0.499]
 
         if aaa >= 3:
-            demand_r1 = np.random.randint(2700, 3200)
-            demand_r2 = np.random.randint(2300, 2600)
-            demand_r3 = np.random.randint(1500, 1700)
+            demand_r1 = np.random.randint(2700, 3200)   #(2700, 3200)
+            demand_r2 = np.random.randint(2300, 2600)    #(2300, 2600) 
+            demand_r3 = np.random.randint(1500, 1700)     #(1500, 1700)
         if aaa == 1:
-            demand_r1 = 4000  # np.random.randint(1800, 4000)  # (2500, 4500) #avg + - 15%
-            demand_r2 = 3300  # np.random.randint(1500, 3300)  # 2000, 3500
-            demand_r3 = 2200  # np.random.randint(700, 2400)  # 1000, 2500
+            demand_r1 = np.random.randint(0, 4000)  # (2500, 4500) #avg + - 15%
+            demand_r2 = np.random.randint(0, 3300)  # 2000, 3500
+            demand_r3 = np.random.randint(0, 2400)  # 1000, 2500
         if aaa == 2:
-            demand_r1 = np.random.randint(2975, 4025)  # (2500, 4500) #avg + - 15%
-            demand_r2 = np.random.randint(2338, 3163)  # 2000, 3500
-            demand_r3 = np.random.randint(1488, 2013)  # 1000, 2500
-
+            demand_r1 = np.random.randint(0, 4200)  # (2500, 4500) #avg + - 15%
+            demand_r2 = np.random.randint(0, 3600)  # 2000, 3500
+            demand_r3 = np.random.randint(0, 2500)  # 1000, 2500
+            
         return index2, demand_r1, demand_r2, demand_r3, aaa
 
     def create_demand_all(self):
