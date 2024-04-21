@@ -7,6 +7,7 @@
 # มีการ normalize input ต่างๆทั้งค่า demand และ inventory ของเสตท
 # ถ้ามีการเปลี่ยนแปลงในไฟล์ InvEnv ใน github ให้ pip install Env ใหม่ ดังคำสั่งด้านล่าง
 # pip install -e git+https://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@github.com/thachanon27/InvEnv4#egg=inv_env
+# แก้ให้ env สามารถรับค่า demand_arr_inf เข้ามาโดยคำสั่ง env.step ได้
 
 from typing import Optional
 
@@ -617,10 +618,11 @@ class InvEnv5_60T_a1_set3(gym.Env):
         #assert (len(demand_all) == 93)
         return (demand_all, aaa)
 
-    def step(self, action):
+    def step(self, action, demand_arr_inf):
         assert self.action_space.contains(
             action
         ), f"{action!r} ({type(action)}) invalid"
+        assert isinstance(demand_arr_inf, np.ndarray), f"{demand_arr_inf!r} ({type(demand_arr_inf)}) invalid"
         info = {}
 
         print("=================================================self.step_count =", self.step_count)
@@ -1539,6 +1541,24 @@ class InvEnv5_60T_a1_set3(gym.Env):
 
         y = self.step_count + 1
         #y = self.step_count
+        #แทนที่ demand_arr_inf ที่สุ่มจากไฟล์ model main ที่ส่งเข้ามา ด้วย fix test demand ของ A1 ชุด 1/3
+        demand_arr_inf =  [0, 0, 0, 3311, 2444, 1321, 0, 0, 0, 961, 2969, 2143, 
+                           0, 0, 0, 3294, 895, 1885, 0, 0, 0, 3001, 2987, 854, 
+                           0, 0, 0, 1402, 1609, 988, 0, 0, 0, 3217, 2846, 2152, 
+                           0, 0, 0, 3085, 1612, 2044, 0, 0, 0, 1685, 1798, 1396, 
+                           0, 0, 0, 2580, 1446, 1178, 0, 0, 0, 1727, 1646, 1176, 
+                           0, 0, 0, 3700, 2031, 1189, 0, 0, 0, 3113, 1060, 1391, 
+                           0, 0, 0, 1538, 1098, 946, 0, 0, 0, 2158, 1021, 1872, 
+                           0, 0, 0, 2761, 1224, 1607, 0, 0, 0, 3957, 1758, 868, 
+                           0, 0, 0, 2530, 1751, 663, 0, 0, 0, 1696, 1625, 1961, 
+                           0, 0, 0, 1167, 724, 1430, 0, 0, 0, 3828, 1802, 1461, 
+                           0, 0, 0, 3594, 2708, 1866, 0, 0, 0, 3808, 2525, 1547, 
+                           0, 0, 0, 3242, 1247, 1596, 0, 0, 0, 1288, 2269, 1933, 
+                           0, 0, 0, 1645, 874, 1917, 0, 0, 0, 3627, 1657, 2177, 
+                           0, 0, 0, 2670, 1479, 1380, 0, 0, 0, 1019, 1510, 1465, 
+                           0, 0, 0, 2503, 2577, 1285, 0, 0, 0, 2529, 823, 1623,
+                          0, 0, 0, 2579., 1476, 957, 0, 0, 0]  # ตรงนี้คือที่ใส่เพิ่มเช้ามาเพื่อให้ไม่ out of range
+        self.demand_all = demand_arr_inf             
 
         if self.step_count < 55:
             # print("len(demand_all)  =", len(self.demand_all))
