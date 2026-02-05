@@ -1,4 +1,4 @@
-# อันนี้คือ env3 (deamnd set3)
+## อันนี้คือ env3 (deamnd set3)
 # this code is same as invEnv36_oneSetDemandGithub.py
 # แก้ env ให้เป็น 24 dimension
 # ตัดพวกที่ print และ comment ออกไปใ เพื่อเอาไปใส่ใน gym
